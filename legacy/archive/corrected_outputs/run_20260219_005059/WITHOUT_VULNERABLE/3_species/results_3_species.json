@@ -1,0 +1,54 @@
+{
+  "scenario": "WITHOUT_VULNERABLE",
+  "n_species_exact": 3,
+  "n_trees": 5,
+  "best_secpi": 1.5015999999999998,
+  "all_secpi": [
+    1.5011,
+    1.5005000000000002,
+    1.5015999999999998,
+    1.5006,
+    1.5006
+  ],
+  "mean_secpi": 1.50088,
+  "std_secpi": 0.00041665333311993025,
+  "tree_placements": [
+    [
+      5.0,
+      45.0
+    ],
+    [
+      15.0,
+      25.0
+    ],
+    [
+      85.0,
+      15.0
+    ],
+    [
+      25.0,
+      75.0
+    ],
+    [
+      95.0,
+      95.0
+    ]
+  ],
+  "tree_species": [
+    "Kabiki",
+    "Duhat",
+    "Banaba",
+    "Duhat",
+    "Banaba"
+  ],
+  "unique_species": [
+    "Kabiki",
+    "Duhat",
+    "Banaba"
+  ],
+  "cooling_stats": {
+    "mean": 0.008828197120976369,
+    "max": 0.13233298366833704,
+    "std": 0.02196833681071644
+  }
+}

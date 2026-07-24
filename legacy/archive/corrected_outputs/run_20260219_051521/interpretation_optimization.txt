@@ -1,0 +1,36 @@
+================================================================================
+AUTOMATED INTERPRETATION: ACO OPTIMIZATION RESULTS
+================================================================================
+
+1. SOLUTION SUMMARY
+----------------------------------------
+   Best SECPI Score: 2.9613
+   Number of Trees: 5
+   Unique Species: 2
+
+2. SPECIES COMPOSITION
+----------------------------------------
+   Narra: 4 trees (80%) - D_j = 0.9429
+   Akleng-parang: 1 trees (20%) - D_j = 0.8557
+
+3. DIVERSITY ASSESSMENT
+----------------------------------------
+   Pattern: MODERATE DIVERSITY SOLUTION
+     Diversity ratio: 0.40
+
+4. SPATIAL DISTRIBUTION ANALYSIS
+----------------------------------------
+   Trees near vulnerable zones (≤20m): 4/5
+   → Strong equity-driven placement
+
+5. COOLING PERFORMANCE METRICS
+----------------------------------------
+   Mean Cooling Intensity: 0.1559
+   Max Cooling Intensity: 1.0927
+   Std Dev: 0.2432
+   Coverage (>0.01): 45.2%
+
+6. SECPI SCORE INTERPRETATION
+----------------------------------------
+   Rating: GOOD cooling distribution
+   → Significant improvement over baseline

@@ -1,0 +1,27 @@
+{
+  "optimal_configs": [
+    {
+      "label": "Optimal (SECPI=3.093)",
+      "coverage": 75.0,
+      "mean_intensity": 0.12440557822230144,
+      "n_species": 2,
+      "color": "#F39C12"
+    }
+  ],
+  "suboptimal_configs": [
+    {
+      "label": "WITH_V",
+      "coverage": 75.0,
+      "mean_intensity": 0.09913604841492876,
+      "n_species": 4,
+      "color": "#2ECC71"
+    },
+    {
+      "label": "NO_V",
+      "coverage": 75.0,
+      "mean_intensity": 0.10380416864919703,
+      "n_species": 3,
+      "color": "#F1C40F"
+    }
+  ]
+}

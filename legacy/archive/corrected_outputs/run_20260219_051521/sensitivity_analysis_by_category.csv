@@ -1,0 +1,5 @@
+category,mean_sensitivity,max_sensitivity,total_sensitivity,param_count
+Species_Morphology,0.10505,0.308983,1.260595,12
+Species_Allometry,0.007566,0.022564,0.181587,24
+Cooling_Model,0.026595,0.04667,0.079784,3
+Weighting,0.024934,0.024934,0.024934,1

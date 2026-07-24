@@ -1,0 +1,20 @@
+================================================================================
+SCENARIO COMPARISON SUMMARY
+WITH vs WITHOUT VULNERABLE CELLS
+================================================================================
+
+SECPI Comparison:
+------------------------------------------------------------
+WITH VULNERABLE:    SECPI = 3.1159
+WITHOUT VULNERABLE: SECPI = 1.5000
+Difference:         +1.6159
+
+Species Used:
+------------------------------------------------------------
+WITH VULN:    ['Kabiki', 'Narra', 'Duhat', 'Akleng-parang']
+WITHOUT VULN: ['Banaba', 'Narra', 'Duhat']
+
+Interpretation:
+------------------------------------------------------------
+Positive difference = WITH VULN performs better (equity prioritized)
+Negative difference = WITHOUT VULN performs better (efficiency only)

@@ -1,0 +1,37 @@
+{
+  "scenario": "WITH_VULNERABLE",
+  "n_species_exact": 1,
+  "n_trees": 5,
+  "best_secpi": 2.8439240096038416,
+  "all_secpi": [
+    2.8439240096038416,
+    2.8439240096038416,
+    2.8439240096038416,
+    2.8439240096038416,
+    2.8439240096038416
+  ],
+  "mean_secpi": 2.8439240096038416,
+  "std_secpi": 0.0,
+  "tree_placements": [
+    [
+      95.0,
+      25.0
+    ],
+    [
+      95.0,
+      45.0
+    ]
+  ],
+  "tree_species": [
+    "Akleng-parang",
+    "Akleng-parang"
+  ],
+  "unique_species": [
+    "Akleng-parang"
+  ],
+  "cooling_stats": {
+    "mean": 0.04263811155922141,
+    "max": 0.9745237262591773,
+    "std": 0.11464014999397154
+  }
+}

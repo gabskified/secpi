@@ -1,0 +1,64 @@
+combo_id,k,species_available,species_actually_used,n_species_used,all_available_used,secpi,rank
+63,6,Narra + Talisay + Banaba + Kabiki + Duhat + Akleng-parang,Narra + Talisay,2,False,4.393,1
+53,4,Talisay + Banaba + Kabiki + Akleng-parang,Akleng-parang,1,False,4.3924,2
+6,1,Akleng-parang,Akleng-parang,1,True,4.3916,3
+59,5,Narra + Talisay + Banaba + Duhat + Akleng-parang,Akleng-parang + Banaba + Narra,3,False,4.3911999999999995,4
+55,4,Talisay + Kabiki + Duhat + Akleng-parang,Akleng-parang,1,False,4.3909,5
+18,2,Banaba + Akleng-parang,Akleng-parang + Banaba,2,True,4.39085,6
+25,3,Narra + Talisay + Akleng-parang,Akleng-parang + Narra + Talisay,3,True,4.3908000000000005,7
+22,3,Narra + Talisay + Banaba,Narra + Talisay,2,False,4.390750000000001,8
+51,4,Narra + Kabiki + Duhat + Akleng-parang,Akleng-parang + Kabiki + Narra,3,False,4.3904499999999995,9
+56,4,Banaba + Kabiki + Duhat + Akleng-parang,Akleng-parang + Banaba,2,False,4.3900500000000005,10
+24,3,Narra + Talisay + Duhat,Duhat + Narra + Talisay,3,True,4.38975,11
+31,3,Narra + Duhat + Akleng-parang,Akleng-parang + Duhat + Narra,3,True,4.3894,12
+28,3,Narra + Banaba + Akleng-parang,Akleng-parang + Banaba + Narra,3,True,4.38915,13
+20,2,Kabiki + Akleng-parang,Akleng-parang,1,False,4.38905,14
+62,5,Talisay + Banaba + Kabiki + Duhat + Akleng-parang,Akleng-parang + Kabiki,2,False,4.3886,15
+10,2,Narra + Duhat,Duhat + Narra,2,True,4.3885000000000005,16
+26,3,Narra + Banaba + Kabiki,Narra,1,False,4.3884,17
+61,5,Narra + Banaba + Kabiki + Duhat + Akleng-parang,Akleng-parang + Duhat + Narra,3,False,4.3883,18
+50,4,Narra + Banaba + Duhat + Akleng-parang,Duhat + Narra,2,False,4.38765,19
+45,4,Narra + Talisay + Kabiki + Duhat,Duhat + Narra,2,False,4.38755,20
+49,4,Narra + Banaba + Kabiki + Akleng-parang,Banaba + Narra,2,False,4.3875,21
+58,5,Narra + Talisay + Banaba + Kabiki + Akleng-parang,Akleng-parang + Banaba + Narra,3,False,4.3872,22
+8,2,Narra + Banaba,Narra,1,False,4.3863,23
+11,2,Narra + Akleng-parang,Akleng-parang + Narra,2,True,4.38595,24
+42,4,Narra + Talisay + Banaba + Kabiki,Narra,1,False,4.3858999999999995,25
+46,4,Narra + Talisay + Kabiki + Akleng-parang,Narra,1,False,4.38565,26
+1,1,Narra,Narra,1,True,4.3856,27
+37,3,Talisay + Duhat + Akleng-parang,Akleng-parang + Talisay,2,False,4.385249999999999,28
+48,4,Narra + Banaba + Kabiki + Duhat,Narra,1,False,4.38475,29
+57,5,Narra + Talisay + Banaba + Kabiki + Duhat,Narra + Talisay,2,False,4.3827,30
+60,5,Narra + Talisay + Kabiki + Duhat + Akleng-parang,Akleng-parang + Narra,2,False,4.38185,31
+21,2,Duhat + Akleng-parang,Akleng-parang,1,False,4.3811,32
+40,3,Banaba + Duhat + Akleng-parang,Akleng-parang + Banaba,2,False,4.3797999999999995,33
+7,2,Narra + Talisay,Narra + Talisay,2,True,4.37915,34
+41,3,Kabiki + Duhat + Akleng-parang,Akleng-parang,1,False,4.379,35
+54,4,Talisay + Banaba + Duhat + Akleng-parang,Akleng-parang + Duhat,2,False,4.378,36
+15,2,Talisay + Akleng-parang,Akleng-parang,1,False,4.3779,37
+44,4,Narra + Talisay + Banaba + Akleng-parang,Narra + Talisay,2,False,4.3773,38
+23,3,Narra + Talisay + Kabiki,Narra,1,False,4.3766,39
+43,4,Narra + Talisay + Banaba + Duhat,Narra,1,False,4.375450000000001,40
+27,3,Narra + Banaba + Duhat,Duhat + Narra,2,False,4.3736999999999995,41
+30,3,Narra + Kabiki + Akleng-parang,Akleng-parang + Narra,2,False,4.3735,42
+34,3,Talisay + Banaba + Akleng-parang,Akleng-parang,1,False,4.3729,43
+47,4,Narra + Talisay + Duhat + Akleng-parang,Narra,1,False,4.3725,44
+9,2,Narra + Kabiki,Narra,1,False,4.37155,45
+36,3,Talisay + Kabiki + Akleng-parang,Akleng-parang,1,False,4.36965,46
+39,3,Banaba + Kabiki + Akleng-parang,Akleng-parang,1,False,4.36775,47
+29,3,Narra + Kabiki + Duhat,Narra,1,False,4.3651,48
+38,3,Banaba + Kabiki + Duhat,Banaba + Duhat + Kabiki,3,True,3.13355,49
+32,3,Talisay + Banaba + Kabiki,Banaba + Talisay,2,False,3.13355,50
+13,2,Talisay + Kabiki,Kabiki + Talisay,2,True,3.12305,51
+33,3,Talisay + Banaba + Duhat,Duhat + Talisay,2,False,3.1151999999999997,52
+19,2,Kabiki + Duhat,Duhat + Kabiki,2,True,3.1132999999999997,53
+2,1,Talisay,Talisay,1,True,3.10645,54
+4,1,Kabiki,Kabiki,1,True,3.0944,55
+52,4,Talisay + Banaba + Kabiki + Duhat,Talisay,1,False,3.0925,56
+17,2,Banaba + Duhat,Banaba + Duhat,2,True,3.0808999999999997,57
+3,1,Banaba,Banaba,1,True,3.067709143657463,58
+35,3,Talisay + Kabiki + Duhat,Duhat + Kabiki + Talisay,3,True,3.0647,59
+16,2,Banaba + Kabiki,Banaba,1,False,3.0610000000000004,60
+14,2,Talisay + Duhat,Talisay,1,False,3.04925,61
+5,1,Duhat,Duhat,1,True,3.0396,62
+12,2,Talisay + Banaba,Talisay,1,False,3.02325,63

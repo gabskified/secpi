@@ -1,0 +1,60 @@
+================================================================================
+AUTOMATED INTERPRETATION: k=1 TO k=6 SCENARIO COMPARISON
+WITH vs WITHOUT VULNERABLE CELLS
+================================================================================
+
+1. SECPI PROGRESSION BY k
+----------------------------------------
+   k=1: WITH=2.9934, WITHOUT=1.5016, Δ=+1.4918 (WITH better)
+   k=2: WITH=3.2498, WITHOUT=1.5006, Δ=+1.7492 (WITH better)
+   k=3: WITH=3.0001, WITHOUT=1.5002, Δ=+1.4999 (WITH better)
+   k=4: WITH=2.9493, WITHOUT=1.5001, Δ=+1.4492 (WITH better)
+   k=5: WITH=2.9120, WITHOUT=1.5001, Δ=+1.4119 (WITH better)
+
+2. OPTIMAL k IDENTIFICATION
+----------------------------------------
+   WITH VULNERABLE: Optimal k = 2 (SECPI = 3.2498)
+   WITHOUT VULNERABLE: Optimal k = 1 (SECPI = 1.5016)
+   → Different optimal k values suggests vulnerability affects diminishing returns
+
+3. DIMINISHING RETURNS ANALYSIS
+----------------------------------------
+   Marginal SECPI gains (k to k+1):
+   k=1→2: WITH=+0.2564, WITHOUT=-0.0010
+   k=2→3: WITH=-0.2498, WITHOUT=-0.0004
+   k=3→4: WITH=-0.0508, WITHOUT=-0.0001
+   k=4→5: WITH=-0.0373, WITHOUT=+0.0000
+
+   WITH: Diminishing returns start at k=3
+   WITHOUT: Diminishing returns start at k=2
+
+4. SPECIES DIVERSITY PATTERNS
+----------------------------------------
+   k=1: WITH uses 1 species {'Duhat'}
+         WITHOUT uses 1 species {'Narra'}
+   k=2: WITH uses 2 species {'Kabiki', 'Narra'}
+         WITHOUT uses 1 species {'Akleng-parang'}
+   k=3: WITH uses 2 species {'Akleng-parang', 'Narra'}
+         WITHOUT uses 2 species {'Akleng-parang', 'Narra'}
+   k=4: WITH uses 3 species {'Akleng-parang', 'Banaba', 'Narra'}
+         WITHOUT uses 2 species {'Akleng-parang', 'Narra'}
+   k=5: WITH uses 3 species {'Kabiki', 'Akleng-parang', 'Narra'}
+         WITHOUT uses 2 species {'Banaba', 'Narra'}
+
+5. EQUITY IMPACT ASSESSMENT
+----------------------------------------
+   WITH performs better in 5/5 k values
+   WITHOUT performs better in 0/5 k values
+   Average SECPI difference: +1.5204
+
+   → STRONG EQUITY BENEFIT: Vulnerable zones improve optimization
+
+6. RECOMMENDATIONS
+----------------------------------------
+   Recommended Configuration:
+   → Number of trees: k = 2
+   → Scenario: WITH VULNERABLE
+   → Expected SECPI: 3.2498
+
+   Rationale: Equity-weighted optimization achieves better cooling
+   distribution while prioritizing vulnerable populations.

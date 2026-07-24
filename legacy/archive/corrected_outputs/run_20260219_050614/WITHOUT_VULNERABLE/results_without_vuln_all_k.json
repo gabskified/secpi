@@ -1,0 +1,221 @@
+{
+  "scenario": "WITHOUT_VULNERABLE",
+  "k_results": {
+    "1": {
+      "n_trees": 1,
+      "best_secpi": 1.5019,
+      "all_secpi": [
+        1.5012,
+        1.5016,
+        1.5011999999999999,
+        1.5019,
+        1.5019
+      ],
+      "mean_secpi": 1.50156,
+      "std_secpi": 0.0003136877428271789,
+      "tree_placements": [
+        [
+          55.0,
+          75.0
+        ]
+      ],
+      "tree_species": [
+        "Akleng-parang"
+      ],
+      "unique_species": [
+        "Akleng-parang"
+      ],
+      "n_unique_species": 1,
+      "cooling_stats": {
+        "mean": 0.049259744669469606,
+        "max": 0.5290730382760345,
+        "std": 0.10597892429089764,
+        "coverage": 33.339999999999996
+      }
+    },
+    "2": {
+      "n_trees": 2,
+      "best_secpi": 1.5006,
+      "all_secpi": [
+        1.5004,
+        1.5001,
+        1.5005,
+        1.5003000000000002,
+        1.5006
+      ],
+      "mean_secpi": 1.5003799999999998,
+      "std_secpi": 0.00017204650534081295,
+      "tree_placements": [
+        [
+          65.0,
+          5.0
+        ],
+        [
+          85.0,
+          45.0
+        ]
+      ],
+      "tree_species": [
+        "Duhat",
+        "Narra"
+      ],
+      "unique_species": [
+        "Duhat",
+        "Narra"
+      ],
+      "n_unique_species": 2,
+      "cooling_stats": {
+        "mean": 0.04393070268031358,
+        "max": 0.5770890510426117,
+        "std": 0.1070950491645159,
+        "coverage": 28.71
+      }
+    },
+    "3": {
+      "n_trees": 3,
+      "best_secpi": 1.5005,
+      "all_secpi": [
+        1.5002,
+        1.5005,
+        1.5,
+        1.5002,
+        1.5003000000000002
+      ],
+      "mean_secpi": 1.50024,
+      "std_secpi": 0.00016248076809271771,
+      "tree_placements": [
+        [
+          85.0,
+          55.0
+        ],
+        [
+          5.0,
+          55.0
+        ],
+        [
+          85.0,
+          45.0
+        ]
+      ],
+      "tree_species": [
+        "Narra",
+        "Kabiki",
+        "Narra"
+      ],
+      "unique_species": [
+        "Kabiki",
+        "Narra"
+      ],
+      "n_unique_species": 2,
+      "cooling_stats": {
+        "mean": 0.06958258433600176,
+        "max": 1.1134593120966165,
+        "std": 0.16736134671308595,
+        "coverage": 33.629999999999995
+      }
+    },
+    "4": {
+      "n_trees": 4,
+      "best_secpi": 1.5003,
+      "all_secpi": [
+        1.5,
+        1.5003,
+        1.5001,
+        1.5,
+        1.5
+      ],
+      "mean_secpi": 1.50008,
+      "std_secpi": 0.00011661903789689316,
+      "tree_placements": [
+        [
+          95.0,
+          55.0
+        ],
+        [
+          5.0,
+          55.0
+        ],
+        [
+          85.0,
+          55.0
+        ],
+        [
+          65.0,
+          55.0
+        ]
+      ],
+      "tree_species": [
+        "Narra",
+        "Narra",
+        "Talisay",
+        "Akleng-parang"
+      ],
+      "unique_species": [
+        "Talisay",
+        "Akleng-parang",
+        "Narra"
+      ],
+      "n_unique_species": 3,
+      "cooling_stats": {
+        "mean": 0.10519098183247245,
+        "max": 1.059632171395929,
+        "std": 0.17198735027550993,
+        "coverage": 55.510000000000005
+      }
+    },
+    "5": {
+      "n_trees": 5,
+      "best_secpi": 1.5003,
+      "all_secpi": [
+        1.5,
+        1.5,
+        1.5,
+        1.5003,
+        1.5
+      ],
+      "mean_secpi": 1.50006,
+      "std_secpi": 0.00011999999999998679,
+      "tree_placements": [
+        [
+          5.0,
+          55.0
+        ],
+        [
+          85.0,
+          55.0
+        ],
+        [
+          45.0,
+          75.0
+        ],
+        [
+          65.0,
+          85.0
+        ],
+        [
+          45.0,
+          35.0
+        ]
+      ],
+      "tree_species": [
+        "Narra",
+        "Narra",
+        "Banaba",
+        "Duhat",
+        "Narra"
+      ],
+      "unique_species": [
+        "Banaba",
+        "Duhat",
+        "Narra"
+      ],
+      "n_unique_species": 3,
+      "cooling_stats": {
+        "mean": 0.12937330525696225,
+        "max": 0.5955041284627947,
+        "std": 0.1580622033772611,
+        "coverage": 66.92
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "validation_type": "Morphological Robustness",
+  "n_runs_per_morphology": 5,
+  "morphologies": {
+    "Dense_Organic": {
+      "mean_secpi": 3.9614199999999995,
+      "std_secpi": 0.4870778557889899,
+      "n_successful_runs": 5,
+      "cv": 0.12295536847620044
+    },
+    "Sparse_Organic": {
+      "mean_secpi": 4.34362,
+      "std_secpi": 0.07483132098259376,
+      "n_successful_runs": 5,
+      "cv": 0.017227870067499866
+    },
+    "Dense_Linear": {
+      "mean_secpi": 3.6995199999999997,
+      "std_secpi": 0.6414815980213304,
+      "n_successful_runs": 5,
+      "cv": 0.17339589947380485
+    },
+    "Sparse_Linear": {
+      "mean_secpi": 3.4576000000000002,
+      "std_secpi": 0.5654056570286504,
+      "n_successful_runs": 5,
+      "cv": 0.16352546767371887
+    },
+    "High_Vulnerability": {
+      "mean_secpi": 4.03938131305044,
+      "std_secpi": 0.5362212352690013,
+      "n_successful_runs": 5,
+      "cv": 0.13274835765976756
+    },
+    "Low_Vulnerability": {
+      "mean_secpi": 3.4202857788958285,
+      "std_secpi": 0.614895837355375,
+      "n_successful_runs": 5,
+      "cv": 0.17977908195550898
+    }
+  },
+  "overall": {
+    "mean_across_morphologies": 3.8203045153243775,
+    "std_across_morphologies": 0.328614712059364,
+    "robustness_assessment": "ROBUST"
+  }
+}

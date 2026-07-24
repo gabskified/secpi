@@ -1,0 +1,55 @@
+{
+  "best_secpi": 3.0768,
+  "n_trees": 5,
+  "tree_placements": [
+    [
+      5.0,
+      45.0
+    ],
+    [
+      65.0,
+      75.0
+    ],
+    [
+      55.0,
+      55.0
+    ],
+    [
+      95.0,
+      95.0
+    ],
+    [
+      35.0,
+      45.0
+    ]
+  ],
+  "tree_species": [
+    "Duhat",
+    "Duhat",
+    "Banaba",
+    "Narra",
+    "Kabiki"
+  ],
+  "unique_species": [
+    "Narra",
+    "Kabiki",
+    "Duhat",
+    "Banaba"
+  ],
+  "n_unique_species": 4,
+  "cooling_stats": {
+    "mean": 0.023171039050578063,
+    "max": 0.5199387624421209,
+    "min": 0.0,
+    "std": 0.06467953656678374
+  },
+  "aco_params": {
+    "n_trees": 5,
+    "n_ants": 20,
+    "n_iterations": 40,
+    "evaporation_rate": 0.5,
+    "alpha": 1.0,
+    "beta": 2.0,
+    "q0": 0.7
+  }
+}

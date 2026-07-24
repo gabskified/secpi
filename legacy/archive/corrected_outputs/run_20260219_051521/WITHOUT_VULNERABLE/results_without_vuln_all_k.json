@@ -1,0 +1,219 @@
+{
+  "scenario": "WITHOUT_VULNERABLE",
+  "k_results": {
+    "1": {
+      "n_trees": 1,
+      "best_secpi": 1.5018000000000002,
+      "all_secpi": [
+        1.5009,
+        1.5006000000000002,
+        1.5008,
+        1.5018000000000002,
+        1.5017
+      ],
+      "mean_secpi": 1.50116,
+      "std_secpi": 0.0004923413450037062,
+      "tree_placements": [
+        [
+          45.0,
+          65.0
+        ]
+      ],
+      "tree_species": [
+        "Narra"
+      ],
+      "unique_species": [
+        "Narra"
+      ],
+      "n_unique_species": 1,
+      "cooling_stats": {
+        "mean": 0.050689423604933406,
+        "max": 0.5770890510156385,
+        "std": 0.11045650245833176,
+        "coverage": 35.510000000000005
+      }
+    },
+    "2": {
+      "n_trees": 2,
+      "best_secpi": 1.5011,
+      "all_secpi": [
+        1.5002999999999997,
+        1.5002,
+        1.5003,
+        1.5011,
+        1.5008
+      ],
+      "mean_secpi": 1.50054,
+      "std_secpi": 0.00034985711369078104,
+      "tree_placements": [
+        [
+          55.0,
+          75.0
+        ],
+        [
+          95.0,
+          85.0
+        ]
+      ],
+      "tree_species": [
+        "Narra",
+        "Duhat"
+      ],
+      "unique_species": [
+        "Narra",
+        "Duhat"
+      ],
+      "n_unique_species": 2,
+      "cooling_stats": {
+        "mean": 0.05115998498066638,
+        "max": 0.5770890522087474,
+        "std": 0.11089401781978726,
+        "coverage": 33.800000000000004
+      }
+    },
+    "3": {
+      "n_trees": 3,
+      "best_secpi": 1.5002,
+      "all_secpi": [
+        1.5001,
+        1.5001,
+        1.5002,
+        1.5,
+        1.5
+      ],
+      "mean_secpi": 1.50008,
+      "std_secpi": 7.483314773547058e-05,
+      "tree_placements": [
+        [
+          95.0,
+          95.0
+        ],
+        [
+          5.0,
+          15.0
+        ],
+        [
+          85.0,
+          55.0
+        ]
+      ],
+      "tree_species": [
+        "Narra",
+        "Talisay",
+        "Banaba"
+      ],
+      "unique_species": [
+        "Narra",
+        "Banaba",
+        "Talisay"
+      ],
+      "n_unique_species": 3,
+      "cooling_stats": {
+        "mean": 0.02499918062313188,
+        "max": 0.5770892422591514,
+        "std": 0.0740298524217184,
+        "coverage": 20.560000000000002
+      }
+    },
+    "4": {
+      "n_trees": 4,
+      "best_secpi": 1.5,
+      "all_secpi": [
+        1.5,
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "mean_secpi": 1.5,
+      "std_secpi": 0.0,
+      "tree_placements": [
+        [
+          95.0,
+          95.0
+        ],
+        [
+          95.0,
+          85.0
+        ],
+        [
+          5.0,
+          75.0
+        ],
+        [
+          25.0,
+          15.0
+        ]
+      ],
+      "tree_species": [
+        "Narra",
+        "Narra",
+        "Narra",
+        "Narra"
+      ],
+      "unique_species": [
+        "Narra"
+      ],
+      "n_unique_species": 1,
+      "cooling_stats": {
+        "mean": 0.10256601160811563,
+        "max": 1.1134593121737848,
+        "std": 0.164939898746474,
+        "coverage": 53.779999999999994
+      }
+    },
+    "5": {
+      "n_trees": 5,
+      "best_secpi": 1.5001,
+      "all_secpi": [
+        1.5,
+        1.5,
+        1.5,
+        1.5001,
+        1.5
+      ],
+      "mean_secpi": 1.50002,
+      "std_secpi": 3.999999999999559e-05,
+      "tree_placements": [
+        [
+          85.0,
+          55.0
+        ],
+        [
+          95.0,
+          85.0
+        ],
+        [
+          25.0,
+          15.0
+        ],
+        [
+          45.0,
+          65.0
+        ],
+        [
+          55.0,
+          25.0
+        ]
+      ],
+      "tree_species": [
+        "Narra",
+        "Narra",
+        "Narra",
+        "Akleng-parang",
+        "Narra"
+      ],
+      "unique_species": [
+        "Narra",
+        "Akleng-parang"
+      ],
+      "n_unique_species": 2,
+      "cooling_stats": {
+        "mean": 0.1996909140039024,
+        "max": 0.8024960658956516,
+        "std": 0.21488662685910023,
+        "coverage": 70.1
+      }
+    }
+  }
+}

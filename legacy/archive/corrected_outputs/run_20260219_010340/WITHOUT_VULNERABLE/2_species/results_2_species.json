@@ -1,0 +1,53 @@
+{
+  "scenario": "WITHOUT_VULNERABLE",
+  "n_species_exact": 2,
+  "n_trees": 5,
+  "best_secpi": 1.592014,
+  "all_secpi": [
+    1.592014,
+    1.5914840000000001,
+    1.5913780000000002,
+    1.5916960000000002,
+    1.590848
+  ],
+  "mean_secpi": 1.5914840000000003,
+  "std_secpi": 0.00038511712504121326,
+  "tree_placements": [
+    [
+      5.0,
+      75.0
+    ],
+    [
+      85.0,
+      35.0
+    ],
+    [
+      95.0,
+      85.0
+    ],
+    [
+      15.0,
+      15.0
+    ],
+    [
+      65.0,
+      75.0
+    ]
+  ],
+  "tree_species": [
+    "Duhat",
+    "Banaba",
+    "Banaba",
+    "Banaba",
+    "Banaba"
+  ],
+  "unique_species": [
+    "Banaba",
+    "Duhat"
+  ],
+  "cooling_stats": {
+    "mean": 0.017312188281013774,
+    "max": 0.20419017366550227,
+    "std": 0.03881854274951699
+  }
+}

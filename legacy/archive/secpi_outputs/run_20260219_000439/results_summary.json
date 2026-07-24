@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-02-19T00:06:31.044263",
+  "config": {
+    "grid": {
+      "width": 10,
+      "height": 10,
+      "cell_size": 10.0
+    },
+    "cooling": {
+      "decay_lambda": 1.5,
+      "cca_threshold": 1.2,
+      "competition_k": 5.0
+    },
+    "aco": {
+      "n_trees": 5,
+      "n_ants": 25,
+      "n_iterations": 50,
+      "evaporation_rate": 0.3,
+      "alpha": 1.0,
+      "beta": 2.5,
+      "q0": 0.8
+    }
+  },
+  "optimal_solution": {
+    "secpi": 0.7502500000000001,
+    "n_trees": 5,
+    "tree_species": [
+      "Duhat",
+      "Duhat",
+      "Narra",
+      "Banaba",
+      "Narra"
+    ],
+    "unique_species": 3,
+    "mean_cooling": 0.007633519660361328,
+    "max_cooling": 0.181207947574687
+  },
+  "species_diversity_results": {
+    "1": {
+      "mean_secpi": 0.7506,
+      "std_secpi": 0.0,
+      "n_runs": 5
+    },
+    "2": {
+      "mean_secpi": 0.7508700000000001,
+      "std_secpi": 5.9999999999993395e-05,
+      "n_runs": 5
+    },
+    "3": {
+      "mean_secpi": 0.75084,
+      "std_secpi": 0.00011999999999998679,
+      "n_runs": 5
+    },
+    "4": {
+      "mean_secpi": 0.7506600000000001,
+      "std_secpi": 2.0000000000042208e-05,
+      "n_runs": 5
+    },
+    "5": {
+      "mean_secpi": 0.75047,
+      "std_secpi": 0.0001029563014098673,
+      "n_runs": 5
+    }
+  },
+  "aco_recommendation": {
+    "n_ants": 25,
+    "n_iterations": 50,
+    "rationale": "Based on problem complexity: 100 coarse cells, ~35 plantable, 5 trees from 6 species. 25 ants and 50 iterations provide sufficient exploration while remaining computationally tractable."
+  }
+}

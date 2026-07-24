@@ -1,0 +1,158 @@
+{
+  "run_timestamp": "20260219_055027",
+  "output_directory": "corrected_outputs\\run_20260219_055027",
+  "configuration": {
+    "coarse_grid": {
+      "width": 10,
+      "height": 10,
+      "cell_size": 10.0
+    },
+    "fine_grid": {
+      "cell_size": 1.0
+    },
+    "ca_params": {
+      "morphology": "organic",
+      "p_init": 0.15,
+      "alpha": 0.1,
+      "beta": 0.4,
+      "theta": 3
+    },
+    "cooling_params": {
+      "decay_lambda": 1.9,
+      "cca_threshold": 1.2,
+      "competition_k": 5.0
+    },
+    "aco_params": {
+      "n_trees": 5,
+      "n_ants": 20,
+      "n_iterations": 40,
+      "evaporation_rate": 0.5,
+      "alpha": 1.0,
+      "beta": 2.0,
+      "q0": 0.7
+    }
+  },
+  "optimization_results": {
+    "best_secpi": 3.0034,
+    "n_trees": 5,
+    "unique_species": [
+      "Narra",
+      "Akleng-parang"
+    ],
+    "cooling_stats": {
+      "mean": 0.1612682169621706,
+      "max": 1.2240536680072958,
+      "std": 0.23344847945408068
+    }
+  },
+  "scenario_comparison": {
+    "with_vulnerable_secpi": null,
+    "without_vulnerable_secpi": null,
+    "difference": 0
+  },
+  "sensitivity_analysis": {
+    "baseline_secpi": 3.0024166666666665,
+    "top_3_sensitive_params": [
+      {
+        "parameter": "Narra.crown_diameter_m",
+        "category": "Species_Morphology",
+        "sensitivity_index": 0.4884842765549975
+      },
+      {
+        "parameter": "Kabiki.height_m",
+        "category": "Species_Morphology",
+        "sensitivity_index": 0.3238502317577506
+      },
+      {
+        "parameter": "Duhat.crown_diameter_m",
+        "category": "Species_Morphology",
+        "sensitivity_index": 0.32194620999750195
+      }
+    ],
+    "total_params_analyzed": 40
+  },
+  "morphological_robustness": {
+    "mean_across_morphologies": 3.8203045153243775,
+    "std_across_morphologies": 0.328614712059364,
+    "assessment": "ROBUST"
+  },
+  "k_scenario_analysis": {
+    "with_vulnerable": {
+      "1": {
+        "secpi": 3.01935,
+        "species": [
+          "Kabiki"
+        ]
+      },
+      "2": {
+        "secpi": 3.02665,
+        "species": [
+          "Narra"
+        ]
+      },
+      "3": {
+        "secpi": 3.01975,
+        "species": [
+          "Narra",
+          "Duhat"
+        ]
+      },
+      "4": {
+        "secpi": 3.02435,
+        "species": [
+          "Narra",
+          "Akleng-parang"
+        ]
+      },
+      "5": {
+        "secpi": 3.01815,
+        "species": [
+          "Narra",
+          "Akleng-parang"
+        ]
+      },
+      "6": {
+        "secpi": 0,
+        "species": []
+      }
+    },
+    "without_vulnerable": {
+      "1": {
+        "secpi": 1.5017000000000003,
+        "species": [
+          "Talisay"
+        ]
+      },
+      "2": {
+        "secpi": 1.5008000000000001,
+        "species": [
+          "Narra"
+        ]
+      },
+      "3": {
+        "secpi": 1.5003,
+        "species": [
+          "Narra"
+        ]
+      },
+      "4": {
+        "secpi": 1.5002,
+        "species": [
+          "Narra"
+        ]
+      },
+      "5": {
+        "secpi": 1.5,
+        "species": [
+          "Narra"
+        ]
+      },
+      "6": {
+        "secpi": 0,
+        "species": []
+      }
+    },
+    "optimal_k_with": 2,
+    "optimal_k_without": 1
+  }
+}

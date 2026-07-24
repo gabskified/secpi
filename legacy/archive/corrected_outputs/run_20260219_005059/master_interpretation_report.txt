@@ -1,0 +1,36 @@
+================================================================================
+SECPI OPTIMIZATION MASTER INTERPRETATION REPORT
+Generated: 2026-02-19 01:00:09
+================================================================================
+
+1. GRID CONFIGURATION
+----------------------------------------
+   Coarse Grid: 10x10 cells
+   Cell Size: 10.0m
+   Total Area: 100.0m x 100.0m
+
+2. ACO PARAMETERS
+----------------------------------------
+   Ants: 20, Iterations: 40
+
+3. OPTIMAL RESULT
+----------------------------------------
+   Best SECPI: 3.0768
+   Species: Duhat, Duhat, Banaba, Narra, Kabiki
+
+4. SUBOPTIMAL COMPARISONS
+----------------------------------------
+   k=1: WITH=3.2241, WITHOUT=1.5015
+   k=2: WITH=3.2248, WITHOUT=1.5025
+   k=3: WITH=3.2215, WITHOUT=1.5016
+   k=4: WITH=3.2243, WITHOUT=1.5010
+   k=5: WITH=3.2249, WITHOUT=1.5007
+
+5. MORPHOLOGICAL ROBUSTNESS
+----------------------------------------
+   Dense_Organic: 3.1826 ± 0.0795
+   Sparse_Organic: 3.0734 ± 0.0825
+   Dense_Linear: 3.0654 ± 0.1306
+   Sparse_Linear: 2.9529 ± 0.1533
+   High_Vulnerability: 3.0523 ± 0.1257
+   Low_Vulnerability: 3.0304 ± 0.1424

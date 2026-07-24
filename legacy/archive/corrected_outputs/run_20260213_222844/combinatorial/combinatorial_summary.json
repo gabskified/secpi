@@ -1,0 +1,103 @@
+{
+  "total_configurations": 126,
+  "n_species": 6,
+  "n_trees": 5,
+  "species_list": [
+    "Narra",
+    "Talisay",
+    "Banaba",
+    "Kabiki",
+    "Duhat",
+    "Akleng-parang"
+  ],
+  "with_vulnerability": {
+    "best_combo": {
+      "combo_id": 63,
+      "k": 6,
+      "species_available": "Narra + Talisay + Banaba + Kabiki + Duhat + Akleng-parang",
+      "species_actually_used": "Narra + Talisay",
+      "n_species_used": 2,
+      "all_available_used": false,
+      "secpi": 4.393,
+      "rank": 1
+    },
+    "best_per_k": {
+      "1": {
+        "species": "Akleng-parang",
+        "secpi": 4.3916,
+        "n_used": 1
+      },
+      "2": {
+        "species": "Banaba + Akleng-parang",
+        "secpi": 4.39085,
+        "n_used": 2
+      },
+      "3": {
+        "species": "Narra + Talisay + Akleng-parang",
+        "secpi": 4.3908000000000005,
+        "n_used": 3
+      },
+      "4": {
+        "species": "Talisay + Banaba + Kabiki + Akleng-parang",
+        "secpi": 4.3924,
+        "n_used": 1
+      },
+      "5": {
+        "species": "Narra + Talisay + Banaba + Duhat + Akleng-parang",
+        "secpi": 4.3911999999999995,
+        "n_used": 3
+      },
+      "6": {
+        "species": "Narra + Talisay + Banaba + Kabiki + Duhat + Akleng-parang",
+        "secpi": 4.393,
+        "n_used": 2
+      }
+    },
+    "aco_used_all_available_pct": 30.158730158730158
+  },
+  "without_vulnerability": {
+    "best_combo": {
+      "combo_id": 6,
+      "k": 1,
+      "species_available": "Akleng-parang",
+      "species_actually_used": "Akleng-parang",
+      "n_species_used": 1,
+      "all_available_used": true,
+      "secpi": 1.7502,
+      "rank": 1
+    },
+    "best_per_k": {
+      "1": {
+        "species": "Akleng-parang",
+        "secpi": 1.7502,
+        "n_used": 1
+      },
+      "2": {
+        "species": "Narra + Kabiki",
+        "secpi": 1.7501,
+        "n_used": 1
+      },
+      "3": {
+        "species": "Kabiki + Duhat + Akleng-parang",
+        "secpi": 1.7501,
+        "n_used": 2
+      },
+      "4": {
+        "species": "Narra + Talisay + Banaba + Akleng-parang",
+        "secpi": 1.7501,
+        "n_used": 2
+      },
+      "5": {
+        "species": "Narra + Talisay + Kabiki + Duhat + Akleng-parang",
+        "secpi": 1.75,
+        "n_used": 2
+      },
+      "6": {
+        "species": "Narra + Talisay + Banaba + Kabiki + Duhat + Akleng-parang",
+        "secpi": 1.75,
+        "n_used": 2
+      }
+    },
+    "aco_used_all_available_pct": 19.047619047619047
+  }
+}

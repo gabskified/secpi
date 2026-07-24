@@ -1,0 +1,448 @@
+====================================================================================================
+COMPREHENSIVE AUTOMATED INTERPRETATION REPORT
+Generated: 2026-02-19 05:53:41
+====================================================================================================
+
+
+################################################################################
+# SECTION: GRID_GENERATION
+################################################################################
+
+================================================================================
+AUTOMATED INTERPRETATION: URBAN GRID GENERATION
+================================================================================
+
+1. GRID COMPOSITION ANALYSIS
+----------------------------------------
+   Total Cells: 100 (10x10)
+   Prohibited (Buildings): 19 cells (19.0%)
+   Available (Plantable): 20 cells (20.0%)
+   Vulnerable Zones: 61 cells (61.0%)
+
+2. URBAN MORPHOLOGY ASSESSMENT
+----------------------------------------
+   Density Classification: LOW DENSITY
+   Implication: Abundant planting opportunities; coverage optimization feasible
+
+3. VULNERABILITY CONTEXT
+----------------------------------------
+   Vulnerability Level: HIGH (61.0%)
+   Implication: Strong equity weighting expected to significantly influence optimization
+
+4. CA PARAMETERS INFLUENCE
+----------------------------------------
+   Initial Seed Probability (p_init): 0.15
+   Growth Rate (alpha): 0.1
+   Neighbor Influence (beta): 0.4
+   Clustering Threshold (theta): 3
+   Morphology Type: organic
+
+5. RECOMMENDATIONS
+----------------------------------------
+   [OK] High vulnerability zones present
+     Equity-weighted optimization highly relevant
+
+
+################################################################################
+# SECTION: EQUITY_WEIGHTS
+################################################################################
+
+================================================================================
+AUTOMATED INTERPRETATION: EQUITY WEIGHT DISTRIBUTION
+================================================================================
+
+1. WEIGHT DISTRIBUTION (Fine Grid)
+----------------------------------------
+   High Priority (w=2.0): 9738 cells (97.4%)
+   Medium Priority (w=1.5): 262 cells (2.6%)
+   Low Priority (w=1.0): 0 cells (0.0%)
+
+2. EQUITY IMPLICATION
+----------------------------------------
+   Mean Equity Weight: 1.987
+   Assessment: HIGH equity sensitivity
+     Optimization will strongly prioritize vulnerable zones
+     Expect concentrated cooling near high-weight areas
+
+3. SECPI SCORING IMPACT
+----------------------------------------
+   The SECPI formula multiplies cooling class scores by equity weights:
+   SECPI = Σ[(A_k - A_baseline) × W_k × E_k]
+   Where E_k is the mean equity weight per cooling class.
+   With current distribution, high-cooling zones in vulnerable areas
+   will receive up to 2.0x scoring boost.
+
+
+################################################################################
+# SECTION: SPECIES
+################################################################################
+
+================================================================================
+AUTOMATED INTERPRETATION: SPECIES CHARACTERISTICS
+================================================================================
+
+1. SPECIES RANKING BY COOLING POTENTIAL (D_j)
+----------------------------------------
+   1. Narra: D_j = 0.9429
+      CPA = 415.5m², LAI = 6.07, CD = 23.0m
+   2. Akleng-parang: D_j = 0.8557
+      CPA = 452.4m², LAI = 3.15, CD = 24.0m
+   3. Talisay: D_j = 0.3925
+      CPA = 113.1m², LAI = 4.40, CD = 12.0m
+   4. Kabiki: D_j = 0.3507
+      CPA = 95.0m², LAI = 4.12, CD = 11.0m
+   5. Banaba: D_j = 0.3383
+      CPA = 95.0m², LAI = 3.87, CD = 11.0m
+   6. Duhat: D_j = 0.2836
+      CPA = 70.9m², LAI = 3.52, CD = 9.5m
+
+2. COOLING MECHANISM BREAKDOWN
+----------------------------------------
+   Cooling Potential Formula: D_j = 0.7×(CPA/CPA_max) + 0.3×(LAI/LAI_max)
+   - Shade Component (CPA): 70% weight
+   - Evapotranspiration Component (LAI): 30% weight
+
+3. KEY FINDINGS
+----------------------------------------
+   Best Performer: Narra (D_j = 0.9429)
+   - Large crown (415.5m^2) provides extensive shade coverage
+   - Also has highest LAI (6.07) for maximum evapotranspiration
+
+   Lowest Performer: Duhat (D_j = 0.2836)
+   - May still be optimal in space-constrained scenarios
+
+4. OPTIMIZATION IMPLICATIONS
+----------------------------------------
+   Without diversity constraints, ACO will likely favor:
+   - Narra for maximum cooling intensity
+   - Akleng-parang as secondary choice
+   Mono-species solutions may emerge if single species dominates.
+
+
+################################################################################
+# SECTION: OPTIMIZATION
+################################################################################
+
+================================================================================
+AUTOMATED INTERPRETATION: ACO OPTIMIZATION RESULTS
+================================================================================
+
+1. SOLUTION SUMMARY
+----------------------------------------
+   Best SECPI Score: 3.0034
+   Number of Trees: 5
+   Unique Species: 2
+
+2. SPECIES COMPOSITION
+----------------------------------------
+   Narra: 3 trees (60%) - D_j = 0.9429
+   Akleng-parang: 2 trees (40%) - D_j = 0.8557
+
+3. DIVERSITY ASSESSMENT
+----------------------------------------
+   Pattern: MODERATE DIVERSITY SOLUTION
+     Diversity ratio: 0.40
+
+4. SPATIAL DISTRIBUTION ANALYSIS
+----------------------------------------
+   Trees near vulnerable zones (≤20m): 5/5
+   → Strong equity-driven placement
+
+5. COOLING PERFORMANCE METRICS
+----------------------------------------
+   Mean Cooling Intensity: 0.1613
+   Max Cooling Intensity: 1.2241
+   Std Dev: 0.2334
+   Coverage (>0.01): 64.9%
+
+6. SECPI SCORE INTERPRETATION
+----------------------------------------
+   Rating: EXCELLENT cooling distribution
+   → High proportion of cells in upper cooling quartiles
+
+
+################################################################################
+# SECTION: ZONAL_EFFICIENCY
+################################################################################
+
+================================================================================
+AUTOMATED INTERPRETATION: ZONAL COOLING EFFICIENCY
+================================================================================
+
+1. ZONE-WISE COOLING STATISTICS
+----------------------------------------
+   High (w=2.0):
+      Mean Cooling: 0.1648
+      Std Dev: 0.2349
+      Cell Count: 9738
+   Medium (w=1.5):
+      Mean Cooling: 0.0309
+      Std Dev: 0.1088
+      Cell Count: 262
+
+2. EQUITY ACHIEVEMENT ANALYSIS
+----------------------------------------
+
+3. WEIGHTED CONTRIBUTION ANALYSIS
+----------------------------------------
+   High (w=2.0) contribution: 3209.16
+   Medium (w=1.5) contribution: 12.15
+   Total Weighted Cooling: 3221.31
+
+4. RECOMMENDATIONS
+----------------------------------------
+   → Current configuration achieves equity goals
+   → Cooling resources appropriately allocated to vulnerable populations
+
+
+################################################################################
+# SECTION: K_SCENARIOS
+################################################################################
+
+================================================================================
+AUTOMATED INTERPRETATION: k=1 TO k=6 SCENARIO COMPARISON
+WITH vs WITHOUT VULNERABLE CELLS
+================================================================================
+
+1. SECPI PROGRESSION BY k
+----------------------------------------
+   k=1: WITH=3.0194, WITHOUT=1.5017, Δ=+1.5176 (WITH better)
+   k=2: WITH=3.0267, WITHOUT=1.5008, Δ=+1.5258 (WITH better)
+   k=3: WITH=3.0198, WITHOUT=1.5003, Δ=+1.5195 (WITH better)
+   k=4: WITH=3.0244, WITHOUT=1.5002, Δ=+1.5242 (WITH better)
+   k=5: WITH=3.0181, WITHOUT=1.5000, Δ=+1.5181 (WITH better)
+
+2. OPTIMAL k IDENTIFICATION
+----------------------------------------
+   WITH VULNERABLE: Optimal k = 2 (SECPI = 3.0267)
+   WITHOUT VULNERABLE: Optimal k = 1 (SECPI = 1.5017)
+   → Different optimal k values suggests vulnerability affects diminishing returns
+
+3. DIMINISHING RETURNS ANALYSIS
+----------------------------------------
+   Marginal SECPI gains (k to k+1):
+   k=1→2: WITH=+0.0073, WITHOUT=-0.0009
+   k=2→3: WITH=-0.0069, WITHOUT=-0.0005
+   k=3→4: WITH=+0.0046, WITHOUT=-0.0001
+   k=4→5: WITH=-0.0062, WITHOUT=-0.0002
+
+   WITH: Diminishing returns start at k=2
+   WITHOUT: Diminishing returns start at k=2
+
+4. SPECIES DIVERSITY PATTERNS
+----------------------------------------
+   k=1: WITH uses 1 species {'Kabiki'}
+         WITHOUT uses 1 species {'Talisay'}
+   k=2: WITH uses 1 species {'Narra'}
+         WITHOUT uses 1 species {'Narra'}
+   k=3: WITH uses 2 species {'Narra', 'Duhat'}
+         WITHOUT uses 1 species {'Narra'}
+   k=4: WITH uses 2 species {'Narra', 'Akleng-parang'}
+         WITHOUT uses 1 species {'Narra'}
+   k=5: WITH uses 2 species {'Narra', 'Akleng-parang'}
+         WITHOUT uses 1 species {'Narra'}
+
+5. EQUITY IMPACT ASSESSMENT
+----------------------------------------
+   WITH performs better in 5/5 k values
+   WITHOUT performs better in 0/5 k values
+   Average SECPI difference: +1.5211
+
+   → STRONG EQUITY BENEFIT: Vulnerable zones improve optimization
+
+6. RECOMMENDATIONS
+----------------------------------------
+   Recommended Configuration:
+   → Number of trees: k = 2
+   → Scenario: WITH VULNERABLE
+   → Expected SECPI: 3.0267
+
+   Rationale: Equity-weighted optimization achieves better cooling
+   distribution while prioritizing vulnerable populations.
+
+
+################################################################################
+# SECTION: SCENARIO_COMPARISON
+################################################################################
+
+================================================================================
+AUTOMATED INTERPRETATION: SCENARIO COMPARISON
+WITH vs WITHOUT VULNERABLE CELLS
+================================================================================
+
+1. SECPI SCORE COMPARISON
+----------------------------------------
+   WITH VULNERABLE:    3.0181
+   WITHOUT VULNERABLE: 1.5000
+   Absolute Difference: +1.5181
+   Relative Difference: +50.3%
+
+2. STATISTICAL SIGNIFICANCE
+----------------------------------------
+   Difference: SIGNIFICANT (|Δ| > 0.1)
+
+3. INTERPRETATION
+----------------------------------------
+   Finding: WITH VULNERABLE performs BETTER
+   Implication:
+   → Equity weighting improves SECPI score
+   → Vulnerable zones benefit from targeted cooling
+   → Equity and efficiency are SYNERGISTIC in this configuration
+
+4. SPECIES SELECTION COMPARISON
+----------------------------------------
+   WITH VULN species: {'Narra', 'Akleng-parang'}
+   WITHOUT VULN species: {'Narra'}
+   → Different species: {'Akleng-parang'}
+   → Vulnerability context affects species selection
+
+5. POLICY RECOMMENDATION
+----------------------------------------
+   RECOMMEND: Use WITH VULNERABLE configuration
+   Rationale: Better cooling for vulnerable populations
+   without sacrificing overall performance
+
+
+################################################################################
+# SECTION: SENSITIVITY
+################################################################################
+
+================================================================================
+AUTOMATED INTERPRETATION: SENSITIVITY ANALYSIS
+================================================================================
+
+1. MOST INFLUENTIAL PARAMETERS (Top 10)
+----------------------------------------
+   Narra.crown_diameter_m
+      Category: Species_Morphology
+      Sensitivity Index: 0.488484
+      SECPI Range: [2.9957, 4.4623]
+   Kabiki.height_m
+      Category: Species_Morphology
+      Sensitivity Index: 0.323850
+      SECPI Range: [4.4662, 3.4939]
+   Duhat.crown_diameter_m
+      Category: Species_Morphology
+      Sensitivity Index: 0.321946
+      SECPI Range: [3.4972, 4.4639]
+   Akleng-parang.crown_diameter_m
+      Category: Species_Morphology
+      Sensitivity Index: 0.163824
+      SECPI Range: [3.4973, 3.9891]
+   Banaba.crown_diameter_m
+      Category: Species_Morphology
+      Sensitivity Index: 0.160926
+      SECPI Range: [3.9843, 4.4675]
+   Banaba.height_m
+      Category: Species_Morphology
+      Sensitivity Index: 0.159749
+      SECPI Range: [3.9855, 4.4652]
+   Kabiki.crown_diameter_m
+      Category: Species_Morphology
+      Sensitivity Index: 0.159649
+      SECPI Range: [3.9798, 3.5004]
+   Talisay.l0
+      Category: Species_Allometry
+      Sensitivity Index: 0.017824
+      SECPI Range: [3.0214, 2.9679]
+   Banaba.l1
+      Category: Species_Allometry
+      Sensitivity Index: 0.016407
+      SECPI Range: [2.9723, 3.0216]
+   Kabiki.h1
+      Category: Species_Allometry
+      Sensitivity Index: 0.015422
+      SECPI Range: [3.0033, 3.0496]
+
+2. CATEGORY-LEVEL SENSITIVITY
+----------------------------------------
+   Species_Morphology:
+      Total Sensitivity: 1.785967
+      Max Single Parameter: 0.488484
+      Mean Sensitivity: 0.148831
+   Species_Allometry:
+      Total Sensitivity: 0.178440
+      Max Single Parameter: 0.017824
+      Mean Sensitivity: 0.007435
+   Cooling_Model:
+      Total Sensitivity: 0.016742
+      Max Single Parameter: 0.008893
+      Mean Sensitivity: 0.005581
+   Weighting:
+      Total Sensitivity: 0.000239
+      Max Single Parameter: 0.000239
+      Mean Sensitivity: 0.000239
+
+3. CRITICAL FINDINGS
+----------------------------------------
+   Most Influential Category: Species_Morphology
+   Most Sensitive Parameter: Narra.crown_diameter_m
+   → Changing this parameter causes 48.85% SECPI variation
+
+4. ROBUSTNESS ASSESSMENT
+----------------------------------------
+   Parameters with high sensitivity (>0.1): 7/40
+   Assessment: SENSITIVE
+   → Multiple parameters significantly affect results
+   → Careful calibration required
+
+5. CALIBRATION RECOMMENDATIONS
+----------------------------------------
+   Priority calibration targets:
+   1. Narra.crown_diameter_m (Species_Morphology)
+   2. Kabiki.height_m (Species_Morphology)
+   3. Duhat.crown_diameter_m (Species_Morphology)
+
+   Low-priority parameters (sensitivity < 0.01):
+   → 25 parameters can use default values
+
+
+################################################################################
+# SECTION: MORPHOLOGICAL_ROBUSTNESS
+################################################################################
+
+================================================================================
+AUTOMATED INTERPRETATION: MORPHOLOGICAL ROBUSTNESS
+================================================================================
+
+1. PERFORMANCE BY MORPHOLOGY
+----------------------------------------
+   Sparse_Organic:
+      Mean SECPI: 4.3436 ± 0.0748
+      CV: 0.017, n=5
+   High_Vulnerability:
+      Mean SECPI: 4.0394 ± 0.5362
+      CV: 0.133, n=5
+   Dense_Organic:
+      Mean SECPI: 3.9614 ± 0.4871
+      CV: 0.123, n=5
+   Dense_Linear:
+      Mean SECPI: 3.6995 ± 0.6415
+      CV: 0.173, n=5
+   Sparse_Linear:
+      Mean SECPI: 3.4576 ± 0.5654
+      CV: 0.164, n=5
+   Low_Vulnerability:
+      Mean SECPI: 3.4203 ± 0.6149
+      CV: 0.180, n=5
+
+2. CROSS-MORPHOLOGY CONSISTENCY
+----------------------------------------
+   Overall Mean SECPI: 3.8203
+   Cross-Morphology Std: 0.3286
+   Cross-Morphology CV: 0.086
+
+   Assessment: HIGHLY ROBUST
+   → Algorithm performs consistently across morphologies
+   → Results generalizable to various urban forms
+
+3. BEST/WORST PERFORMING MORPHOLOGIES
+----------------------------------------
+   Best: Sparse_Organic (SECPI = 4.3436)
+   Worst: Low_Vulnerability (SECPI = 3.4203)
+   Performance Gap: 0.9233
+
+4. RELIABILITY ASSESSMENT
+----------------------------------------
+   All morphologies show consistent results (CV < 0.2)
+   → High confidence in single-run results

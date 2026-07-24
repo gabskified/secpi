@@ -1,0 +1,83 @@
+{
+  "optimal_configs": [
+    {
+      "label": "Optimal (SECPI=3.077)",
+      "coverage": 75.0,
+      "mean_intensity": 0.023171039050578063,
+      "n_species": 4,
+      "color": "#2ECC71"
+    }
+  ],
+  "suboptimal_configs": [
+    {
+      "label": "k=1 WITH",
+      "coverage": 75.0,
+      "mean_intensity": 0.027571674757941356,
+      "n_species": 1,
+      "color": "#E74C3C"
+    },
+    {
+      "label": "k=2 WITH",
+      "coverage": 75.0,
+      "mean_intensity": 0.03379458071844228,
+      "n_species": 2,
+      "color": "#E67E22"
+    },
+    {
+      "label": "k=3 WITH",
+      "coverage": 75.0,
+      "mean_intensity": 0.018175348825562473,
+      "n_species": 3,
+      "color": "#F1C40F"
+    },
+    {
+      "label": "k=4 WITH",
+      "coverage": 75.0,
+      "mean_intensity": 0.012179639947947737,
+      "n_species": 4,
+      "color": "#2ECC71"
+    },
+    {
+      "label": "k=5 WITH",
+      "coverage": 75.0,
+      "mean_intensity": 0.03586809272896048,
+      "n_species": 5,
+      "color": "#3498DB"
+    },
+    {
+      "label": "k=1 NO_V",
+      "coverage": 75.0,
+      "mean_intensity": 0.00931831835403469,
+      "n_species": 1,
+      "color": "#E74C3C"
+    },
+    {
+      "label": "k=2 NO_V",
+      "coverage": 74.97,
+      "mean_intensity": 0.007003970827139364,
+      "n_species": 2,
+      "color": "#E67E22"
+    },
+    {
+      "label": "k=3 NO_V",
+      "coverage": 75.0,
+      "mean_intensity": 0.008828197120976369,
+      "n_species": 3,
+      "color": "#F1C40F"
+    },
+    {
+      "label": "k=4 NO_V",
+      "coverage": 74.98,
+      "mean_intensity": 0.05194531821890382,
+      "n_species": 4,
+      "color": "#2ECC71"
+    },
+    {
+      "label": "k=5 NO_V",
+      "coverage": 75.0,
+      "mean_intensity": 0.0555283729862124,
+      "n_species": 5,
+      "color": "#3498DB"
+    }
+  ]
+}

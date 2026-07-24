@@ -1,0 +1,31 @@
+================================================================================
+AUTOMATED INTERPRETATION: URBAN GRID GENERATION
+================================================================================
+
+1. GRID COMPOSITION ANALYSIS
+----------------------------------------
+   Total Cells: 100 (10x10)
+   Prohibited (Buildings): 61 cells (61.0%)
+   Available (Plantable): 31 cells (31.0%)
+   Vulnerable Zones: 8 cells (8.0%)
+
+2. URBAN MORPHOLOGY ASSESSMENT
+----------------------------------------
+   Density Classification: HIGH DENSITY
+   Implication: Limited planting opportunities; strategic placement critical
+
+3. VULNERABILITY CONTEXT
+----------------------------------------
+   Vulnerability Level: LOW (8.0%)
+   Implication: Efficiency-driven placement likely to dominate
+
+4. CA PARAMETERS INFLUENCE
+----------------------------------------
+   Initial Seed Probability (p_init): 0.15
+   Growth Rate (alpha): N/A
+   Neighbor Influence (beta): N/A
+   Clustering Threshold (theta): 3
+   Morphology Type: organic
+
+5. RECOMMENDATIONS
+----------------------------------------

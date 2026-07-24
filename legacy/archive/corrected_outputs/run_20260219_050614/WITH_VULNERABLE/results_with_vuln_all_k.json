@@ -1,0 +1,219 @@
+{
+  "scenario": "WITH_VULNERABLE",
+  "k_results": {
+    "1": {
+      "n_trees": 1,
+      "best_secpi": 3.0646871846215458,
+      "all_secpi": [
+        3.0646871846215458,
+        3.047515064102564,
+        3.0463000000000005,
+        3.0646871846215458,
+        3.0646871846215458
+      ],
+      "mean_secpi": 3.0575753235934404,
+      "std_secpi": 0.008718686197011634,
+      "tree_placements": [
+        [
+          55.0,
+          35.0
+        ]
+      ],
+      "tree_species": [
+        "Narra"
+      ],
+      "unique_species": [
+        "Narra"
+      ],
+      "n_unique_species": 1,
+      "cooling_stats": {
+        "mean": 0.050721704405633526,
+        "max": 0.5770890510156385,
+        "std": 0.11044294172411319,
+        "coverage": 35.64
+      }
+    },
+    "2": {
+      "n_trees": 2,
+      "best_secpi": 3.1326,
+      "all_secpi": [
+        3.1326,
+        3.012,
+        3.1313,
+        3.1313,
+        3.1306499999999997
+      ],
+      "mean_secpi": 3.10757,
+      "std_secpi": 0.04778919961664975,
+      "tree_placements": [
+        [
+          85.0,
+          45.0
+        ],
+        [
+          5.0,
+          85.0
+        ]
+      ],
+      "tree_species": [
+        "Duhat",
+        "Narra"
+      ],
+      "unique_species": [
+        "Duhat",
+        "Narra"
+      ],
+      "n_unique_species": 2,
+      "cooling_stats": {
+        "mean": 0.02704210328761518,
+        "max": 0.5770890510156385,
+        "std": 0.08618690737842563,
+        "coverage": 18.68
+      }
+    },
+    "3": {
+      "n_trees": 3,
+      "best_secpi": 3.0905,
+      "all_secpi": [
+        3.06325,
+        3.0900000000000003,
+        3.0905,
+        3.08075,
+        3.06245
+      ],
+      "mean_secpi": 3.0773900000000003,
+      "std_secpi": 0.012371879404520598,
+      "tree_placements": [
+        [
+          65.0,
+          15.0
+        ],
+        [
+          15.0,
+          85.0
+        ],
+        [
+          15.0,
+          75.0
+        ]
+      ],
+      "tree_species": [
+        "Narra",
+        "Narra",
+        "Akleng-parang"
+      ],
+      "unique_species": [
+        "Akleng-parang",
+        "Narra"
+      ],
+      "n_unique_species": 2,
+      "cooling_stats": {
+        "mean": 0.10186996128766306,
+        "max": 1.0840603643621696,
+        "std": 0.1830174320036425,
+        "coverage": 49.55
+      }
+    },
+    "4": {
+      "n_trees": 4,
+      "best_secpi": 3.1081499999999997,
+      "all_secpi": [
+        3.07425,
+        3.1081499999999997,
+        2.9654,
+        3.0364999999999998,
+        3.0965999999999996
+      ],
+      "mean_secpi": 3.05618,
+      "std_secpi": 0.05155481160861707,
+      "tree_placements": [
+        [
+          5.0,
+          85.0
+        ],
+        [
+          15.0,
+          85.0
+        ],
+        [
+          25.0,
+          85.0
+        ],
+        [
+          75.0,
+          35.0
+        ]
+      ],
+      "tree_species": [
+        "Talisay",
+        "Narra",
+        "Narra",
+        "Narra"
+      ],
+      "unique_species": [
+        "Narra",
+        "Talisay"
+      ],
+      "n_unique_species": 2,
+      "cooling_stats": {
+        "mean": 0.10650923437648033,
+        "max": 1.1175336463026329,
+        "std": 0.18605346355983318,
+        "coverage": 53.63
+      }
+    },
+    "5": {
+      "n_trees": 5,
+      "best_secpi": 3.05175,
+      "all_secpi": [
+        3.04645,
+        3.05175,
+        3.03525,
+        2.998,
+        3.04935
+      ],
+      "mean_secpi": 3.03616,
+      "std_secpi": 0.019899356773524068,
+      "tree_placements": [
+        [
+          45.0,
+          75.0
+        ],
+        [
+          25.0,
+          85.0
+        ],
+        [
+          55.0,
+          25.0
+        ],
+        [
+          5.0,
+          85.0
+        ],
+        [
+          45.0,
+          35.0
+        ]
+      ],
+      "tree_species": [
+        "Talisay",
+        "Narra",
+        "Narra",
+        "Narra",
+        "Narra"
+      ],
+      "unique_species": [
+        "Narra",
+        "Talisay"
+      ],
+      "n_unique_species": 2,
+      "cooling_stats": {
+        "mean": 0.1334517852631941,
+        "max": 1.1542158469704469,
+        "std": 0.20783658063799984,
+        "coverage": 54.84
+      }
+    }
+  }
+}

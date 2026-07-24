@@ -1,0 +1,53 @@
+{
+  "scenario": "WITHOUT_VULNERABLE",
+  "n_trees": 5,
+  "best_secpi": 1.5,
+  "all_secpi": [
+    1.5,
+    1.5,
+    1.5,
+    1.5,
+    1.5
+  ],
+  "mean_secpi": 1.5,
+  "std_secpi": 0.0,
+  "tree_placements": [
+    [
+      65.0,
+      45.0
+    ],
+    [
+      65.0,
+      55.0
+    ],
+    [
+      25.0,
+      75.0
+    ],
+    [
+      75.0,
+      25.0
+    ],
+    [
+      25.0,
+      15.0
+    ]
+  ],
+  "tree_species": [
+    "Banaba",
+    "Banaba",
+    "Narra",
+    "Narra",
+    "Duhat"
+  ],
+  "unique_species": [
+    "Banaba",
+    "Narra",
+    "Duhat"
+  ],
+  "cooling_stats": {
+    "mean": 0.10380416864919703,
+    "max": 0.6321824763407803,
+    "std": 0.14526558216754887
+  }
+}

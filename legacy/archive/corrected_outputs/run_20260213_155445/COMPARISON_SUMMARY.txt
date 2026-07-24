@@ -1,0 +1,19 @@
+
+================================================================================
+COMPARISON: WITH vs WITHOUT VULNERABLE ZONES
+================================================================================
+
+SECPI Scores Comparison (5 Trees, Varying Species):
+--------------------------------------------------------------------------------
+Species Count   WITH Vulnerable (SECPI)        WITHOUT Vulnerable (SECPI)    
+--------------------------------------------------------------------------------
+1               3.2239                         1.5000                         (UP WITH)
+2               3.3234                         1.5000                         (UP WITH)
+3               3.2954                         1.5000                         (UP WITH)
+4               3.2687                         1.5000                         (UP WITH)
+5               3.1126                         1.5000                         (UP WITH)
+
+Key Observations:
+--------------------------------------------------------------------------------
+Optimal WITH Vulnerable Zones: 2 species (5 trees) (SECPI: 3.3234)
+Optimal WITHOUT Vulnerable Zones: 1 species (5 trees) (SECPI: 1.5000)

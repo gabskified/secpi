@@ -1,0 +1,38 @@
+{
+  "scenario": "WITH_VULNERABLE",
+  "n_species_exact": 5,
+  "n_trees": 5,
+  "best_secpi": 3.013532412965186,
+  "all_secpi": [
+    3.013532412965186,
+    3.013532412965186,
+    3.013532412965186,
+    3.013532412965186,
+    3.013532412965186
+  ],
+  "mean_secpi": 3.013532412965186,
+  "std_secpi": 0.0,
+  "tree_placements": [
+    [
+      15.0,
+      85.0
+    ],
+    [
+      5.0,
+      95.0
+    ]
+  ],
+  "tree_species": [
+    "Akleng-parang",
+    "Narra"
+  ],
+  "unique_species": [
+    "Akleng-parang",
+    "Narra"
+  ],
+  "cooling_stats": {
+    "mean": 0.03382670203644375,
+    "max": 0.9868764156449341,
+    "std": 0.11183739024772968
+  }
+}

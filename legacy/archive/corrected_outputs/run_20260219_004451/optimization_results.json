@@ -1,0 +1,37 @@
+{
+  "best_secpi": 3.0142325730292114,
+  "n_trees": 2,
+  "tree_placements": [
+    [
+      15.0,
+      85.0
+    ],
+    [
+      5.0,
+      95.0
+    ]
+  ],
+  "tree_species": [
+    "Akleng-parang",
+    "Akleng-parang"
+  ],
+  "unique_species": [
+    "Akleng-parang"
+  ],
+  "n_unique_species": 1,
+  "cooling_stats": {
+    "mean": 0.034363210333224925,
+    "max": 0.9777436087010732,
+    "min": 0.0,
+    "std": 0.1130109268969152
+  },
+  "aco_params": {
+    "n_trees": 5,
+    "n_ants": 20,
+    "n_iterations": 40,
+    "evaporation_rate": 0.5,
+    "alpha": 1.0,
+    "beta": 2.0,
+    "q0": 0.7
+  }
+}

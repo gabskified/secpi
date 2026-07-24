@@ -1,0 +1,43 @@
+EQUITABLE INTEGER LATTICE OPTIMIZATION PARADIGM
+============================================================
+
+
+    PARADIGM COMPONENTS IMPLEMENTED:
+    
+    1. INTEGER LATTICE FORMALIZATION
+       - Formal representation of urban space as subset of Z^2
+       - State function S: G → {P, V, A}
+       - Equity weighting function W_e(i)
+    
+    2. CELLULAR AUTOMATA URBAN GENERATOR
+       - Binary urban CA model based on Chakraborty et al. (2022)
+       - Three morphology archetypes: organic, sparse, linear
+       - P: 100.0%, V: 0.0%, A: 0.0%
+    
+    3. DUAL-SCALE GRID SYSTEM
+       - Coarse grid (G_c): 10x10 cells, 10m resolution
+       - Fine grid (G_f): 100x100 cells, 1m resolution
+       - Plantable cells: 0/100
+    
+    4. PHILIPPINE TREE FUNCTIONAL TYPES
+       - 6 TFTs with biophysical parameters
+       - FORMIND allometric equations for DBH and LAI
+       - CPA and LAI normalization for cooling potential
+    
+    5. NON-SUBMODULAR COOLING MODEL
+       - Distance-decay function with Manhattan distance
+       - Cumulative Crown Area (CCA) competition model
+       - Sigmoidal reduction factor for diminishing returns
+    
+    6. SECPI OBJECTIVE FUNCTION
+       - Equity-weighted benefit classification
+       - Quartile-based cooling classes
+       - Integrated equity analysis metrics
+    
+    NEXT STEPS FOR ACO IMPLEMENTATION:
+    1. Initialize pheromone matrix on coarse grid
+    2. Implement heuristic information η(p,s)
+    3. Develop ant solution construction procedure
+    4. Implement pheromone update rules
+    5. Add parallelization for colony evaluation
+    

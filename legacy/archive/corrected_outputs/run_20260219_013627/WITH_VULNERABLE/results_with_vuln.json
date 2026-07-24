@@ -1,0 +1,54 @@
+{
+  "scenario": "WITH_VULNERABLE",
+  "n_trees": 5,
+  "best_secpi": 3.1159,
+  "all_secpi": [
+    3.1159,
+    3.08645,
+    3.01505,
+    2.9964500000000003,
+    2.9915000000000003
+  ],
+  "mean_secpi": 3.0410700000000004,
+  "std_secpi": 0.05056489493710027,
+  "tree_placements": [
+    [
+      5.0,
+      15.0
+    ],
+    [
+      65.0,
+      65.0
+    ],
+    [
+      65.0,
+      45.0
+    ],
+    [
+      65.0,
+      55.0
+    ],
+    [
+      95.0,
+      85.0
+    ]
+  ],
+  "tree_species": [
+    "Akleng-parang",
+    "Akleng-parang",
+    "Kabiki",
+    "Duhat",
+    "Narra"
+  ],
+  "unique_species": [
+    "Kabiki",
+    "Narra",
+    "Duhat",
+    "Akleng-parang"
+  ],
+  "cooling_stats": {
+    "mean": 0.09913604841492876,
+    "max": 0.7748738640138143,
+    "std": 0.1617844215039859
+  }
+}

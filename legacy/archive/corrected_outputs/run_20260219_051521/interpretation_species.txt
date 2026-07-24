@@ -1,0 +1,40 @@
+================================================================================
+AUTOMATED INTERPRETATION: SPECIES CHARACTERISTICS
+================================================================================
+
+1. SPECIES RANKING BY COOLING POTENTIAL (D_j)
+----------------------------------------
+   1. Narra: D_j = 0.9429
+      CPA = 415.5m², LAI = 6.07, CD = 23.0m
+   2. Akleng-parang: D_j = 0.8557
+      CPA = 452.4m², LAI = 3.15, CD = 24.0m
+   3. Talisay: D_j = 0.3925
+      CPA = 113.1m², LAI = 4.40, CD = 12.0m
+   4. Kabiki: D_j = 0.3507
+      CPA = 95.0m², LAI = 4.12, CD = 11.0m
+   5. Banaba: D_j = 0.3383
+      CPA = 95.0m², LAI = 3.87, CD = 11.0m
+   6. Duhat: D_j = 0.2836
+      CPA = 70.9m², LAI = 3.52, CD = 9.5m
+
+2. COOLING MECHANISM BREAKDOWN
+----------------------------------------
+   Cooling Potential Formula: D_j = 0.7×(CPA/CPA_max) + 0.3×(LAI/LAI_max)
+   - Shade Component (CPA): 70% weight
+   - Evapotranspiration Component (LAI): 30% weight
+
+3. KEY FINDINGS
+----------------------------------------
+   Best Performer: Narra (D_j = 0.9429)
+   - Large crown (415.5m^2) provides extensive shade coverage
+   - Also has highest LAI (6.07) for maximum evapotranspiration
+
+   Lowest Performer: Duhat (D_j = 0.2836)
+   - May still be optimal in space-constrained scenarios
+
+4. OPTIMIZATION IMPLICATIONS
+----------------------------------------
+   Without diversity constraints, ACO will likely favor:
+   - Narra for maximum cooling intensity
+   - Akleng-parang as secondary choice
+   Mono-species solutions may emerge if single species dominates.

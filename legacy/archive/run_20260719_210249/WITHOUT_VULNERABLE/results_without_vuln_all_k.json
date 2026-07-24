@@ -1,0 +1,216 @@
+{
+  "scenario": "WITHOUT_VULNERABLE",
+  "k_results": {
+    "1": {
+      "n_trees": 1,
+      "best_secpi": 1.8737000000000001,
+      "all_secpi": [
+        1.8251,
+        1.3996,
+        1.6018000000000001,
+        1.8737000000000001,
+        1.6227999999999998
+      ],
+      "mean_secpi": 1.6646,
+      "std_secpi": 0.17052808566333,
+      "tree_placements": [
+        [
+          55.0,
+          55.0
+        ]
+      ],
+      "tree_species": [
+        "Akleng-parang"
+      ],
+      "unique_species": [
+        "Akleng-parang"
+      ],
+      "n_unique_species": 1,
+      "cooling_stats": {
+        "mean": 0.05113846192355692,
+        "max": 0.5290730382760345,
+        "std": 0.10548608904314702,
+        "coverage": 37.96
+      }
+    },
+    "2": {
+      "n_trees": 2,
+      "best_secpi": 2.1793,
+      "all_secpi": [
+        2.0981,
+        2.1258999999999997,
+        2.1793,
+        1.9819,
+        2.1519
+      ],
+      "mean_secpi": 2.10742,
+      "std_secpi": 0.06830643893513991,
+      "tree_placements": [
+        [
+          65.0,
+          35.0
+        ],
+        [
+          25.0,
+          65.0
+        ]
+      ],
+      "tree_species": [
+        "Akleng-parang",
+        "Akleng-parang"
+      ],
+      "unique_species": [
+        "Akleng-parang"
+      ],
+      "n_unique_species": 1,
+      "cooling_stats": {
+        "mean": 0.10013668421047164,
+        "max": 0.5363370484831167,
+        "std": 0.13576849450068654,
+        "coverage": 62.629999999999995
+      }
+    },
+    "3": {
+      "n_trees": 3,
+      "best_secpi": 2.2644,
+      "all_secpi": [
+        2.1643,
+        2.1603,
+        2.2432,
+        2.1745,
+        2.2644
+      ],
+      "mean_secpi": 2.20134,
+      "std_secpi": 0.0436014953871998,
+      "tree_placements": [
+        [
+          5.0,
+          35.0
+        ],
+        [
+          55.0,
+          65.0
+        ],
+        [
+          55.0,
+          25.0
+        ]
+      ],
+      "tree_species": [
+        "Narra",
+        "Narra",
+        "Narra"
+      ],
+      "unique_species": [
+        "Narra"
+      ],
+      "n_unique_species": 1,
+      "cooling_stats": {
+        "mean": 0.1300659792269841,
+        "max": 0.6187994940470561,
+        "std": 0.16140643151440484,
+        "coverage": 67.15
+      }
+    },
+    "4": {
+      "n_trees": 4,
+      "best_secpi": 2.3445,
+      "all_secpi": [
+        2.2632,
+        2.2607,
+        2.2417000000000002,
+        2.3445,
+        2.2897999999999996
+      ],
+      "mean_secpi": 2.2799799999999997,
+      "std_secpi": 0.035715285243156,
+      "tree_placements": [
+        [
+          55.0,
+          65.0
+        ],
+        [
+          25.0,
+          15.0
+        ],
+        [
+          75.0,
+          35.0
+        ],
+        [
+          15.0,
+          75.0
+        ]
+      ],
+      "tree_species": [
+        "Narra",
+        "Narra",
+        "Narra",
+        "Narra"
+      ],
+      "unique_species": [
+        "Narra"
+      ],
+      "n_unique_species": 1,
+      "cooling_stats": {
+        "mean": 0.1815329972414849,
+        "max": 0.6878187512160929,
+        "std": 0.18042393700488113,
+        "coverage": 77.08
+      }
+    },
+    "5": {
+      "n_trees": 5,
+      "best_secpi": 2.3048,
+      "all_secpi": [
+        2.1405000000000003,
+        2.3011,
+        2.3048,
+        2.2725999999999997,
+        2.2419000000000002
+      ],
+      "mean_secpi": 2.25218,
+      "std_secpi": 0.06026127778266892,
+      "tree_placements": [
+        [
+          75.0,
+          35.0
+        ],
+        [
+          15.0,
+          45.0
+        ],
+        [
+          65.0,
+          55.0
+        ],
+        [
+          25.0,
+          15.0
+        ],
+        [
+          15.0,
+          75.0
+        ]
+      ],
+      "tree_species": [
+        "Narra",
+        "Duhat",
+        "Narra",
+        "Narra",
+        "Narra"
+      ],
+      "unique_species": [
+        "Narra",
+        "Duhat"
+      ],
+      "n_unique_species": 2,
+      "cooling_stats": {
+        "mean": 0.1707612983968208,
+        "max": 1.1176021660009443,
+        "std": 0.18466564079765574,
+        "coverage": 74.47
+      }
+    }
+  }
+}

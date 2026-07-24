@@ -1,0 +1,46 @@
+================================================================================
+SECPI OPTIMIZATION MASTER INTERPRETATION REPORT
+Standard ACO (Pure SECPI Optimization)
+Generated: 2026-02-19 01:37:49
+================================================================================
+
+1. GRID CONFIGURATION
+----------------------------------------
+   Coarse Grid: 10x10 cells
+   Cell Size: 10.0m
+   Total Area: 100.0m x 100.0m
+
+2. SPECIES DATA (LAI PROVIDED DIRECTLY - NO CALCULATION)
+----------------------------------------
+   Narra: CD=23.0m, CPA=415.5m², LAI=6.07
+   Talisay: CD=12.0m, CPA=113.1m², LAI=4.40
+   Banaba: CD=11.0m, CPA=95.0m², LAI=3.87
+   Kabiki: CD=11.0m, CPA=95.0m², LAI=4.12
+   Duhat: CD=9.5m, CPA=70.9m², LAI=3.52
+   Akleng-parang: CD=24.0m, CPA=452.4m², LAI=3.15
+
+3. ACO PARAMETERS
+----------------------------------------
+   Ants: 20, Iterations: 40
+   Trees: 5
+   Mode: Standard ACO (no diversity enforcement)
+
+4. OPTIMAL RESULT
+----------------------------------------
+   Best SECPI: 3.0930
+   Species Used: Kabiki, Narra, Narra, Narra, Narra
+   Unique Species: 2
+
+5. SCENARIO COMPARISONS
+----------------------------------------
+   WITH VULNERABLE:    SECPI = 3.1159
+   WITHOUT VULNERABLE: SECPI = 1.5000
+
+6. MORPHOLOGICAL ROBUSTNESS
+----------------------------------------
+   Dense_Organic: 2.9911 ± 0.1221
+   Sparse_Organic: 2.9196 ± 0.1218
+   Dense_Linear: 2.9947 ± 0.0847
+   Sparse_Linear: 3.0034 ± 0.0707
+   High_Vulnerability: 3.0047 ± 0.0816
+   Low_Vulnerability: 2.9094 ± 0.1190

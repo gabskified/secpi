@@ -1,0 +1,36 @@
+================================================================================
+AUTOMATED INTERPRETATION: SCENARIO COMPARISON
+WITH vs WITHOUT VULNERABLE CELLS
+================================================================================
+
+1. SECPI SCORE COMPARISON
+----------------------------------------
+   WITH VULNERABLE:    2.9120
+   WITHOUT VULNERABLE: 1.5001
+   Absolute Difference: +1.4119
+   Relative Difference: +48.5%
+
+2. STATISTICAL SIGNIFICANCE
+----------------------------------------
+   Difference: SIGNIFICANT (|Δ| > 0.1)
+
+3. INTERPRETATION
+----------------------------------------
+   Finding: WITH VULNERABLE performs BETTER
+   Implication:
+   → Equity weighting improves SECPI score
+   → Vulnerable zones benefit from targeted cooling
+   → Equity and efficiency are SYNERGISTIC in this configuration
+
+4. SPECIES SELECTION COMPARISON
+----------------------------------------
+   WITH VULN species: {'Kabiki', 'Akleng-parang', 'Narra'}
+   WITHOUT VULN species: {'Banaba', 'Narra'}
+   → Different species: {'Kabiki', 'Akleng-parang', 'Banaba'}
+   → Vulnerability context affects species selection
+
+5. POLICY RECOMMENDATION
+----------------------------------------
+   RECOMMEND: Use WITH VULNERABLE configuration
+   Rationale: Better cooling for vulnerable populations
+   without sacrificing overall performance

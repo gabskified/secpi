@@ -1,0 +1,61 @@
+{
+  "baseline_secpi": 2.665383333333333,
+  "top_10_sensitive_params": [
+    {
+      "parameter": "Narra.crown_diameter_m",
+      "category": "Species_Morphology",
+      "sensitivity_index": 0.020391063199164394
+    },
+    {
+      "parameter": "decay_lambda",
+      "category": "Cooling_Model",
+      "sensitivity_index": 0.003576721297124347
+    },
+    {
+      "parameter": "Akleng-parang.height_m",
+      "category": "Species_Morphology",
+      "sensitivity_index": 0.0016070233800018238
+    },
+    {
+      "parameter": "Narra.l1",
+      "category": "Species_Allometry",
+      "sensitivity_index": 0.0011568067132306566
+    },
+    {
+      "parameter": "shade_weight",
+      "category": "Weighting",
+      "sensitivity_index": 0.001150553703969909
+    },
+    {
+      "parameter": "Banaba.h1",
+      "category": "Species_Allometry",
+      "sensitivity_index": 0.0010692645835806889
+    },
+    {
+      "parameter": "Duhat.h0",
+      "category": "Species_Allometry",
+      "sensitivity_index": 0.0008754212964988437
+    },
+    {
+      "parameter": "Narra.h1",
+      "category": "Species_Allometry",
+      "sensitivity_index": 0.0008441562501952719
+    },
+    {
+      "parameter": "Talisay.l0",
+      "category": "Species_Allometry",
+      "sensitivity_index": 0.0008128912038918668
+    },
+    {
+      "parameter": "Talisay.crown_diameter_m",
+      "category": "Species_Morphology",
+      "sensitivity_index": 0.0007378550927633944
+    }
+  ],
+  "category_mean_sensitivity": {
+    "Cooling_Model": 0.0014069270836590644,
+    "Species_Allometry": 0.0004470901621405434,
+    "Species_Morphology": 0.002166667708834895,
+    "Weighting": 0.001150553703969909
+  }
+}

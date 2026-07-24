@@ -1,0 +1,25 @@
+================================================================================
+AUTOMATED INTERPRETATION: SENSITIVITY ANALYSIS
+================================================================================
+
+1. MOST INFLUENTIAL PARAMETERS (Top 10)
+----------------------------------------
+
+2. CATEGORY-LEVEL SENSITIVITY
+----------------------------------------
+
+3. CRITICAL FINDINGS
+----------------------------------------
+   Most Influential Category: N/A
+
+4. ROBUSTNESS ASSESSMENT
+----------------------------------------
+   Parameters with high sensitivity (>0.1): 0/0
+   Assessment: HIGHLY ROBUST
+   → Model results stable across parameter variations
+
+5. CALIBRATION RECOMMENDATIONS
+----------------------------------------
+
+   Low-priority parameters (sensitivity < 0.01):
+   → 0 parameters can use default values

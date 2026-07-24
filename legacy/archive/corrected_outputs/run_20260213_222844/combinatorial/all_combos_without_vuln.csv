@@ -1,0 +1,64 @@
+combo_id,k,species_available,species_actually_used,n_species_used,all_available_used,secpi,rank
+6,1,Akleng-parang,Akleng-parang,1,True,1.7502,1
+9,2,Narra + Kabiki,Narra,1,False,1.7501,2
+44,4,Narra + Talisay + Banaba + Akleng-parang,Banaba + Narra,2,False,1.7501,3
+41,3,Kabiki + Duhat + Akleng-parang,Akleng-parang + Duhat,2,False,1.7501,4
+49,4,Narra + Banaba + Kabiki + Akleng-parang,Kabiki + Narra,2,False,1.7501,5
+11,2,Narra + Akleng-parang,Narra,1,False,1.75,6
+7,2,Narra + Talisay,Narra,1,False,1.75,7
+15,2,Talisay + Akleng-parang,Akleng-parang,1,False,1.75,8
+25,3,Narra + Talisay + Akleng-parang,Narra + Talisay,2,False,1.75,9
+26,3,Narra + Banaba + Kabiki,Kabiki + Narra,2,False,1.75,10
+23,3,Narra + Talisay + Kabiki,Narra,1,False,1.75,11
+20,2,Kabiki + Akleng-parang,Akleng-parang,1,False,1.75,12
+10,2,Narra + Duhat,Duhat + Narra,2,True,1.75,13
+8,2,Narra + Banaba,Banaba + Narra,2,True,1.75,14
+1,1,Narra,Narra,1,True,1.75,15
+28,3,Narra + Banaba + Akleng-parang,Narra,1,False,1.75,16
+29,3,Narra + Kabiki + Duhat,Narra,1,False,1.75,17
+30,3,Narra + Kabiki + Akleng-parang,Akleng-parang + Narra,2,False,1.75,18
+27,3,Narra + Banaba + Duhat,Duhat + Narra,2,False,1.75,19
+31,3,Narra + Duhat + Akleng-parang,Narra,1,False,1.75,20
+24,3,Narra + Talisay + Duhat,Narra + Talisay,2,False,1.75,21
+45,4,Narra + Talisay + Kabiki + Duhat,Narra,1,False,1.75,22
+43,4,Narra + Talisay + Banaba + Duhat,Duhat + Narra,2,False,1.75,23
+39,3,Banaba + Kabiki + Akleng-parang,Akleng-parang,1,False,1.75,24
+37,3,Talisay + Duhat + Akleng-parang,Akleng-parang,1,False,1.75,25
+42,4,Narra + Talisay + Banaba + Kabiki,Narra,1,False,1.75,26
+40,3,Banaba + Duhat + Akleng-parang,Akleng-parang,1,False,1.75,27
+34,3,Talisay + Banaba + Akleng-parang,Akleng-parang,1,False,1.75,28
+21,2,Duhat + Akleng-parang,Akleng-parang,1,False,1.75,29
+22,3,Narra + Talisay + Banaba,Narra + Talisay,2,False,1.75,30
+18,2,Banaba + Akleng-parang,Akleng-parang,1,False,1.75,31
+60,5,Narra + Talisay + Kabiki + Duhat + Akleng-parang,Narra + Talisay,2,False,1.75,32
+57,5,Narra + Talisay + Banaba + Kabiki + Duhat,Narra + Talisay,2,False,1.75,33
+58,5,Narra + Talisay + Banaba + Kabiki + Akleng-parang,Banaba + Narra,2,False,1.75,34
+59,5,Narra + Talisay + Banaba + Duhat + Akleng-parang,Narra,1,False,1.75,35
+53,4,Talisay + Banaba + Kabiki + Akleng-parang,Akleng-parang + Talisay,2,False,1.75,36
+54,4,Talisay + Banaba + Duhat + Akleng-parang,Akleng-parang,1,False,1.75,37
+55,4,Talisay + Kabiki + Duhat + Akleng-parang,Akleng-parang,1,False,1.75,38
+56,4,Banaba + Kabiki + Duhat + Akleng-parang,Akleng-parang,1,False,1.75,39
+62,5,Talisay + Banaba + Kabiki + Duhat + Akleng-parang,Akleng-parang,1,False,1.75,40
+61,5,Narra + Banaba + Kabiki + Duhat + Akleng-parang,Narra,1,False,1.75,41
+46,4,Narra + Talisay + Kabiki + Akleng-parang,Narra,1,False,1.75,42
+47,4,Narra + Talisay + Duhat + Akleng-parang,Narra,1,False,1.75,43
+51,4,Narra + Kabiki + Duhat + Akleng-parang,Kabiki + Narra,2,False,1.75,44
+50,4,Narra + Banaba + Duhat + Akleng-parang,Narra,1,False,1.75,45
+48,4,Narra + Banaba + Kabiki + Duhat,Narra,1,False,1.75,46
+36,3,Talisay + Kabiki + Akleng-parang,Akleng-parang + Kabiki,2,False,1.75,47
+63,6,Narra + Talisay + Banaba + Kabiki + Duhat + Akleng-parang,Kabiki + Narra,2,False,1.75,48
+19,2,Kabiki + Duhat,Duhat + Kabiki,2,True,1.5011,49
+16,2,Banaba + Kabiki,Banaba,1,False,1.5010000000000001,50
+5,1,Duhat,Duhat,1,True,1.5007,51
+17,2,Banaba + Duhat,Duhat,1,False,1.5007,52
+4,1,Kabiki,Kabiki,1,True,1.5006,53
+38,3,Banaba + Kabiki + Duhat,Duhat + Kabiki,2,False,1.5005000000000002,54
+3,1,Banaba,Banaba,1,True,1.5004,55
+35,3,Talisay + Kabiki + Duhat,Kabiki + Talisay,2,False,1.5004,56
+52,4,Talisay + Banaba + Kabiki + Duhat,Kabiki + Talisay,2,False,1.5004,57
+13,2,Talisay + Kabiki,Talisay,1,False,1.5004,58
+12,2,Talisay + Banaba,Banaba + Talisay,2,True,1.5004,59
+2,1,Talisay,Talisay,1,True,1.5002,60
+14,2,Talisay + Duhat,Duhat + Talisay,2,True,1.5002,61
+32,3,Talisay + Banaba + Kabiki,Kabiki + Talisay,2,False,1.5001,62
+33,3,Talisay + Banaba + Duhat,Banaba + Duhat + Talisay,3,True,1.5001,63

@@ -1,0 +1,47 @@
+{
+  "analysis_type": "Species Diversity",
+  "n_trees": 5,
+  "n_runs_per_k": 15,
+  "results": {
+    "k1": {
+      "n_species_exact": 1,
+      "mean_secpi": 3.2105272144041166,
+      "std_secpi": 0.01126224788431815,
+      "min_secpi": 3.18205,
+      "max_secpi": 3.2239500000000003,
+      "n_runs": 15
+    },
+    "k2": {
+      "n_species_exact": 2,
+      "mean_secpi": 3.2161445311457917,
+      "std_secpi": 0.008373251460393612,
+      "min_secpi": 3.19935,
+      "max_secpi": 3.2253,
+      "n_runs": 15
+    },
+    "k3": {
+      "n_species_exact": 3,
+      "mean_secpi": 3.2192433333333335,
+      "std_secpi": 0.006342524909073956,
+      "min_secpi": 3.20355,
+      "max_secpi": 3.22515,
+      "n_runs": 15
+    },
+    "k4": {
+      "n_species_exact": 4,
+      "mean_secpi": 3.21757,
+      "std_secpi": 0.011319022337051345,
+      "min_secpi": 3.1822,
+      "max_secpi": 3.2253,
+      "n_runs": 15
+    },
+    "k5": {
+      "n_species_exact": 5,
+      "mean_secpi": 3.2211100000000004,
+      "std_secpi": 0.003846695551595731,
+      "min_secpi": 3.2118,
+      "max_secpi": 3.2253,
+      "n_runs": 15
+    }
+  }
+}

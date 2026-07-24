@@ -1,0 +1,68 @@
+================================================================================
+SECPI OPTIMIZATION MASTER INTERPRETATION REPORT
+Generated: 2026-02-19 00:33:09
+================================================================================
+
+1. GRID CONFIGURATION
+----------------------------------------
+   Coarse Grid: 10x10 cells
+   Cell Size: 10.0m
+   Fine Grid Resolution: 1.0m
+   Total Area: 100.0m x 100.0m = 10000.0m²
+   Land Use Distribution:
+      Prohibited (1): 28 cells
+      Available (3): 20 cells
+      Vulnerable (4): 52 cells
+
+2. ACO PARAMETERS (RECOMMENDED)
+----------------------------------------
+   Number of Ants: 20
+   Number of Iterations: 40
+   Evaporation Rate: 0.5
+   Alpha (pheromone weight): 1.0
+   Beta (heuristic weight): 2.0
+   Q0 (exploitation probability): 0.7
+   RATIONALE: 20 ants × 40 iterations = 800 solutions evaluated,
+              providing good exploration for 100-cell grid with 5 trees.
+
+3. OPTIMAL CONFIGURATION RESULTS
+----------------------------------------
+   Best SECPI: 3.0805
+   Tree Species Used: Banaba, Duhat, Narra, Narra, Narra
+   Unique Species: 3
+   Mean Cooling Intensity: 0.1020
+   Max Cooling Intensity: 1.0068
+
+4. VULNERABILITY IMPACT ANALYSIS
+----------------------------------------
+   WITH Vulnerability SECPI: 3.0805
+   WITHOUT Vulnerability SECPI: 1.5002
+   Difference: 1.5803
+
+5. SPECIES DIVERSITY FINDINGS
+----------------------------------------
+   k=1 species: Mean SECPI = 3.2101 ± 0.0197
+   k=2 species: Mean SECPI = 3.2222 ± 0.0095
+   k=3 species: Mean SECPI = 3.2101 ± 0.0104
+   k=4 species: Mean SECPI = 3.2035 ± 0.0170
+   k=5 species: Mean SECPI = 3.1967 ± 0.0178
+
+6. MORPHOLOGICAL ROBUSTNESS
+----------------------------------------
+   Dense_Organic: 3.0879 ± 0.0908
+   Sparse_Organic: 3.0207 ± 0.1181
+   Dense_Linear: 3.0076 ± 0.2223
+   Sparse_Linear: 2.9468 ± 0.1444
+   High_Vulnerability: 3.0935 ± 0.0821
+   Low_Vulnerability: 3.0310 ± 0.1645
+
+7. KEY INTERPRETATIONS
+----------------------------------------
+   • The framework successfully optimizes tree placement for cooling equity
+   • Large-crowned species (Narra, Akleng-parang) dominate cooling performance
+   • Species diversity provides marginal improvement over mono-species solutions
+   • Results are robust across different urban morphologies
+
+================================================================================
+END OF REPORT
+================================================================================

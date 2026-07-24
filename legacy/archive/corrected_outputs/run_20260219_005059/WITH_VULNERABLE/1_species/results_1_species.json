@@ -1,0 +1,52 @@
+{
+  "scenario": "WITH_VULNERABLE",
+  "n_species_exact": 1,
+  "n_trees": 5,
+  "best_secpi": 3.22415,
+  "all_secpi": [
+    3.22415,
+    3.21765,
+    3.1987500000000004,
+    3.2195044253103724,
+    3.220068527410964
+  ],
+  "mean_secpi": 3.2160245905442677,
+  "std_secpi": 0.008894249699388826,
+  "tree_placements": [
+    [
+      85.0,
+      95.0
+    ],
+    [
+      15.0,
+      25.0
+    ],
+    [
+      85.0,
+      85.0
+    ],
+    [
+      25.0,
+      65.0
+    ],
+    [
+      25.0,
+      75.0
+    ]
+  ],
+  "tree_species": [
+    "Talisay",
+    "Talisay",
+    "Talisay",
+    "Talisay",
+    "Talisay"
+  ],
+  "unique_species": [
+    "Talisay"
+  ],
+  "cooling_stats": {
+    "mean": 0.027571674757941356,
+    "max": 0.5517053277692212,
+    "std": 0.06821213825291052
+  }
+}

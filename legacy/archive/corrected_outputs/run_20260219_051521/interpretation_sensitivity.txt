@@ -1,0 +1,88 @@
+================================================================================
+AUTOMATED INTERPRETATION: SENSITIVITY ANALYSIS
+================================================================================
+
+1. MOST INFLUENTIAL PARAMETERS (Top 10)
+----------------------------------------
+   Narra.crown_diameter_m
+      Category: Species_Morphology
+      Sensitivity Index: 0.308983
+      SECPI Range: [2.9326, 3.8618]
+   Duhat.crown_diameter_m
+      Category: Species_Morphology
+      Sensitivity Index: 0.296380
+      SECPI Range: [3.4206, 4.3119]
+   Banaba.height_m
+      Category: Species_Morphology
+      Sensitivity Index: 0.163636
+      SECPI Range: [4.2986, 3.8065]
+   Kabiki.crown_diameter_m
+      Category: Species_Morphology
+      Sensitivity Index: 0.152125
+      SECPI Range: [4.2877, 3.8302]
+   Duhat.height_m
+      Category: Species_Morphology
+      Sensitivity Index: 0.143058
+      SECPI Range: [3.8830, 4.3133]
+   Talisay.crown_diameter_m
+      Category: Species_Morphology
+      Sensitivity Index: 0.140021
+      SECPI Range: [3.4302, 3.8513]
+   cca_threshold
+      Category: Cooling_Model
+      Sensitivity Index: 0.046670
+      SECPI Range: [2.9068, 3.0472]
+   decay_lambda
+      Category: Cooling_Model
+      Sensitivity Index: 0.027140
+      SECPI Range: [3.0696, 2.9880]
+   shade_weight
+      Category: Weighting
+      Sensitivity Index: 0.024934
+      SECPI Range: [2.9659, 3.0409]
+   Talisay.l1
+      Category: Species_Allometry
+      Sensitivity Index: 0.022564
+      SECPI Range: [3.0379, 2.9701]
+
+2. CATEGORY-LEVEL SENSITIVITY
+----------------------------------------
+   Species_Morphology:
+      Total Sensitivity: 1.260595
+      Max Single Parameter: 0.308983
+      Mean Sensitivity: 0.105050
+   Species_Allometry:
+      Total Sensitivity: 0.181587
+      Max Single Parameter: 0.022564
+      Mean Sensitivity: 0.007566
+   Cooling_Model:
+      Total Sensitivity: 0.079784
+      Max Single Parameter: 0.046670
+      Mean Sensitivity: 0.026595
+   Weighting:
+      Total Sensitivity: 0.024934
+      Max Single Parameter: 0.024934
+      Mean Sensitivity: 0.024934
+
+3. CRITICAL FINDINGS
+----------------------------------------
+   Most Influential Category: Species_Morphology
+   Most Sensitive Parameter: Narra.crown_diameter_m
+   → Changing this parameter causes 30.90% SECPI variation
+
+4. ROBUSTNESS ASSESSMENT
+----------------------------------------
+   Parameters with high sensitivity (>0.1): 6/40
+   Assessment: SENSITIVE
+   → Multiple parameters significantly affect results
+   → Careful calibration required
+
+5. CALIBRATION RECOMMENDATIONS
+----------------------------------------
+   Priority calibration targets:
+   1. Narra.crown_diameter_m (Species_Morphology)
+   2. Duhat.crown_diameter_m (Species_Morphology)
+   3. Banaba.height_m (Species_Morphology)
+
+   Low-priority parameters (sensitivity < 0.01):
+   → 20 parameters can use default values

@@ -1,0 +1,20 @@
+{
+  "n_species": 4,
+  "n_trees": 5,
+  "best_secpi": 1.5004,
+  "tree_placements": [
+    [
+      95.0,
+      5.0
+    ]
+  ],
+  "tree_species": [
+    "Narra"
+  ],
+  "cooling_stats": {
+    "mean": 0.015611458863985399,
+    "max": 0.5199379750155835,
+    "min": 0.0,
+    "std": 0.06340313182216441
+  }
+}

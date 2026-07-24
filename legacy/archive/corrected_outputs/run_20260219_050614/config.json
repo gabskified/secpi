@@ -1,0 +1,31 @@
+{
+  "coarse_grid": {
+    "width": 10,
+    "height": 10,
+    "cell_size": 10.0
+  },
+  "fine_grid": {
+    "cell_size": 1.0
+  },
+  "ca_params": {
+    "morphology": "organic",
+    "p_init": 0.15,
+    "alpha": 0.1,
+    "beta": 0.4,
+    "theta": 3
+  },
+  "cooling_params": {
+    "decay_lambda": 1.9,
+    "cca_threshold": 1.2,
+    "competition_k": 5.0
+  },
+  "aco_params": {
+    "n_trees": 5,
+    "n_ants": 20,
+    "n_iterations": 40,
+    "evaporation_rate": 0.5,
+    "alpha": 1.0,
+    "beta": 2.0,
+    "q0": 0.7
+  }
+}

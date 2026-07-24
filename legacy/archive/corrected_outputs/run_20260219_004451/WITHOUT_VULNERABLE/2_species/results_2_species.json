@@ -1,0 +1,38 @@
+{
+  "scenario": "WITHOUT_VULNERABLE",
+  "n_species_exact": 2,
+  "n_trees": 5,
+  "best_secpi": 1.5009000000000001,
+  "all_secpi": [
+    1.5009000000000001,
+    1.5009000000000001,
+    1.5009000000000001,
+    1.5009000000000001,
+    1.5009000000000001
+  ],
+  "mean_secpi": 1.5009000000000001,
+  "std_secpi": 0.0,
+  "tree_placements": [
+    [
+      5.0,
+      95.0
+    ],
+    [
+      15.0,
+      85.0
+    ]
+  ],
+  "tree_species": [
+    "Akleng-parang",
+    "Banaba"
+  ],
+  "unique_species": [
+    "Akleng-parang",
+    "Banaba"
+  ],
+  "cooling_stats": {
+    "mean": 0.014795358171637333,
+    "max": 0.5642471121574341,
+    "std": 0.06108836895866428
+  }
+}

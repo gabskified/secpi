@@ -1,0 +1,15 @@
+============================================================
+AUTOMATED COOLING INTERPRETATION REPORT (2026-02-13 21:33:18)
+============================================================
+
+1. GLOBAL PERFORMANCE
+   Average Cooling Intensity: 1.2885
+   Peak Cooling Intensity:    1.9464
+
+2. ZONAL ANALYSIS
+   Vulnerable Zones (Target): 1.1023 avg cooling (Coverage: 79.67%)
+   Available Zones (Source):   1.3881 avg cooling
+   Building Zones:             1.5472 avg cooling
+
+3. INTERPRETATION & INSIGHTS
+[WARNING] LOW EQUITY. Vulnerable zones are underserved.

@@ -1,0 +1,217 @@
+{
+  "scenario": "WITHOUT_VULNERABLE",
+  "k_results": {
+    "1": {
+      "n_trees": 1,
+      "best_secpi": 1.8648,
+      "all_secpi": [
+        1.7109999999999999,
+        1.7300999999999997,
+        1.856,
+        1.6486,
+        1.8648
+      ],
+      "mean_secpi": 1.7620999999999998,
+      "std_secpi": 0.08471358804819926,
+      "tree_placements": [
+        [
+          45.0,
+          35.0
+        ]
+      ],
+      "tree_species": [
+        "Narra"
+      ],
+      "unique_species": [
+        "Narra"
+      ],
+      "n_unique_species": 1,
+      "cooling_stats": {
+        "mean": 0.050723579030513236,
+        "max": 0.5770890510156385,
+        "std": 0.11044208479995851,
+        "coverage": 35.64
+      }
+    },
+    "2": {
+      "n_trees": 2,
+      "best_secpi": 2.2374,
+      "all_secpi": [
+        2.0053,
+        2.1076,
+        2.0274,
+        1.8691000000000002,
+        2.2374
+      ],
+      "mean_secpi": 2.04936,
+      "std_secpi": 0.12138215025282749,
+      "tree_placements": [
+        [
+          45.0,
+          15.0
+        ],
+        [
+          55.0,
+          75.0
+        ]
+      ],
+      "tree_species": [
+        "Narra",
+        "Akleng-parang"
+      ],
+      "unique_species": [
+        "Akleng-parang",
+        "Narra"
+      ],
+      "n_unique_species": 2,
+      "cooling_stats": {
+        "mean": 0.09232301431022899,
+        "max": 0.5773013243644755,
+        "std": 0.13715035653136234,
+        "coverage": 57.120000000000005
+      }
+    },
+    "3": {
+      "n_trees": 3,
+      "best_secpi": 2.348,
+      "all_secpi": [
+        2.1052,
+        2.3053999999999997,
+        2.348,
+        2.1605999999999996,
+        2.2785
+      ],
+      "mean_secpi": 2.2395400000000003,
+      "std_secpi": 0.09153988420355359,
+      "tree_placements": [
+        [
+          45.0,
+          25.0
+        ],
+        [
+          95.0,
+          85.0
+        ],
+        [
+          35.0,
+          75.0
+        ]
+      ],
+      "tree_species": [
+        "Narra",
+        "Narra",
+        "Narra"
+      ],
+      "unique_species": [
+        "Narra"
+      ],
+      "n_unique_species": 1,
+      "cooling_stats": {
+        "mean": 0.12243771636659044,
+        "max": 0.5799311245073233,
+        "std": 0.15130723571206536,
+        "coverage": 69.24
+      }
+    },
+    "4": {
+      "n_trees": 4,
+      "best_secpi": 2.4208000000000003,
+      "all_secpi": [
+        2.3417999999999997,
+        2.3736,
+        2.4208000000000003,
+        2.2772,
+        2.2148
+      ],
+      "mean_secpi": 2.3256400000000004,
+      "std_secpi": 0.07245505089364036,
+      "tree_placements": [
+        [
+          95.0,
+          45.0
+        ],
+        [
+          45.0,
+          5.0
+        ],
+        [
+          35.0,
+          65.0
+        ],
+        [
+          75.0,
+          95.0
+        ]
+      ],
+      "tree_species": [
+        "Akleng-parang",
+        "Narra",
+        "Narra",
+        "Narra"
+      ],
+      "unique_species": [
+        "Akleng-parang",
+        "Narra"
+      ],
+      "n_unique_species": 2,
+      "cooling_stats": {
+        "mean": 0.13917522221200443,
+        "max": 0.5818515599940413,
+        "std": 0.15121600870307933,
+        "coverage": 76.12
+      }
+    },
+    "5": {
+      "n_trees": 5,
+      "best_secpi": 2.3400000000000003,
+      "all_secpi": [
+        2.336,
+        2.3314,
+        2.2992,
+        2.3400000000000003,
+        2.2866
+      ],
+      "mean_secpi": 2.31864,
+      "std_secpi": 0.021563450558758038,
+      "tree_placements": [
+        [
+          45.0,
+          15.0
+        ],
+        [
+          65.0,
+          5.0
+        ],
+        [
+          95.0,
+          95.0
+        ],
+        [
+          35.0,
+          65.0
+        ],
+        [
+          95.0,
+          55.0
+        ]
+      ],
+      "tree_species": [
+        "Narra",
+        "Narra",
+        "Narra",
+        "Narra",
+        "Narra"
+      ],
+      "unique_species": [
+        "Narra"
+      ],
+      "n_unique_species": 1,
+      "cooling_stats": {
+        "mean": 0.155835870733843,
+        "max": 1.11749274714638,
+        "std": 0.18203184898574237,
+        "coverage": 74.96000000000001
+      }
+    }
+  }
+}

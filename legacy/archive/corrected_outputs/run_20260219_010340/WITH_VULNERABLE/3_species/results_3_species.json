@@ -1,0 +1,54 @@
+{
+  "scenario": "WITH_VULNERABLE",
+  "n_species_exact": 3,
+  "n_trees": 5,
+  "best_secpi": 3.3815070000000005,
+  "all_secpi": [
+    3.3516955000000004,
+    3.3434660000000003,
+    3.3811255000000005,
+    3.3815070000000005,
+    3.3386155
+  ],
+  "mean_secpi": 3.3592819000000005,
+  "std_secpi": 0.018471026921641518,
+  "tree_placements": [
+    [
+      35.0,
+      65.0
+    ],
+    [
+      15.0,
+      65.0
+    ],
+    [
+      85.0,
+      35.0
+    ],
+    [
+      5.0,
+      35.0
+    ],
+    [
+      35.0,
+      55.0
+    ]
+  ],
+  "tree_species": [
+    "Banaba",
+    "Talisay",
+    "Akleng-parang",
+    "Banaba",
+    "Banaba"
+  ],
+  "unique_species": [
+    "Talisay",
+    "Akleng-parang",
+    "Banaba"
+  ],
+  "cooling_stats": {
+    "mean": 0.057057545136268574,
+    "max": 0.5290730382762002,
+    "std": 0.105269080437512
+  }
+}

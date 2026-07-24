@@ -1,0 +1,52 @@
+{
+  "scenario": "WITH_VULNERABLE",
+  "n_trees": 5,
+  "best_secpi": 3.19065,
+  "all_secpi": [
+    2.8569,
+    3.11775,
+    3.1523499999999998,
+    3.0844000000000005,
+    3.19065
+  ],
+  "mean_secpi": 3.08041,
+  "tree_placements": [
+    [
+      45.0,
+      85.0
+    ],
+    [
+      75.0,
+      75.0
+    ],
+    [
+      75.0,
+      95.0
+    ],
+    [
+      85.0,
+      25.0
+    ],
+    [
+      25.0,
+      85.0
+    ]
+  ],
+  "tree_species": [
+    "Narra",
+    "Talisay",
+    "Narra",
+    "Narra",
+    "Banaba"
+  ],
+  "unique_species": [
+    "Talisay",
+    "Narra",
+    "Banaba"
+  ],
+  "cooling_stats": {
+    "mean": 0.11166682171012592,
+    "max": 0.8037339317821778,
+    "std": 0.18037214120917286
+  }
+}

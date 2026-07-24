@@ -1,0 +1,53 @@
+{
+  "scenario": "WITH_VULNERABLE",
+  "n_species_exact": 2,
+  "n_trees": 5,
+  "best_secpi": 3.2248,
+  "all_secpi": [
+    3.2248,
+    3.22235,
+    3.2204,
+    3.2207500000000002,
+    3.22445
+  ],
+  "mean_secpi": 3.2225500000000005,
+  "std_secpi": 0.0018207141456032668,
+  "tree_placements": [
+    [
+      65.0,
+      75.0
+    ],
+    [
+      5.0,
+      45.0
+    ],
+    [
+      15.0,
+      25.0
+    ],
+    [
+      95.0,
+      65.0
+    ],
+    [
+      25.0,
+      75.0
+    ]
+  ],
+  "tree_species": [
+    "Kabiki",
+    "Narra",
+    "Kabiki",
+    "Kabiki",
+    "Kabiki"
+  ],
+  "unique_species": [
+    "Kabiki",
+    "Narra"
+  ],
+  "cooling_stats": {
+    "mean": 0.03379458071844228,
+    "max": 0.5481166698387678,
+    "std": 0.08456664174792479
+  }
+}

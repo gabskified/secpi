@@ -1,0 +1,23 @@
+================================================================================
+AUTOMATED INTERPRETATION: EQUITY WEIGHT DISTRIBUTION
+================================================================================
+
+1. WEIGHT DISTRIBUTION (Fine Grid)
+----------------------------------------
+   High Priority (w=2.0): 2314 cells (23.1%)
+   Medium Priority (w=1.5): 1754 cells (17.5%)
+   Low Priority (w=1.0): 5932 cells (59.3%)
+
+2. EQUITY IMPLICATION
+----------------------------------------
+   Mean Equity Weight: 1.319
+   Assessment: MODERATE equity sensitivity
+     Balanced consideration of efficiency and equity
+
+3. SECPI SCORING IMPACT
+----------------------------------------
+   The SECPI formula multiplies cooling class scores by equity weights:
+   SECPI = Σ[(A_k - A_baseline) × W_k × E_k]
+   Where E_k is the mean equity weight per cooling class.
+   With current distribution, high-cooling zones in vulnerable areas
+   will receive up to 1.3x scoring boost.

@@ -1,0 +1,24 @@
+{
+  "best_secpi": 2.6657,
+  "n_trees": 2,
+  "tree_placements": [
+    [
+      95.0,
+      25.0
+    ],
+    [
+      95.0,
+      35.0
+    ]
+  ],
+  "tree_species": [
+    "Narra",
+    "Akleng-parang"
+  ],
+  "cooling_stats": {
+    "mean": 0.8112470918404169,
+    "max": 1.600953887017211,
+    "min": 0.0,
+    "std": 0.4260324422011407
+  }
+}

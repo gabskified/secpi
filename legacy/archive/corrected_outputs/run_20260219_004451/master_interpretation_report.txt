@@ -1,0 +1,36 @@
+================================================================================
+SECPI OPTIMIZATION MASTER INTERPRETATION REPORT
+Generated: 2026-02-19 00:49:19
+================================================================================
+
+1. GRID CONFIGURATION
+----------------------------------------
+   Coarse Grid: 10x10 cells
+   Cell Size: 10.0m
+   Total Area: 100.0m x 100.0m
+
+2. ACO PARAMETERS
+----------------------------------------
+   Ants: 20, Iterations: 40
+
+3. OPTIMAL RESULT
+----------------------------------------
+   Best SECPI: 3.0142
+   Species: Akleng-parang, Akleng-parang
+
+4. SUBOPTIMAL COMPARISONS
+----------------------------------------
+   k=1: WITH=3.0142, WITHOUT=1.5002
+   k=2: WITH=3.0135, WITHOUT=1.5009
+   k=3: WITH=3.0135, WITHOUT=1.5009
+   k=4: WITH=3.0135, WITHOUT=1.5009
+   k=5: WITH=3.0135, WITHOUT=1.5009
+
+5. MORPHOLOGICAL ROBUSTNESS
+----------------------------------------
+   Dense_Organic: 3.1293 ± 0.0669
+   Sparse_Organic: 3.1022 ± 0.0788
+   Dense_Linear: 3.0088 ± 0.1756
+   Sparse_Linear: 2.9994 ± 0.1812
+   High_Vulnerability: 3.0268 ± 0.0819
+   Low_Vulnerability: 3.1488 ± 0.1011

@@ -1,0 +1,48 @@
+================================================================================
+SECPI OPTIMIZATION MASTER INTERPRETATION REPORT
+(With Diversity Enforcement & Blue Canopy Overlays)
+Generated: 2026-02-19 01:09:17
+================================================================================
+
+1. GRID CONFIGURATION
+----------------------------------------
+   Coarse Grid: 10x10 cells
+   Cell Size: 10.0m
+   Total Area: 100.0m x 100.0m
+
+2. SPECIES DATA (LAI PROVIDED DIRECTLY)
+----------------------------------------
+   Narra: CD=23.0m, CPA=415.5m², LAI=6.07
+   Talisay: CD=12.0m, CPA=113.1m², LAI=4.40
+   Banaba: CD=11.0m, CPA=95.0m², LAI=3.87
+   Kabiki: CD=11.0m, CPA=95.0m², LAI=4.12
+   Duhat: CD=9.5m, CPA=70.9m², LAI=3.52
+   Akleng-parang: CD=24.0m, CPA=452.4m², LAI=3.15
+
+3. ACO PARAMETERS
+----------------------------------------
+   Ants: 20, Iterations: 40
+   Diversity Bonus: 0.15, Mono-species Penalty: 0.30
+
+4. OPTIMAL RESULT
+----------------------------------------
+   Best SECPI: 3.4562
+   Species Used: Banaba, Kabiki, Narra, Akleng-parang, Talisay
+   Unique Species: 5
+
+5. SUBOPTIMAL COMPARISONS
+----------------------------------------
+   k=1: WITH=2.1559, WITHOUT=1.0515
+   k=2: WITH=3.2862, WITHOUT=1.5920
+   k=3: WITH=3.3815, WITHOUT=1.6365
+   k=4: WITH=3.4739, WITHOUT=1.6810
+   k=5: WITH=3.5646, WITHOUT=1.7258
+
+6. MORPHOLOGICAL ROBUSTNESS
+----------------------------------------
+   Dense_Organic: 3.5318 ± 0.1951
+   Sparse_Organic: 3.5373 ± 0.0821
+   Dense_Linear: 3.5381 ± 0.1613
+   Sparse_Linear: 3.3878 ± 0.2460
+   High_Vulnerability: 3.5100 ± 0.1300
+   Low_Vulnerability: 3.4690 ± 0.0924

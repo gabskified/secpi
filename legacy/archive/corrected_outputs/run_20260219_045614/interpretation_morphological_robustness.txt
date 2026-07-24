@@ -1,0 +1,45 @@
+================================================================================
+AUTOMATED INTERPRETATION: MORPHOLOGICAL ROBUSTNESS
+================================================================================
+
+1. PERFORMANCE BY MORPHOLOGY
+----------------------------------------
+   High_Vulnerability:
+      Mean SECPI: 4.0716 ± 0.5161
+      CV: 0.127, n=5
+   Dense_Organic:
+      Mean SECPI: 3.9654 ± 0.4983
+      CV: 0.126, n=5
+   Sparse_Organic:
+      Mean SECPI: 3.9339 ± 0.5446
+      CV: 0.138, n=5
+   Low_Vulnerability:
+      Mean SECPI: 3.7685 ± 0.6145
+      CV: 0.163, n=5
+   Sparse_Linear:
+      Mean SECPI: 3.5558 ± 0.6098
+      CV: 0.172, n=5
+   Dense_Linear:
+      Mean SECPI: 2.9695 ± 0.0560
+      CV: 0.019, n=5
+
+2. CROSS-MORPHOLOGY CONSISTENCY
+----------------------------------------
+   Overall Mean SECPI: 3.7108
+   Cross-Morphology Std: 0.3700
+   Cross-Morphology CV: 0.100
+
+   Assessment: HIGHLY ROBUST
+   → Algorithm performs consistently across morphologies
+   → Results generalizable to various urban forms
+
+3. BEST/WORST PERFORMING MORPHOLOGIES
+----------------------------------------
+   Best: High_Vulnerability (SECPI = 4.0716)
+   Worst: Dense_Linear (SECPI = 2.9695)
+   Performance Gap: 1.1020
+
+4. RELIABILITY ASSESSMENT
+----------------------------------------
+   All morphologies show consistent results (CV < 0.2)
+   → High confidence in single-run results

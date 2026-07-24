@@ -1,0 +1,37 @@
+================================================================================
+AUTOMATED INTERPRETATION: ZONAL COOLING EFFICIENCY
+================================================================================
+
+1. ZONE-WISE COOLING STATISTICS
+----------------------------------------
+   High (w=2.0):
+      Mean Cooling: 0.1522
+      Std Dev: 0.2428
+      Cell Count: 5852
+   Medium (w=1.5):
+      Mean Cooling: 0.0608
+      Std Dev: 0.1184
+      Cell Count: 2156
+   Low (w=1.0):
+      Mean Cooling: 0.0217
+      Std Dev: 0.0523
+      Cell Count: 1992
+
+2. EQUITY ACHIEVEMENT ANALYSIS
+----------------------------------------
+   High-to-Low Zone Cooling Ratio: 7.02
+   ✓ EQUITY GOAL ACHIEVED
+   → Vulnerable zones receive MORE cooling than average
+   → Optimization successfully prioritized equity
+
+3. WEIGHTED CONTRIBUTION ANALYSIS
+----------------------------------------
+   High (w=2.0) contribution: 1780.95
+   Medium (w=1.5) contribution: 196.70
+   Low (w=1.0) contribution: 43.19
+   Total Weighted Cooling: 2020.84
+
+4. RECOMMENDATIONS
+----------------------------------------
+   → Current configuration achieves equity goals
+   → Cooling resources appropriately allocated to vulnerable populations

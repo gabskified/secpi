@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-02-19T00:08:20.190168",
+  "config": {
+    "grid": {
+      "width": 10,
+      "height": 10,
+      "cell_size": 10.0
+    },
+    "cooling": {
+      "decay_lambda": 1.5,
+      "cca_threshold": 1.2,
+      "competition_k": 5.0
+    },
+    "aco": {
+      "n_trees": 5,
+      "n_ants": 25,
+      "n_iterations": 50,
+      "evaporation_rate": 0.3,
+      "alpha": 1.0,
+      "beta": 2.5,
+      "q0": 0.8
+    }
+  },
+  "optimal_solution": {
+    "secpi": 0.8327115046018407,
+    "n_trees": 1,
+    "tree_species": [
+      "Akleng-parang"
+    ],
+    "unique_species": 1,
+    "mean_cooling": 0.002005047272257226,
+    "max_cooling": 0.17589339021505548
+  },
+  "species_diversity_results": {
+    "1": {
+      "mean_secpi": 0.8327115046018407,
+      "std_secpi": 0.0,
+      "n_runs": 5
+    },
+    "2": {
+      "mean_secpi": 0.8327115046018407,
+      "std_secpi": 0.0,
+      "n_runs": 5
+    },
+    "3": {
+      "mean_secpi": 0.8327115046018407,
+      "std_secpi": 0.0,
+      "n_runs": 5
+    },
+    "4": {
+      "mean_secpi": 0.8327115046018407,
+      "std_secpi": 0.0,
+      "n_runs": 5
+    },
+    "5": {
+      "mean_secpi": 0.8327115046018407,
+      "std_secpi": 0.0,
+      "n_runs": 5
+    }
+  },
+  "aco_recommendation": {
+    "n_ants": 25,
+    "n_iterations": 50,
+    "rationale": "Based on problem complexity: 100 coarse cells, ~35 plantable, 5 trees from 6 species. 25 ants and 50 iterations provide sufficient exploration while remaining computationally tractable."
+  }
+}
