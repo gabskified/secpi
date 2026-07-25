@@ -16,7 +16,7 @@ Update this file at the end of every session. It answers one question: *what is 
 | ROADBLOCK (SEVERE) | 0 | **0** | — |
 | **Total** | 41 | 41 | — |
 
-Next free flag number: **#48**.
+> **Current live total: 51 flags** (41 original + #42–#51 added during migration). The v1/v2 columns above are the historical baseline; see the detailed movement blocks below for every change since. Next free number: **#52**.
 
 **Added 2026-07-25 from the D-06 salvage** (see `DECISIONS.md` D-06):
 
@@ -65,8 +65,6 @@ Next free flag number: **#48**.
 
 Next free flag number: **#52**.
 
-Revised counts: 28 cleared · 2 deferred · 19 pending · **3 potential roadblocks (#46, #48, and #30 pending its remaining 3 species)** · 0 severe · **50 total**.
-
 Four flags added during migration (Project Log Entry 4 and dependency verification):
 
 | Flag | Section | Proposed class |
@@ -78,18 +76,16 @@ Four flags added during migration (Project Log Entry 4 and dependency verificati
 
 **Flag #45 detail.** The Abstract states ACO was implemented "via the scikit-opt Python library"; `AuditedCode_1.py` contains no `sko` import and hand-implements `AntColonySystemACO`. §2.4.2 credits "Matplotlib and Seaborn"; only matplotlib is imported. Verified dependencies are numpy, matplotlib, scipy (`cdist` only), tqdm, and pandas (soft, try/except-guarded). A reviewer attempting reproduction would install scikit-opt and find nothing uses it — this is a reproducibility defect, not a wording nit.
 
-Revised counts: 25 cleared · 2 deferred · 17 pending · **1 potential roadblock** · 0 severe · **45 total**.
-
-The project's clean record ended this session: after three audit cycles with zero escalations, the first POTENTIAL ROADBLOCK since v1 was found — by structural grep, not by reading — in the one section nobody has reviewed.
+Revised counts: **28 cleared · 2 deferred · 19 pending · 3 potential roadblocks · 0 severe · 51 total.** The three roadblocks: #46 (mis-stated diversity claim), #48 (assumed heights beyond calibration), and #30 (pending its remaining 3 species without field data).
 
 ---
 
 ## Open work by owner
 
-### Research lead — 6 decisions
-D-02 (normalization ceiling), D-03 (statistical outcome metric), D-04 (final title), D-05 (Chebyshev terminology), **D-06 (recover the combinatorial script — highest urgency)**, D-07 (`k` notation). See `DECISIONS.md`.
+### Research lead — 7 open decisions
+D-02 (normalization ceiling), D-03 (statistical outcome metric), D-04 (final title), D-05 (Chebyshev terminology), D-07 (`k` notation — now a three-way collision), D-08 (assumed heights), D-10 (`p0 = 1.0` sign-off). D-01, D-09 decided; D-06 resolved (outcome b). See `DECISIONS.md`.
 
-**D-06 outranks everything.** D-02 and D-03 gate how Results are *written*; D-06 determines whether §3.1, and the Abstract and Conclusion claims that depend on it, can exist at all.
+**D-02 and D-03 gate the Results rewrite.** D-06 is resolved — the combinatorial output was located and confirmed as outcome (b), so §3.1 regenerates rather than being reconstructed from scratch.
 
 ### Deriver — 5 literature items, zero code dependency
 | Item | Flag | Ask |
@@ -138,14 +134,9 @@ Confirmed working:
 
 ---
 
-## Provenance gap — Project Log Entry 3 is missing
+## Provenance note — Project Log Entry 3 RECOVERED
 
-`FLAGS.md` (v2) cites "Project Log Entry 3" as the sole source for four flag resolutions (#20, #26, #35, #38), but the log carried over from the Claude Project ends at Entry 2. See the placeholder in `PROJECT_LOG.md`.
-
-`math-auditor` should re-verify #35 and #38 by execution — both are independently checkable against the code — and re-source them to a new entry. #20 and #26 are queue assignments with no analytical content; re-issue to the Deriver.
-
----
-
+Entry 3 (Deriver) was recovered 2026-07-25 and folded into `PROJECT_LOG.md` with independent verification of every numeric claim against raw field data (`docs/data/SECPI_HD_field_data.csv`). The gap flagged during migration is **closed**. The four flags that cited it (#20, #26, #35, #38) now have a readable source.
 ## Session-end checklist
 
 - [ ] Appended a dated entry to `PROJECT_LOG.md` using the template
