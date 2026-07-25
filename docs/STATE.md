@@ -51,7 +51,19 @@ Next free flag number: **#48**.
 | #49 | §2.3.2 | λ = 1.897 attributed to Morakinyo & Lam (2016), which is an **ENVI-met thermal-comfort study, not a distance-decay calibration**. λ is arithmetically fixed by the author-chosen 15% anchor (−ln 0.15 = 1.897). Author construct requiring disclosure. | PENDING VERIFICATION |
 | #50 | §2.3 | Cooling decay kernel `exp(−λ(d/C_D)²)` has **no direct literature precedent** — author construct requiring disclosure. | PENDING VERIFICATION |
 
-Next free flag number: **#51**.
+**Added 2026-07-25 during Phase 1.5 manuscript extraction:**
+
+| Flag | Section | Description | Class |
+|---|---|---|---|
+| #51 | Results §3.5 | **Subsection numbering error.** §3.5 Sensitivity Analysis contains `3.5.1`, then jumps to **`3.4.2`** and **`3.4.3`** — duplicate numbers already used under §3.4. Mechanical fix; renumber to 3.5.2 / 3.5.3. | RESOLVED — Cleared Up (fix is unambiguous) |
+
+**⚠️ Flag #47 CORRECTED — my error, not the manuscript's.** I registered #47 claiming the WITHOUT_VULN degeneracy (3 distinct SECPI values across 63 configs) was "not explained by any existing flag." **That was wrong.** The manuscript documents it explicitly at §3.4.4: scores *"compress into two narrow bands centered at approximately 1.50 and 1.75, with the entire top 48 configurations falling within a range of only 0.0002,"* interpreted as the optimizer lacking spatial signal without equity weighting. The authors observed and wrote up the phenomenon; I flagged as undiscovered something already in their Results.
+
+**Revised #47:** PENDING VERIFICATION → the *observation* is documented and correct. What still needs checking is whether the *interpretation* holds, and whether a near-degenerate WITHOUT_VULN arm is a sound comparison baseline. Reframed as an analytical question, not a discovery.
+
+**Corroboration from the same extraction:** §3.4.4 states SECPI spans **"3.023 to 4.393... across the 63 configurations"** — matching the recovered `run_20260213_222844` CSV exactly (best 4.393, and a `k2_Tal_Ban_SECPI_3.023.png` file). Independent confirmation that D-06's located output is the source of the manuscript's Results.
+
+Next free flag number: **#52**.
 
 Revised counts: 28 cleared · 2 deferred · 19 pending · **3 potential roadblocks (#46, #48, and #30 pending its remaining 3 species)** · 0 severe · **50 total**.
 
