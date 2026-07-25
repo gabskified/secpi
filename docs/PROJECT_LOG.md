@@ -474,6 +474,141 @@ New decision raised: **D-06 — recover or retire the combinatorial analysis** (
 
 ---
 
+## Entry 5 — Editorial Flagger, Results/Discussion/Conclusion first pass — [2026-07-25 — recovered and logged 2026-07-26] — ⚠️ INTERRUPTED, RECOVERED BY ORCHESTRATOR
+
+**From:** `editorial-flagger` (session crashed mid-write) → recovered and completed by the orchestrator in a following session
+**Reviewed:** `CLAUDE.md`, `docs/DECISIONS.md`, `docs/STATE.md`, `docs/FLAGS.md` (v2 → v3 working tree), `manuscript/sections/00_title_abstract.md`, `02_methods_2.1_2.2_grid.md`, `03_methods_2.3_cooling.md`, `04_methods_2.4_secpi.md`, `05_methods_2.5_2.6_vv.md`, `06_results_discussion.md`, `07_conclusion.md`
+**Context:** Entry 4 handoff note 3 assigned `editorial-flagger` the first editorial pass over Results, Discussion and Conclusion — the largest uninspected surface in the project. The session performed that pass and rewrote `docs/FLAGS.md` from v2 to v3, **then terminated before writing this log entry, before syncing `docs/STATE.md`, and before committing.** The v3 edit survived only as an uncommitted working-tree change.
+
+This entry is written by the orchestrator, not by the flagger. It records what the interrupted session produced, what it did **not** produce, and the independent verification the orchestrator performed before letting any of it into the durable record. Per `CLAUDE.md` §8.1, a subagent's findings are authoritative only once logged; this entry is that log, and it is explicit about which parts are the flagger's work and which are the orchestrator's checks.
+
+### What I found
+
+#### A. 🔴 The v3 file is truncated — 20 of the 43 claimed new flags do not exist
+
+`docs/FLAGS.md` v3 announces flags **#52–#94** (43 new: "27 POTENTIAL ROADBLOCK, 15 PENDING VERIFICATION, 1 ROADBLOCK (SEVERE)") and sets the next free number to **#95**. The file actually ends at **#74**, followed by the bare stub `## Resuming This Review — PLACEHOLDER`.
+
+**Flags #75–#94 were never written.** Verified by enumerating every `**#N —` heading in the file: #52 through #74 inclusive, 23 flags, no gaps, nothing above #74.
+
+This is not cosmetic. The unwritten range contains items the rest of the file forward-references as though they were on record:
+
+| Missing flag | Forward-referenced as | Referenced from |
+|---|---|---|
+| **#75** | The project's first **ROADBLOCK (SEVERE)** — §3.5 category-level sensitivity means arithmetically impossible against the SI definition one subsection earlier | v3 preamble item 2; v3 note under the ROADBLOCK (SEVERE) heading |
+| **#79** | §3.5.3's "sourced from literature" is a false provenance claim (refines #30) | Escalations table, #30 row |
+| **#90** | Conclusion asserts "successfully developed and validated" (extends #8) | Escalations table, #8 row |
+| **#91 / #92** | Conclusion's real-world planting prescription and "climate-vulnerable cities" transferability (extend #10/#11) | Escalations table, #10/#11 row |
+
+A reader taking the Executive Summary at face value would believe this project now carries a SEVERE roadblock. **It does not — not because the finding is wrong, but because the finding was never written down.** I spot-checked all four forward references against the manuscript and every quoted string is verbatim-accurate (see §C). The findings are real; the register entries are absent.
+
+#### B. Count reconciliation — the v3 Executive Summary describes a file that does not exist
+
+Derived per-flag, the register **as it actually stands (#1–#74)**:
+
+| Category | As written | v3 column claims | Gap |
+|---|---|---|---|
+| RESOLVED — Cleared Up | **29** | 29 | — |
+| RESOLVED — Deferred | **2** | 2 | — |
+| PENDING VERIFICATION | **25** | 32 | −7 |
+| POTENTIAL ROADBLOCK | **18** | 30 | −12 |
+| ROADBLOCK (SEVERE) | **0** | 1 | −1 |
+| **TOTAL** | **74** | 94 | −20 |
+
+Basis: the 51-flag per-flag reconstruction v3 itself adopts (29 / 2 / 17 / 3 / 0 — which I re-derived independently and confirm), plus v3's escalations of **#39** and **#44** from PENDING to POTENTIAL ROADBLOCK (−2 pending, +2 PR), plus the 23 flags actually written (**#52–#74**: 13 POTENTIAL ROADBLOCK, 10 PENDING VERIFICATION).
+
+Two pre-existing count defects are also now resolved or bounded:
+
+- `docs/STATE.md` line 79 read **"28 cleared · 2 deferred · 19 pending · 3 potential roadblocks · 0 severe · 51 total"** — five categories summing to **52**, not 51. v3 correctly identified this and correctly declined to fix it, routing it to the orchestrator. **Fixed this session** in favour of the per-flag record.
+- `docs/STATE.md`'s "current live total: 51 flags / next free number #52" is superseded: the live total is **74** and the next free number is **#75**.
+
+#### C. Independent verification of flags #52–#74 against the manuscript
+
+I re-checked every one of the 23 written flags against the section text it cites, quoting from `manuscript/sections/`. **Every direct quotation attributed to the manuscript in flags #52–#74 is verbatim-accurate.** Not one fabricated quote, and not one misattributed section — the flagger's citation discipline held. Five flags carry defects in *reasoning or sourcing* on top of accurate quotes:
+
+**#53 — three problems, one substantive.** The four reported cooling-potential scores (Narra 0.943, Akleng-parang 0.856, Talisay 0.392, Duhat 0.284) are quoted correctly, and the objection that Kabiki and Banaba are never scored is correct. But: (i) *"the two omitted are precisely the ones whose LAI is highest"* is **false for Banaba** — Table 3 gives Banaba LAI 3.5–4.5, fourth of six by midpoint, below Talisay (4.0–5.5) and Narra (4.0–5.0). Only Kabiki (4.5–6.0) supports the claim. (ii) *"using midpoints, Akleng-parang **outranks** Narra, contradicting the text"* — **I could not reproduce this under any midpoint convention.** Using Table 3 CPA midpoints (Narra 510.5, Akleng 480.5): Narra 0.957 vs Akleng 0.830. Using CPA recomputed from CD midpoints (Narra π/4·23² = 415.5, Akleng π/4·24² = 452.4): Narra 0.900 vs Akleng 0.871. Narra leads in both. The claim as written is unsupported; the *first* half of the check — Akleng-parang ≈ 0.72 under range maxima against a reported 0.856 — I reproduce exactly and it stands on its own. (iii) The 0.70/0.30 weighting is attributed to **§2.3.1**; it is stated in **§2.3.2** (`03_methods_2.3_cooling.md:213–215`, α₁ = 0.70, α₂ = 0.30). §2.3.1 defines only normalized CPA = CPA/CPA_max.
+
+**#59 — headline overstated.** Both quotations are exact and objection (b) (pheromone attribution with no pheromone, diversity or entropy diagnostic) is sound. But the headline — *"iteration-best and global-best traces are conflated"* — is **not supported by the extracted text**, which names them separately: *"The best-per-iteration SECPI trace fluctuated…"* and, as a distinct sentence, *"The global best was reached early."* A per-iteration best legitimately fluctuates, so the manuscript is internally consistent on this point. What survives is the flag's own alternative reading: whether Figure 11's plotted series matches its label. Needs rewording before it goes to the Editor.
+
+**#64 — conclusion sound, attestation wrong.** The core finding is correct and decisive: §3.4.1's stated k=1 mean of **2.990** is below **3.0396**, the lowest single k=1 value the manuscript itself prints — verifiable from the manuscript alone. The six-value mean of **3.514** is arithmetically correct. **But the flag labels this "hand arithmetic on the manuscript's own printed values (no execution required)" and cites §3.1.4/§3.4.2/§3.4.3 as the source of all six mono-species values. Two of the six — Kabiki 3.094 and Banaba 3.068 — appear nowhere in §3.** They come from the recovered `run_20260213_222844` CSV via `DECISIONS.md` D-06. The attestation must be corrected; the finding survives intact.
+
+**#68 — same sourcing defect.** Talisay − Duhat = 3.1065 − 3.0396 = **0.0669** is manuscript-internal and correct. The second effect, *"Banaba + Kabiki + Duhat marginally outperforms any of its constituent mono-species,"* is quantified in the flag as **Δ = 0.0396** over Kabiki at 3.094 — again a CSV value, not a manuscript value. Using only what §3 prints, the margin over its one reported constituent (Duhat 3.0396) is **0.094**. The objection holds either way, since both figures sit at or near §3.3.1's stated 0.05–0.07 best-versus-average gap, but the number needs re-sourcing.
+
+**#70 — one half verified, one half inferred.** Part (a) is confirmed: §3.4.4 says *"significantly higher mean SECPI of 3.08"* with no test, n, p or dispersion. Part (b) quotes *"[SUCCESS] HIGH EQUITY"* exactly — **but no project record establishes that this particular string is threshold-triggered.** `docs/STATE.md` documents a *different* function, `interpret_scenario_comparison()`, printing `"Difference: SIGNIFICANT"` on a hardcoded `|Δ| > 0.1`. The flag asserts as established fact that *"the software was told when to print SUCCESS and it printed SUCCESS."* That is an inference by analogy from a different code path. The flag's own "closes when" clause correctly assigns `math-auditor` to enumerate which thresholds emit which strings — but the objection states the conclusion before that work is done. **Downgrade the assertion to a hypothesis until `math-auditor` reports.**
+
+The remaining **18 flags (#52, #54, #55, #56, #57, #58, #60, #61, #62, #63, #65, #66, #67, #69, #71, #72, #73, #74) I confirm in full** — quotes, section attributions, and arithmetic. Selected independent re-derivations:
+
+- **#52** — Table 3 midpoints check out: Narra CD 12–34 → 23.0; Akleng-parang 18–30 → 24.0. §3.1.4's *"(24.0 m and 23.0 m, respectively)"* follows "Akleng-parang and Narra" in that order. The alternation against §3.1.1's *"34 meters and 30 meters"* is real.
+- **#55(c)** — §3.4.4's (25,45) and (45,45) are **20 m** apart against a Narra crown diameter of 23–34 m, i.e. closer than combined radii. The self-contradiction is genuine.
+- **#56** — §3.2 is literally four content lines (`06_results_discussion.md:210–217`): two subsection headings, two figure captions, zero prose. Confirmed.
+- **#57** — Methods §2.4.1 (`04_methods_2.4_secpi.md:90–91`) *"colony size of 50 artificial ants over 100 iterations"* against Results §3.4 *"30 iterations with 15 ants per iteration"*. 5,000 vs 450 evaluations — an 11× discrepancy, confirmed.
+- **#58** — `q0` appears **nowhere** in any Methods section file. Confirmed by grep across `02`–`05`.
+- **#62** — the °C relabelling is confirmed end to end: §2.3.1 *"dimensionless scale from 0 to 1"*, §2.3.2 *"relative measure"*, §3.1.2 *"between 0 and 1"*, §3.3.2 unitless (0.131 / 0.809 / 0.160), then §3.4.4 *"1.15 °C"*, Conclusion *"0.80 °C… 0.11 °C"*, Abstract *"0.809 °C"*. And §3.4.4's 1.15 does exceed the model's own asserted 0–1 bound.
+- **#63** — (0.19 − 0.11)/0.19 = **42.1%** matches the manuscript's "approximately 42%"; (0.19 − 0.131)/0.19 = **31.0%**. The 11-point swing between the manuscript's own two means is real.
+- **#67** — 1.2315 / 4.3651 = **28.21%**; D-06's independent derivation (4.3916 − 3.13)/4.3916 = **28.73%**. Two incompatible derivations of the same headline number, both on the project record. Confirmed.
+- **#72** — Methods Table 2 (`02_methods_2.1_2.2_grid.md:447–451`) assigns weights by zone type (2.0 / 1.5 / 1.0 / 0.5); §3.4.4 describes distance bands (2.0 within 10 m, 1.5 within 20 m, 1.0 elsewhere). I read all of §3 and confirm **the 0.5 class appears nowhere in Results**.
+- **#74** — I re-derived the isopleth independently. Solving 0.85·exp(−1.9·(d/23)²) = 0.5 gives **d ≈ 12.16 m** (flag says ≈12.2 ✓), area ≈ **465 m²** (flag says ≈470 ✓), against the manuscript's 15 m and 707 m². And π·15² = **706.9 ≈ 707**, which is also **exactly Table 3's maximum CPA for Akleng-parang** — the transposition hypothesis is well founded. The V fine-cell denominator behind "4.80%" appears nowhere in §3. Confirmed.
+
+Section attributions I verified independently and confirm: #66's §2.1 *"expected to be non-submodular"* (`02:194–195`); #71's §2.2.4 *"permitted only in cells where S(cell) = A"* (`02:540–541`, and §2.2.4 does begin at line 471); #73's §2.3 *"Wind modulation effects are indirectly considered"* (`03:65–67`); #69's §2.4 mean equity weight `W_e,k` (`04:161–164`).
+
+### What I changed / decided
+
+**Decided nothing.** No `D-xx` was closed, no flag was reclassified, no manuscript prose was written or altered.
+
+Three files changed, all record-keeping:
+
+1. **`docs/FLAGS.md`** — added a truncation notice to the Executive Summary giving the true per-flag counts for #1–#74; struck the header's "next free flag number: #95" and corrected it to **#75**; expanded the terminal `PLACEHOLDER` stub into a resumption brief naming what is missing and where to restart. **No flag's text, section reference, or classification was altered** — append-don't-overwrite, per `CLAUDE.md` §2.3.
+2. **`docs/PROJECT_LOG.md`** — this entry.
+3. **`docs/STATE.md`** — counts synced to the per-flag record (see below).
+
+The five defective flags (#53, #59, #64, #68, #70) were **left in place unmodified**. Correcting a flagger's finding is the flagger's job, not the orchestrator's; this entry records the defects and the next `editorial-flagger` session owns the fixes. Nothing here downgrades any flag's class.
+
+**One reverted change, recorded for the audit trail.** While this entry was being appended, `docs/PROJECT_LOG.md` was modified on disk by something other than me: **Entry 4's finding "#### B. Entry 3 is missing — see the placeholder above." was deleted and its remaining findings renumbered C → B and D → C.** The intent was presumably benign — Entry 3 has since been recovered, so that pointer is stale — but the edit (a) violates §2.3's *append, never overwrite* rule for this file, and (b) broke three cross-references **inside Entry 4**, which still says *"Findings C and D are recorded here"*, *"Read Findings C and D before doing anything else"*, and *"that is precisely how Finding C was caught."* Under the renumbering those pointers resolve to the wrong findings.
+
+**I reverted it.** Entry 4 is restored byte-for-byte to its committed state and this commit's diff against `docs/PROJECT_LOG.md` is verified **append-only (131 insertions, 0 deletions)**. The stale pointer stands as written; it is superseded — not deleted — by Entry 3's recovery, recorded at the head of Entry 3 and in `docs/STATE.md`. If the deletion was deliberate, redo it as an explicit supersession note rather than a silent removal, and fix Entry 4's three internal references in the same edit.
+
+### Still open / unresolved
+
+- **Flags #75–#94 must be re-derived.** §3.5 Sensitivity Analysis, the Conclusion, Recommendations and back matter are, as of this entry, **still without editorial coverage** — Entry 4's handoff note 3 is only two-thirds discharged. Owner: `editorial-flagger`, assigning from #75.
+- **#75's underlying finding needs formal registration, and it is likely severe.** My spot-check of `06_results_discussion.md:658–665`: §3.5.2 reports a **Species Morphology category mean SI of 1.3068** while §3.5.1's largest single SI is **0.4435** (Narra crown diameter), with all 39 other parameters below 0.005. A mean cannot exceed its own maximum. The same sentence also names **"Species Allometry" twice** (0.1857 and 0.0727) where the following paragraph implies the second is *Cooling Model*. I am **not** registering this as a SEVERE roadblock on my own authority — the orchestrator does not classify findings — but the next flagger should treat it as the highest-priority item in the remaining range.
+- **Five flags need repair before they go to any downstream agent:** #53 (drop the unreproducible midpoint-inversion claim and the Banaba LAI assertion; re-cite the weighting to §2.3.2), #59 (reword the headline away from "conflated"), #64 and #68 (re-source Kabiki 3.094 / Banaba 3.068 to the D-06 CSV, and correct #64's "manuscript's own printed values" attestation), #70 (demote the "[SUCCESS] HIGH EQUITY" threshold claim to a hypothesis pending `math-auditor`).
+- **No `D-xx` moved.** D-02, D-03, D-04, D-05, D-07, D-08, D-10 remain open with the research lead. Several new flags sharpen D-03 considerably — #69 argues the existing §3.4.4 validation is circular by construction, which is the strongest case yet for D-03's SECPI-independent outcome metric — but that is a recommendation to the lead, not a decision.
+- **A second log gap exists and is not filled by this entry.** The Phase 1.5 manuscript extraction (commit `6c3192a`) and the STATE.md reconciliation (`527e68a`) produced flag #51 and the #47 correction with no corresponding log entry. Both are recorded in `STATE.md` only. Flagged here rather than back-filled, since I did not run that session and will not reconstruct one.
+
+### Handoff notes for the next chat
+
+1. **Do not quote any flag total from `FLAGS.md`'s Executive Summary v3 column.** It describes 94 flags; 74 exist. The truncation notice immediately below that table carries the real numbers. Same for "next free flag number" — it is **#75**.
+2. **There is no ROADBLOCK (SEVERE) on this project's record.** Two places in `FLAGS.md` say otherwise, and both are forward references to an unwritten #75. The *finding* behind #75 looks real and I verified the arithmetic (see above) — but until a flagger registers it, the project's severe count is zero. Do not report a severe roadblock to the research lead on the strength of a forward reference.
+3. **Flags #52–#74 are quotation-reliable.** I checked all 23 against the source sections; every manuscript quotation is verbatim. Treat the *quotes* as trustworthy and the *reasoning* of #53, #59, #64, #68, #70 as needing repair per the list above. The other 18 are usable as-is.
+4. **This session ran read-only, as did the flagger's.** No script was executed, no seed set, no number regenerated. Every arithmetic check in this entry was performed by hand on values printed in the manuscript or already logged, and is labelled as such. Nothing here discharges the execution obligations sitting with `math-auditor` and `code-stressor` in the "closes when" clauses of #52–#74.
+5. **The interruption itself is the lesson.** A full editorial pass over three manuscript sections existed for one session as an uncommitted working-tree diff with no log entry — precisely the Entry 3 failure mode `CLAUDE.md` §8.1 was written to prevent, recurring at the orchestrator level rather than the subagent level. The v3 file's internal contradictions were only detectable because the *file* survived; had the working tree been cleaned, the entire pass would have been lost silently. **Commit the flag register before the session that produced it ends, not after.**
+
+### Flags touched
+
+- **#52–#74 created** (23 flags) by the interrupted `editorial-flagger` session. Numbering confirmed correct: #52 was the next free number per `STATE.md`, and the range is contiguous with no reuse.
+  - POTENTIAL ROADBLOCK (13): #52, #54, #55, #56, #57, #60, #62, #64, #67, #68, #69, #70, #72
+  - PENDING VERIFICATION (10): #53, #58, #59, #61, #63, #65, #66, #71, #73, #74
+- **#39** — PENDING VERIFICATION → **POTENTIAL ROADBLOCK**. Basis: Results §3.4.4 carries a second, independent significance assertion beyond the Methods §2.5.2 sentence #39 was scoped to. Registered in detail as #69 and #70.
+- **#44** — PENDING VERIFICATION → **POTENTIAL ROADBLOCK**. Basis: the `k` collision manifests as a numerical error, not a notation preference — see #64.
+- **#46, #30, #6, #10, #11, #8** — refined or extended in scope, **classes unchanged**. See the v3 Escalations table.
+- **#75–#94 — NOT created.** Announced in the v3 preamble but never written. **The numbers #75–#94 are unassigned and free.** Whoever resumes must not treat them as taken.
+- No flag was downgraded or closed this session.
+
+### Decisions raised or closed
+
+**None closed.** No new `D-xx` raised. #69's circularity finding materially strengthens the case for D-03's SECPI-independent outcome metric, and #72's finding may require `deriver` re-grounding if the implemented weight scheme is distance-banded rather than zone-typed — both are recommendations to the research lead, recorded in the flags, not decisions taken here.
+
+### Reproducibility attestation
+
+**No code was executed in this session or in the flagger session it recovers.** Every number asserted above is one of:
+
+1. **A verbatim quotation from `manuscript/sections/*.md`**, cited by file and line. These files are the Phase 1.5 verbatim extraction from `manuscript/MCS02_SECPI_original.pdf` (commit `6c3192a`); the extraction's own provenance banners note that flattened equations still require visual comparison against the PDF before any equation is trusted.
+2. **Hand arithmetic on those quoted values**, shown inline so it can be checked without rerunning anything: the #53 normalization comparisons, #57's 5,000-vs-450, #63's 42.1% / 31.0%, #64's 3.514 mean, #67's 28.21% / 28.73%, #68's 0.0669 and 0.094, and #74's isopleth solve (d ≈ 12.16 m, ≈465 m²).
+3. **A value cited from an earlier log entry or from `DECISIONS.md`**, identified as such — specifically Kabiki 3.094 and Banaba 3.068, which originate in the D-06 `run_20260213_222844` CSV and **not** in the manuscript. That distinction is the substance of the #64 and #68 corrections above.
+
+**Flag counts (29 / 2 / 25 / 18 / 0 = 74) were derived by per-flag enumeration of `docs/FLAGS.md`, not by carrying forward any summary line.** They reconcile against the 51-flag baseline the v3 file itself adopts. No number in this entry rests on a subagent's return summary.
+
+---
+
 ---
 
 ## ENTRY TEMPLATE (copy this for your session, fill in, append after the last entry — do not overwrite prior entries)
