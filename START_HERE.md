@@ -1,5 +1,7 @@
 # START HERE — SECPI Migration Plan (Windows / PowerShell)
 
+> **📌 One-time setup runbook — not a live document.** Its job is done once Phase 0–2 are complete. No Claude Code session reads this file. If you set up on a second machine or onboard a co-author later, it's an accurate historical record of what worked — but don't expect it to reflect the project's current state; check `docs/STATE.md` for that instead.
+
 Everything you need, in order. All commands are PowerShell-native.
 
 **Assumed present:** Claude Code (v2.1.0+), git, GitHub, ECC installed from prior work.

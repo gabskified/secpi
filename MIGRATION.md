@@ -1,5 +1,7 @@
 # MIGRATION.md — Master Plan
 
+> **📌 Setup snapshot — not a live document.** Accurate as of 2026-07-25 (Phase 1 complete). No Claude Code session or subagent reads this file — every session instruction points to `CLAUDE.md`, `docs/DECISIONS.md`, `docs/STATE.md`, `docs/PROJECT_LOG.md`, `docs/FLAGS.md` instead, and that's where live state actually lives. Sections here that overlapped those files (constraints, risk register, decision queue) have already drifted and won't be corrected — treat this document as historical planning context, not current status. **Parts 0.5 (repo architecture) and 7 (the `src/secpi` refactor plan) are the exceptions** — static, not duplicated elsewhere, and worth a fresh accuracy pass right before Stage 7 (the refactor) actually begins.
+
 **The authoritative document for this migration.** Read this to understand *what* is happening and *why*. Use `START_HERE.md` for the commands to type.
 
 Last updated: 2026-07-24. Supersedes all earlier migration notes.
