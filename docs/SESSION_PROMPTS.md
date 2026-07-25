@@ -62,9 +62,9 @@ Note the namespacing: plugin installs use `/ecc:plan "..."`, manual installs use
 >
 > Then tell me, in your own words:
 > 1. What this project is and what the immediate deliverable is
-> 2. The six decisions currently waiting on me, and which ones block which downstream work
+> 2. The seven decisions currently open and waiting on me, which are already decided, and which ones block which downstream work
 > 3. Which manuscript sections have never been reviewed
-> 4. Why every Results number currently in the manuscript is void
+> 4. Why every Results number currently in the manuscript is void, and what changed about that after the D-06 recovery
 >
 > If you cannot answer any of these from those three files alone, say exactly what is missing. Do not fill gaps by inference.
 
