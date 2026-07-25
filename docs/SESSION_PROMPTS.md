@@ -107,21 +107,23 @@ Use `/model opus` for this one.
 
 ## Session 4 — D-06 salvage triage
 
-**Do Step 1 by hand first** — freeze and commit the recovered directory before any agent executes anything. See `docs/DECISIONS.md` D-06.
+**Updated with concrete findings from the actual salvage** — the recovered directory is far larger than anticipated: 5 `.py` files (`CA.py`, `CODE020526.py`, `GEMINI.py`, `dashboard.py`, `secpi_main.py`) and dozens of run-output directories under three naming conventions (`corrected_outputs/`, `secpi_outputs/`, loose `run_*`), spanning two date clusters (mid-Feb 2026, and July 19 — the same day as Entry 2's audit).
 
-> Use the `math-auditor` agent. Read `docs/DECISIONS.md` D-06 in full, including the three-outcome table, before starting.
+> Use the `math-auditor` agent. Read `docs/DECISIONS.md` D-06 in full first.
 >
-> `legacy/archive/` contains multiple recovered Python iterations, already committed unmodified. Your job is to identify which one produced Results §3.1, and whether it predates the Entry 1 and Entry 2 audits.
+> `legacy/archive/` contains recovered material already committed unmodified: 5 Python scripts and dozens of run-output directories.
 >
-> **Step A — Inventory by signature.** For every `.py` in `legacy/archive/`, record: whether `itertools` is imported *and called*; presence of any combinatorial or subset-sweep class; references to 63 subsets or six species; grid dimensions; `n_trees`; whether a random seed is set. Filenames are unreliable — go by imports and class definitions.
+> **Priority 1 — inspect `corrected_outputs/run_20260213_222844/combinatorial/` first.** It contains `all_combos_with_vuln.csv`, `all_combos_without_vuln.csv`, `combinatorial_summary.json`. Check row counts (looking for ~63), column structure, and whether any values match the published Results §3.1 numbers: SECPI 4.3916 (rank 3/63), 4.3856 (rank 27/63), marginal deltas 0.6291/0.6283, threshold 3.13. This may be stored *output* of the missing combinatorial sweep, not just a candidate script — treat it as the highest-value lead.
 >
-> **Step B — Reproduce against targets.** Run each plausible candidate. Compare output to the published values: SECPI 4.3916 (rank 3/63), 4.3856 (rank 27/63), marginal deltas 0.6291 and 0.6283, threshold 3.13, ~28% cliff. Report actual printed output, not your reading of the code. If no seed is set, compare distributions and rank orderings and say so explicitly.
+> **Priority 2 — inventory all 5 `.py` files by signature:** for each, check for a combinatorial/subset-sweep class, `itertools` used (not just imported), 63-subset or six-species references, and whether any of them could have produced the `combinatorial/` output above.
 >
-> **Step C — Date it against the audit boundary.** For whichever candidate reproduces §3.1, check individually for each Entry 1 and Entry 2 fix: the tie-inversion fix, `SensitivityAnalyzer` reading `base_aco_config` rather than hardcoded 10 ants / 15 iterations, absence of the fabricated `np.random.uniform(0.98, 1.02)` allometric sensitivity, the corrected CA transition formula, and which SECPI normalization scheme it uses.
+> **Priority 3 — note the `1_species` through `5_species` folder pattern** (in `run_20260219_004451`, `_005059`, `_010340`). This may represent a species-*count* sweep distinct from both subset-size and tree-count meanings of `k` — flag as a possible third D-07 variable, don't resolve it yourself.
 >
-> **Step D — State the outcome** as (a) post-audit, (b) pre-audit, or (c) no reproduction, per the D-06 table.
+> **Priority 4 — use directory naming and dates as forensic signal, not proof.** `corrected_outputs/` vs `secpi_outputs/` vs loose `run_*` likely indicates different script versions or sessions. The July 19 runs share a date with Entry 2's audit — note this, but confirm audit-boundary status per Step C below rather than inferring from the date alone. A folder called "corrected" is not evidence of correctness; that's exactly what verification is for.
 >
-> Do not modify any file in `legacy/archive/`. Do not conclude that reproducing the published numbers validates them — under outcome (b) the numbers are reproducible *and* wrong, and both facts hold simultaneously. Append a log entry and update `legacy/archive/MANIFEST.md` with the verdict.
+> **Step: date the winning candidate against the audit boundary.** For whichever script/output combination best matches §3.1, check individually: the tie-inversion fix, `SensitivityAnalyzer` reading `base_aco_config` rather than hardcoded 10 ants/15 iterations, absence of the fabricated `np.random.uniform(0.98, 1.02)` allometric sensitivity, the corrected CA transition formula, and which SECPI normalization scheme is in use.
+>
+> **State the outcome** as (a) post-audit, (b) pre-audit — numbers reproducible but wrong — or (c) no reproduction, per the D-06 table. Do not modify any file in `legacy/archive/`. Expand `legacy/archive/MANIFEST.md` to cover the run-output directories, not just the `.py` files. Append a full `PROJECT_LOG.md` entry.
 
 Use `/model opus`.
 

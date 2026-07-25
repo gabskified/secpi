@@ -291,24 +291,118 @@ Flag #39: paired Wilcoxon signed-rank recommended, n=30, non-SECPI placement met
 
 ---
 
-## Entry 3 — ⚠️ MISSING FROM THIS LOG — [status: unrecovered]
+## Entry 3 — Literature Verification & Derivation Specialist (Deriver) — [recovered 2026-07-25]
 
-**This entry does not exist in the canonical log file and must be reconstructed or formally retired.**
+> **Provenance note.** This entry was written during the Deriver chat but never appended to the log — the session hit usage limits, and the findings were captured as a standalone markdown file instead. Recovered and folded in by the research lead on 2026-07-25. The Entry 3 gap flagged in Entry 4 is hereby **CLOSED**; the four flags citing "Project Log Entry 3" (#20, #26, #35, #38) now have a real, readable source.
+>
+> **Independent verification performed on recovery.** Every quantitative claim in §1 was re-derived from the delivered raw data (`SECPI_HD_field_data.csv`, 211 records) by OLS refit:
+>
+> | Claim | Reported | Reproduced |
+> |---|---|---|
+> | Narra h0 / h1 | 2.201 / 0.4750 | 2.201 / 0.4750 ✓ |
+> | Talisay h0 / h1 | 2.156 / 0.4622 | 2.156 / 0.4622 ✓ |
+> | Banaba h0 / h1 | 0.595 / 0.7659 | 0.595 / 0.7659 ✓ |
+> | n per species | 161 / 37 / 13 | 161 / 37 / 13 ✓ |
+> | DBH ranges | 6.0–117.2 / 9.4–58.0 / 10.5–34.6 | exact ✓ |
+> | RMSE (m) | 2.92 / 2.04 / 1.46 | exact ✓ |
+> | Low-risk subsets | h0 2.022/2.468/0.714, n 136/32/9 | exact ✓ |
+> | Narra inversion at h=30 m | ~245 cm | 244.5 cm ✓ |
+> | Observed height maxima | Narra ~21.6 m, Talisay 15.8 m | 21.58 / 15.77 ✓ |
+>
+> R² values (0.515 / 0.475 / 0.710) are **log-scale** R², which is what OLS on log-transformed data optimises — the correct convention, correctly reported. Original-height-scale R² would be 0.474 / 0.430 / 0.689; state which convention the manuscript uses.
+>
+> **This is the first log entry in the project whose numerical claims were fully reproducible from primary data.** Raw data archived at `docs/data/SECPI_HD_field_data.csv`.
 
-`SECPI-Manuscript-Flag-Archive-v2.md` states it was "cross-referenced against SECPI Project Log **Entries 1–3**," and cites "Source: Project Log Entry 3" as the sole basis for four flag resolutions:
+**Session scope:** p0 provenance · normalization citation audit (Priority 5) · flag batch (#14, #18, #19, #20, #21, #22, #26) · allometric H–D/LAI directive · field-data extraction and refit.
 
-| Flag | Claim sourced to the missing Entry 3 |
-|---|---|
-| #20 | AGB estimation-error percentages assigned to the Deriver queue |
-| #26 | "Expander heuristic" terminology bundled into the Almeida lookup |
-| #35 | The 38.7% recalculation assumed linear decay; no arithmetic error, the §2.3.2 formula is missing a squared term |
-| #38 | "Gaussian" is the correct term; the equation is what's wrong |
+---
 
-The log carried forward from the Claude Project ends at Entry 2. Entry 3 was either written in a chat and never appended, or appended to a copy that was never re-uploaded to project knowledge.
+## 1. Allometric H–D formula — root cause confirmed, refit data supplied
 
-**This is the coordination failure that motivated the migration, caught in the act.** Four flag resolutions currently rest on a citation that cannot be opened.
+**Verdict on the code's constants: they are not valid cm-based coefficients.** Refitting the power form `h = h0 · DBH^h1` to real paired field measurements gives `h0` on the order of 0.6–2.2, against the code's 45.8–51.2 — a discrepancy of **22× to 77×**. This confirms Auditor #2's hypothesis #2 (placeholder/invented values), and it is not a unit-conversion artifact that can be patched by rescaling: no cm/m conversion produces the code's values from the fitted ones.
 
-**Action required (math-auditor, first session):** the #35/#38 resolutions are independently re-verifiable by execution against `AuditedCode_1.py` — confirm the decay function is quadratic in distance and re-derive the calibration points, then re-source those flags to a new entry. The #20/#26 items are queue assignments only and carry no analytical content; re-issue them to the Deriver directly. Once both are done, mark this placeholder RETIRED rather than deleting it — the gap is part of the provenance record.
+**Refitted coefficients (OLS on log-transformed field data, DBH in cm, height in m):**
+
+| Species | n | DBH range (cm) | Fitted h0 | Fitted h1 | R² | RMSE (m) | Code h0 | Ratio |
+|---|---|---|---|---|---|---|---|---|
+| Narra (*Pterocarpus indicus*) | 161 | 6.0–117.2 | 2.201 | 0.4750 | 0.515 | 2.92 | 51.2 | 23.3× |
+| Talisay (*Terminalia catappa*) | 37 | 9.4–58.0 | 2.156 | 0.4622 | 0.475 | 2.04 | 47.2 | 21.9× |
+| Banaba (*Lagerstroemia speciosa*) | 13 | 10.5–34.6 | 0.595 | 0.7659 | 0.710 | 1.46 | 45.8 | 76.9× |
+
+Low-risk-only subsets (excluding structurally damaged trees) give materially similar results — Narra `h0=2.022, h1=0.4989` (n=136); Talisay `h0=2.468, h1=0.4189` (n=32); Banaba `h0=0.714, h1=0.7133` (n=9).
+
+**Data source:** National Parks Development Committee (NPDC) tree inventories, Rizal Park complex, Manila — "Bachelors Garden" and "Western Section" surveys (published Feb 2025). Individually tagged, GPS-located trees with paired DBH (cm) and height (m) plus a structural risk class. **Tier: government/LGU field survey — measured primary data, not peer-reviewed.** Urban open-grown context, which matches the study's modelling context better than closed-canopy forest allometry would.
+
+**Full extracted dataset delivered as `SECPI_HD_field_data.csv`** (211 records: 161 Narra, 37 Talisay, 13 Banaba) with species, inventory, tree ID, DBH, height, and risk class, so the team can re-run or vary the regression independently.
+
+### Caveats the team must carry into the manuscript
+
+1. **Fit quality is modest (R² 0.48–0.71).** Urban trees are pruned, pollarded, and space-constrained, so H–D scatter is genuinely high. These coefficients are defensible but should be reported *with* their R², n, and DBH range of validity — not presented as precise.
+2. **Banaba's fit rests on n=13.** Usable, but thin; disclose the sample size.
+3. **A saturating form did not outperform the power law here.** I tested Michaelis-Menten alongside the power form; it scored *lower* on R² for all three species. This partially walks back the earlier Priority-1 recommendation: the tropical-forest literature (Feldpausch et al. 2011) favours saturating forms, but *this urban dataset* does not demand one. The power form is empirically adequate for this data. (Note: my MM fit used a linearized estimator, which is biased — a proper nonlinear fit might close some of the gap. Not worth pursuing unless a reviewer raises it.)
+4. **The manuscript's assumed heights are outside the observed range.** Inverting the fitted Narra equation, an assumed height of 30 m implies **DBH ≈ 245 cm** — larger than any tree in the dataset (max 117.2 cm) and above the species' documented maximum (~200 cm). Observed Manila Narra top out at ~21.6 m. Talisay's assumed 35 m is likewise far above the observed max of 15.8 m. **Recommend re-anchoring the assumed heights to realistic urban values** (Narra ~18–21 m, Talisay ~13–15 m, Banaba ~10–12 m) rather than species-maximum figures, or the H–D inversion will be extrapolating well beyond its calibration range regardless of which constants are used.
+
+### The three species with no field data
+Duhat (*Syzygium cumini*), Kabiki (*Mimusops elengi*), and Akleng-parang (*Albizia lebbeck*) do not appear in the NPDC inventories, and no open paired (DBH, height) dataset was located. Only species-profile ranges exist: Duhat 10–30 m / trunk 40–100 cm; Kabiki 9–18 m (typ. ~15 m) / ~1 m girth; Akleng-parang 18–30 m / 0.5–1 m trunk (World Agroforestry notes 15–20 m typical, 30 m exceptional). **Options: borrow a constrained pantropical/genus-level fit, collect field data, or disclose as range-constrained author estimates. No species-specific cited coefficients exist to hand over.**
+
+*(Incidental: the Western Section inventory contains* Albizia acle *("Akle"), a different Philippine species — not a substitute for* A. lebbeck.*)*
+
+## 2. LAI — no literature basis for the allometric path; Path X confirmed
+
+- **No direct or genus-level precedent** exists for an `LAI = l0 · DBH^l1` power law for any of the six species, after two dedicated search rounds.
+- **Conceptual mismatch:** the urban-forestry standard predicts leaf **area** (m², extensive) from DBH — Nowak (1996), the i-Tree Eco basis; Peper & McPherson — typically via log-log/exponential forms, not a bare power law. LAI is leaf area per unit ground area (intensive). The manuscript applies biomass-style allometric machinery to the wrong quantity.
+- **The hardcoded LAI values (3.15–6.07) are physically plausible**, sitting inside measured tropical/urban canopy LAI (~3–6.5). No species-specific source exists for the six values; §2.2's DENR-ERDB / UPLB-CFNR / Abino et al. (2014) citation covers **morphology, not LAI**.
+- **Decision recorded (research lead, this session): Path X.** Hardcoded LAI remains canonical for all results; the allometric chain stays sensitivity-only and is disclosed as author-estimated. Path Y (computed-canonical) was ruled out because no valid leaf-area constants exist for these species.
+- **Path Y-prime, if revisited later:** predict leaf area (or intra-crown LAI, *sensu* Nock et al. 2008 — leaf area per unit crown projection area) from **crown projection area**, which the model already computes, bypassing the height→DBH chain entirely. A tropical LAI-allometry study found leaf area regressed on canopy spread area fit well while DBH-based regression did not improve correlation. This is the methodologically defensible route, not the DBH route.
+
+## 3. p0 provenance — no Almeida convention exists
+
+Almeida et al. (2002/2003) uses the **weights-of-evidence (Bayesian)** method: transition probabilities are computed from spatial evidence and current state each iteration, **not propagated recursively**. The only initial condition in that model is the observed land-use map.
+
+- **(a)** No initial transition-probability convention exists in Almeida.
+- **(b)** N/A.
+- **(c)** Uniform initialization is **not** a citable convention for this model class. It is defensible only as a generic non-informative default (principle-of-indifference), which is a statistical argument, not a CA-methodology precedent.
+- **(d)** `p0` **cannot** collapse into `p_init` (seed density vs. per-cell probability — different quantities). But `p0` **is redundant with γ**: in the first update `p(1) = γ·ω·p0`, so both act as multiplicative scale factors and are not separately identifiable. **Recommend fixing `p0 = 1.0` and letting γ absorb the calibration**, which removes the undocumented parameter and leaves exactly the two manuscript-named parameters.
+
+**Citation hygiene:** "Almeida et al., 2002" is ambiguous — confirm whether it is CASA Working Paper 42 (UCL) or the Buenos Aires ISRSE proceedings. The full journal version is **de Almeida et al. (2003), *Computers, Environment and Urban Systems* 27(5), 481–509**. Methods should cite Almeida for the *framework* only and present the multiplicative rule + p0/γ as the team's own adaptation.
+
+*Caveat: mechanism confirmed from abstract and multiple independent descriptions, not from the full text's equations. Equation-level correspondence would need the full CASA WP 42 / CEUS 2003 text.*
+
+## 4. Normalization precedent (Priority 5) — Auditor #2's citations verified
+
+| Source | Status | Notes |
+|---|---|---|
+| **UNDP HDI goalposts** | ✅ Verified | "Natural zeros and aspirational targets" framing confirmed; fixed-goalpost + geometric-mean method introduced in HDR 2010. Cite the HDR edition whose goalpost values are used. |
+| **OECD/JRC (2008) Handbook** | ✅ Verified (complete) | ISBN 978-92-64-04345-9; DOI 10.1787/9789264043466-en. Covers min-max and distance-to-reference normalization. Author-form: Nardo, Saisana, Saltelli, Tarantola, Hoffman & Giovannini. |
+| **World Bank "distance to frontier"** | ⚠️ Verified, but **caveat** | Real (0–100, frontier = best practice, introduced DB2015, renamed "ease of doing business score" DB2019). **However, Doing Business was discontinued in Sept 2021 after a data-integrity investigation.** Method is sound; citing a discredited index invites reviewer scrutiny. Prefer the ESI. |
+| **Cedefop European Skills Index** | ✅ Verified — **preferred backup** | Min-max normalized 0–100, "distance to the ideal," frontier = best achieved. Still active, never discredited. |
+
+**Method-fit note:** in all four precedents the frontier is a **fixed, pre-registered goalpost**. The manuscript should present the ceiling explicitly as a pre-specified design constant — consistent with Auditor #2's recommendation. Klugman, Rodríguez & Choi (2011), *J. Economic Inequality* 9(2), 249–288 is recommended as a provenance citation; **DOI/pages not independently verified — needs a 10-second check.**
+
+## 5. Flag batch outcomes
+
+| Flag | Status | Finding |
+|---|---|---|
+| **#18** | Confirmed closed | Already resolved in v2 archive; dropped. |
+| **#19** | ✅ RESOLVED — error confirmed | Both *Terminalia catappa* and *Lagerstroemia speciosa* are documented **deciduous** (Talisay often twice-yearly leaf drop in tropical dry-season climates). The blanket "evergreen tree types" claim is factually wrong. Correct to "predominantly evergreen, with Talisay and Banaba deciduous/semi-deciduous." |
+| **#26** | ✅ RESOLVED — direct precedent | "Expander" is **not** author-coined and not originally Almeida's: it is one of the two vicinity-based transition functions of **DINAMICA** (expander grows existing patches; patcher seeds new ones). Cite **Soares-Filho, Cerqueira & Pennachin (2002), *Ecological Modelling* 154(3), 217–235.** Almeida inherited it (Soares-Filho et al. are co-authors). Note DINAMICA's expander has the form `P' = P × √(nⱼ/4)` — a neighborhood factor multiplying a **weights-of-evidence transition potential**, never a uniform constant, reinforcing that `p0 = 0.5` is the team's own simplification. |
+| **#21** | ◐ Likely resolved | **No author named "Kunhle" exists** in the submodular-optimization literature. The manuscript already cites a real source for the same claim one section earlier: "Bian et al., 2018" → correct paper is **Bian, Buhmann, Krause & Tschiatschek, ICML 2017** (year off by one), on greedy maximization guarantees for non-submodular functions. Both hypotheses (Krause misspelled / corrupted duplicate) converge on this source. Recommend Editor confirm "Kunhle et al." was meant to be the same citation. |
+| **#22** | ◐ Diagnosed — not a search gap | EPFL has attributable material (Discrete Optimization Chair; MATH-504 "Integer Optimisation" covering lattices, Minkowski's theorem). **NSF is a funding agency, not an author** — there is no "NSF work" on integer lattice theory to cite. This is a citation-*form* error: the team must name the actual paper/textbook intended (e.g. Rothvoss, *Integer Optimization and Lattices*, or Schrijver) rather than cite institutions. |
+| **#20** | ◐ PARTIAL — needs author input | The directional claim (smaller plots → larger AGB error; 1 ha as the tropical standard) is well-supported (Chave et al. 2004; Condit; Mauya et al. 2015 show prediction error falling with plot size). **But no source called "PTM-2" could be located, and no source gives the manuscript's specific figures (~50% at 10×10 m, ~10% at 50×50 m, ~5% at 100×100 m).** Ask the author team what "PTM-2" refers to — it may be a garbled or internal label. |
+| **#14** | ◐ Spot-checked only | **Yigitcanlar** is real and highly active in urban complexity / AI / climate-resilient cities, with verified 2024–2025 output — a "Yigitcanlar et al." citation is plausible. **Scordato & Gulbrandsen and Abujder Ochoa et al. remain unchecked** (budget). Carry to next session. |
+
+## 6. Carried forward / still open
+
+1. **FORMIND native equation** — confirmed real (Fischer et al. 2016, *Ecological Modelling* 326:124–133) and confirmed by research lead as the power form. Full-text equation-level verification still not obtained from open sources; low priority now that constants are being refit empirically.
+2. **h0/h1 for Duhat, Kabiki, Akleng-parang** — no data; disclosure or fieldwork required.
+3. **l0/l1** — no precedent; author estimates (sensitivity-only under Path X).
+4. **Six hardcoded LAI values** — author estimates; disclose bracketed by literature range (~3–6.5).
+5. **Cooling decay kernel** `exp(−λ(d/C_D)²)` — no direct precedent; author construct requiring disclosure.
+6. **λ = 1.897 / 15% anchor** — not literature-calibrated; the Morakinyo & Lam (2016) attribution is mismatched (that paper is an ENVI-met thermal-comfort study, not a distance-decay calibration). λ is arithmetically fixed by the author-chosen 15% anchor (−ln 0.15 = 1.897). Disclose as author choice.
+7. **Flags #35/#38** — diagnosed as a single defect: code and calibration are Gaussian (d² form; 15% at d=C_D ✓, 62.2% at d=C_D/2 ✓), but the §2.3.2 equation dropped the square and reads as plain exponential (which yields the anomalous 38.7%). Fix = restore the square in §2.3.2. With audit chat.
+8. **P/A/V land-use ratios (#9)** — P 55–65% analogous (mid-density; Metro Manila core is ~78% impervious — specify density context); A 25–40% aligns with *aspirational* targets (UN-Habitat 30%+10–15%; C40 30%) not measured cover (~16% global average); **V 5–10% has no precedent and is directionally contradicted** by Philippine heat-vulnerability data (Quezon City: 81% of barangays high-risk). Present all three as an illustrative/assumed CA calibration scenario, not empirically derived proportions. **V is the highest-priority disclosure item.**
+9. **Priority 4 (CCA sigmoidal competition threshold)** — not yet searched.
+10. **#14 remaining names; #20 "PTM-2" identification** — pending.
 
 ---
 

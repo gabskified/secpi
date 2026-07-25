@@ -22,7 +22,17 @@ Status vocabulary: `OPEN` · `DECIDED` · `SUPERSEDED`
 
 > Correction of record: Project Log Entry 1 stated this baseline as **2.94**. That is wrong — it double-applied the 5× factor. The correct value is **0.5882**, confirmed by arithmetic, by the code's own docstring, and by direct execution of `AntColonySystemACO.normalize_secpi(0.0)`. Do not propagate 2.94 anywhere.
 
-**Proposal on the table:** goalposts / distance-to-frontier normalization (precedent: UNDP Human Development Index technical notes; OECD/JRC 2008 *Handbook on Constructing Composite Indicators*; also World Bank Doing Business, European Skills Index).
+**Proposal on the table:** goalposts / distance-to-frontier normalization.
+
+> **⚠️ Citation list corrected 2026-07-25 (Entry 3, Deriver).** All four candidate precedents were independently verified:
+> - **UNDP HDI goalposts** — ✅ verified. Fixed-goalpost method introduced HDR 2010; cite the specific HDR edition whose values are used.
+> - **OECD/JRC (2008) Handbook** — ✅ verified complete. ISBN 978-92-64-04345-9, DOI 10.1787/9789264043466-en. Authors: Nardo, Saisana, Saltelli, Tarantola, Hoffman & Giovannini.
+> - **World Bank "distance to frontier"** — ⚠️ **DO NOT CITE.** Real and methodologically sound, but Doing Business was **discontinued in September 2021 following a data-integrity investigation**. Citing a discredited index as precedent for your normalization scheme invites the exact scrutiny you want to avoid.
+> - **Cedefop European Skills Index** — ✅ verified, **preferred substitute**. Min-max 0–100, "distance to the ideal," still active, never discredited.
+>
+> Also recommended: Klugman, Rodríguez & Choi (2011), *J. Economic Inequality* 9(2), 249–288 — **DOI/pages not independently verified, needs a 10-second check.**
+>
+> Method-fit note: in all verified precedents the frontier is a **fixed, pre-registered goalpost**. Present the ceiling explicitly as a pre-specified design constant.
 
 `SECPI_norm = 5 × (SECPI_raw − floor) / (ceiling − floor)`, clamped to [0, 5].
 
@@ -79,9 +89,63 @@ Confirmed: cooling decay genuinely uses **Euclidean** distance. The old V-zone b
 
 ---
 
-## D-06 — Recover or retire the combinatorial species analysis — **PARTIALLY ANSWERED — TRIAGE REQUIRED**
+## D-06 — Recover or retire the combinatorial species analysis — **SOURCE LOCATED — OUTCOME (b) CONFIRMED**
 
-> **Update 2026-07-24:** Multiple Python iterations located in the old file directory. Recovery is plausible. The question is no longer *does it exist* but **which iteration produced §3.1, and was that iteration correct?**
+> **Update 2026-07-25:** **The output data has been found and verified.**
+> `legacy/archive/corrected_outputs/run_20260213_222844/combinatorial/` contains `all_combos_with_vuln.csv` (63 data rows + header), `all_combos_without_vuln.csv`, and `combinatorial_summary.json`.
+>
+> **Verbatim matches to the manuscript's §3.1:**
+> - `combo_id 6, k=1, Akleng-parang, secpi 4.3916, rank 3` — the manuscript's "4.3916 (rank 3/63)"
+> - `k1_Nar_SECPI_4.386.png` — the manuscript's mono-Narra 4.3856
+> - 0.03% diversity figure = (4.393 − 4.3916)/4.3916 = **0.0319%** ✓
+> - 28% cliff = (4.3916 − 3.13)/4.3916 = **28.73%** ✓
+>
+> **Classified outcome (b): reproducible AND superseded.** The run is dated 2026-02-13, five months before the Entry 1/Entry 2 audits (2026-07-19). Confirming evidence: every WITHOUT_VULN value is 1.500, 1.501, or 1.750 — the retired `WITHOUT_VULN = 1.5` constant of the self-normalizing scheme superseded by D-01. §3.1 must be regenerated under Option B; magnitudes will change.
+>
+> **Still unknown:** which script generated it. Candidates in `legacy/archive/`: `CA.py`, `CODE020526.py`, `GEMINI.py`, `dashboard.py`, `secpi_main.py`, plus `dashboard.ipynb` and `explore.ipynb`. Session 4 still owns this, but it is now a provenance question, not an existence question.
+
+### 🔴 The finding that matters more than the recovery — Flag #46
+
+The CSV carries three columns the manuscript never reports: **`species_available`**, **`species_actually_used`**, **`all_available_used`**.
+
+| rank | k (available) | actually used | SECPI |
+|---|---|---|---|
+| 1 | 6 | **2** (Narra + Talisay) | 4.393 |
+| 2 | 4 | **1** (Akleng-parang) | 4.3924 |
+| 3 | 1 | 1 | 4.3916 |
+| 4 | 5 | **3** | 4.3912 |
+
+`aco_used_all_available_pct`: **30.16%** WITH vulnerability, **19.05%** WITHOUT. The optimizer declined to use the full palette in ~70% and ~81% of configurations respectively.
+
+**Therefore `k` in §3.1 is the size of the offered palette, not the number of species planted.** The 0.03% comparison is "offered six vs offered one" — and when offered six, the optimizer planted two.
+
+The manuscript's claim that functional diversity offers negligible benefit is **not what this data shows**. What it shows:
+
+> Given a larger species palette, the optimizer converges to the same small set of high-performing species regardless of palette size.
+
+This is a different claim, better supported, and currently unclaimed. The existing phrasing asserts something the data cannot carry. **Reframing §3.1, the Abstract, and the Conclusion is mandatory, not optional** — the `species_actually_used` column is the first thing a reviewer will notice.
+
+### What survives intact
+
+The **28% cliff is robust and now mechanistically explained.** At k=1 the six species split cleanly bimodal, gap of **1.280**:
+
+Akleng-parang 4.392 · Narra 4.386 ‖ Talisay 3.106 · Kabiki 3.094 · Banaba 3.068 · Duhat 3.040
+
+Two species carry the result. The 3.13 threshold sits just above the lower cluster. Magnitudes shift under Option B renormalization; the structure does not.
+
+### Flag #47 — WITHOUT_VULN degeneracy
+
+The without-vulnerability scenario produced **three distinct SECPI values across 63 configurations** (1.500, 1.501, 1.750) — near-total loss of discrimination, suggesting saturation or clamping. Combined with `aco_used_all_available_pct` = 19.05%, that arm of the analysis looks close to degenerate. Not explained by any existing flag. Needs investigation before the WITHOUT/WITH comparison can be reported.
+
+### Revised research-lead decisions
+
+1. Confirm §3.1 will be regenerated under Option B (outcome (b) requires it).
+2. **Confirm the reframing of the diversity claim** per Flag #46 — this changes what the paper argues.
+3. Decide whether `species_actually_used` becomes a reported variable in the new Results. Recommended: yes; it is the most interesting thing in the dataset.
+
+### Original question, for the record
+
+**Does the script that produced Results §3.1 still exist anywhere?** — Output: yes, verified. Script: pending Session 4.
 
 ### ⚠️ The trap: reproducing the numbers does not validate them
 
@@ -183,3 +247,43 @@ D-04 ─────────────────────────
 ```
 
 **Neither D-02 nor D-03 blocks *running* the pipeline.** Both block *writing the numbers up*. Settle them first so normalized scores and the significance test are final on the first pass rather than requiring a second regeneration.
+
+---
+
+## D-08 — Assumed species heights are outside observed range — **OPEN — new, from Entry 3**
+
+**Separate from Flag #30 and arguably more serious.** Independent of which H–D constants are used, the manuscript's *assumed heights* extrapolate far beyond any calibration range:
+
+| Species | Manuscript assumes | Observed max (NPDC, n=211) | Inverted DBH at assumed height |
+|---|---|---|---|
+| Narra | 30 m | **21.58 m** | **244.5 cm** — above documented species max (~200 cm), and 2× the largest tree in a 161-tree inventory |
+| Talisay | 35 m | **15.77 m** | far beyond range |
+| Banaba | — | 11.77 m | — |
+
+Entry 3 recommends re-anchoring to realistic urban values: **Narra ~18–21 m, Talisay ~13–15 m, Banaba ~10–12 m**. The current figures appear to be species *maxima* from profile literature, not urban open-grown typicals.
+
+**Decision needed:** re-anchor assumed heights, or retain species-maxima and disclose that the H–D inversion extrapolates beyond calibration. Affects every downstream cooling calculation via crown geometry.
+
+---
+
+## D-09 — Path X (hardcoded LAI canonical) — **DECIDED (recorded in Entry 3)**
+
+**Decision:** Hardcoded LAI values remain canonical for all results. The allometric chain stays **sensitivity-only**, disclosed as author-estimated.
+
+**Rationale:** Path Y (computed-LAI canonical) was ruled out because no valid leaf-area constants exist for these six species. Entry 3 confirmed no direct or genus-level precedent for an `LAI = l0·DBH^l1` power law after two dedicated search rounds, and identified a conceptual mismatch — urban-forestry standards (Nowak 1996 / i-Tree Eco; Peper & McPherson) predict leaf *area* (m², extensive) from DBH, whereas LAI is leaf area per unit ground area (intensive).
+
+The hardcoded values (3.15–6.07) are **physically plausible**, sitting inside measured tropical/urban canopy LAI (~3–6.5). No species-specific source exists; §2.2's DENR-ERDB / UPLB-CFNR / Abino et al. (2014) citation covers **morphology, not LAI** — do not present it as sourcing LAI.
+
+**If revisited later (Path Y-prime):** predict leaf area or intra-crown LAI (*sensu* Nock et al. 2008) from **crown projection area**, which the model already computes — bypassing the height→DBH chain entirely. This is the methodologically defensible route.
+
+---
+
+## D-10 — `p0` disposition — **RECOMMENDATION READY, needs sign-off (Entry 3)**
+
+Entry 3 settled the provenance question: **no Almeida initial-condition convention exists.** Almeida et al. (2002/2003) uses weights-of-evidence (Bayesian) transition probabilities computed from spatial evidence each iteration — not propagated recursively. The only initial condition is the observed land-use map. Uniform initialization is **not** a citable convention for this model class; it is defensible only as a generic non-informative default (principle of indifference), which is a statistical argument, not CA-methodology precedent.
+
+**Key finding:** `p0` **cannot** collapse into `p_init` (seed density vs. per-cell probability — different quantities), **but is redundant with γ**. In the first update `p(1) = γ·ω·p0`, so both act as multiplicative scale factors and are not separately identifiable.
+
+**Recommendation: fix `p0 = 1.0` and let γ absorb the calibration.** This removes the undocumented parameter and leaves exactly the two manuscript-named parameters. Needs research-lead sign-off; touches `grid.py` / CA generation.
+
+**Citation hygiene:** "Almeida et al., 2002" is ambiguous — confirm whether CASA Working Paper 42 (UCL) or the Buenos Aires ISRSE proceedings. The full journal version is **de Almeida et al. (2003), *Computers, Environment and Urban Systems* 27(5), 481–509**. Cite Almeida for the *framework only*; present the multiplicative rule + p0/γ as the team's own adaptation.
