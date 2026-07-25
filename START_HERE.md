@@ -1,6 +1,8 @@
 # START HERE — SECPI Migration Plan (Windows / PowerShell)
 
 > **📌 One-time setup runbook — not a live document.** Its job is done once Phase 0–2 are complete. No Claude Code session reads this file. If you set up on a second machine or onboard a co-author later, it's an accurate historical record of what worked — but don't expect it to reflect the project's current state; check `docs/STATE.md` for that instead.
+>
+> **One exception, 2026-07-25:** §2.4a was added after the freeze to document a real, confirmed environment trap (Python Install Manager runtimes) that cost significant debugging time and will recur for any co-author whose machine has the same setup. Worth breaking the freeze for; nothing else in this file has been touched since.
 
 Everything you need, in order. All commands are PowerShell-native.
 
@@ -331,7 +333,55 @@ python -m py_compile legacy\AuditedCode_1.py
 if ($LASTEXITCODE -eq 0) { "compiles clean" } else { "COMPILE FAILED" }
 ```
 
-Prior audits confirm this passes. `$LASTEXITCODE` is PowerShell's equivalent of checking `$?` in bash.
+Prior audits confirm this passes. `$LASTEXITCODE` is PowerShell's equivalent of checking `$?` in bash. **This only checks syntax — it never imports numpy, scipy, pandas, or matplotlib, so it will say "clean" even if package installation silently failed.** Run the import check in 2.4a below before trusting this line alone.
+
+### 2.4a ⚠️ Known trap: Python Install Manager (PIM) runtimes are broken for this purpose
+
+**Confirmed on this machine, 2026-07-25 — cost roughly a dozen debugging turns before being traced to the root cause.** If `python` resolves to a path containing `pythoncore-X.Y-64` (check with `python -c "import sys; print(sys.executable)"`), you are on a PIM-managed runtime, and venv creation will fail in a specific, escalating sequence:
+
+1. **`python -m venv .venv` fails** with `No module named ensurepip` — the PIM runtime doesn't ship it.
+2. **Workaround `--without-pip` + `get-pip.py` "succeeds"**, but silently doesn't — `-m pip` keeps resolving to a copy bundled directly in the base install's `Lib\pip` folder (not the normal `site-packages` location), which sits earlier on `sys.path` than the venv's own copy and permanently shadows it.
+3. **Even after forcing pip to resolve correctly** (temporary `$env:PYTHONPATH` pointing at the venv's `site-packages`), package installs that happen to already exist in the base install's `Lib` (we hit this with `scipy` and `tqdm`) get skipped as "already satisfied" — landing outside the venv entirely, silently breaking isolation.
+4. **Even past that**, `import pandas` fails with `No module named 'zoneinfo'` — a standard-library module missing from this base install, for reasons not fully diagnosed. This is where the runtime was abandoned as unfixable rather than patched further.
+
+**Fix: do not use the PIM runtime at all. Install a conventional interpreter instead.**
+
+```powershell
+winget install Python.Python.3.14
+```
+
+**`py -0p` will *not* reliably show the new install** — it appeared to only enumerate PIM-registered runtimes on this machine, silently omitting the classic installer. Locate it directly on disk instead:
+
+```powershell
+Get-ChildItem "C:\Users\$env:USERNAME\AppData\Local\Programs\Python\Python314\python.exe" -ErrorAction SilentlyContinue
+```
+
+If that's empty, broaden the sweep:
+
+```powershell
+Get-ChildItem -Path "C:\Users\$env:USERNAME\AppData\Local","C:\Program Files","C:\Program Files (x86)" -Recurse -Filter "python.exe" -ErrorAction SilentlyContinue -Depth 3 | Select-Object FullName
+```
+
+**Rebuild the venv using this path explicitly** — never bare `python` or `py`, both were shown to resolve unpredictably on a machine with multiple Python installs present:
+
+```powershell
+& "C:\Users\$env:USERNAME\AppData\Local\Programs\Python\Python314\python.exe" -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip --version          # should show a path INSIDE .venv\Lib\site-packages, not pythoncore-*
+python -c "import zoneinfo; print('zoneinfo OK')"
+```
+
+Both must pass clean before proceeding to package installation. If either fails the same way, something more fundamental is wrong and this addendum's diagnosis doesn't apply — stop and reassess rather than keep patching.
+
+**Do not uninstall the PIM runtime once this works.** Any salvaged environments in `legacy/archive/` (`*.venv`, `secpi_env`) declare it as their `home` in `pyvenv.cfg` — removing it would break those archived interpreters' ability to run at all, for no benefit.
+
+### 2.4b Real import check (do this, not just the syntax smoke test)
+
+```powershell
+python -c "import numpy, scipy, pandas, matplotlib, tqdm; from scipy.spatial.distance import cdist; print('numpy', numpy.__version__); print('scipy', scipy.__version__); print('pandas', pandas.__version__); print('matplotlib', matplotlib.__version__); print('all imports OK')"
+```
+
+This is the actual Phase 2 finish line — confirms the packages are installed, importable, and specifically that `scipy.spatial.distance.cdist` (the one scipy symbol `AuditedCode_1.py` calls) resolves. `py_compile` passing without this does not mean the environment works.
 
 ### 2.6 Baseline commit
 
