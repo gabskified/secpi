@@ -169,6 +169,24 @@ Sections in order of readiness: `02` → `05` → `04` (after D-02) → `03` (af
 
 ---
 
+## Using ECC skills inside sessions
+
+ECC (`ecc@ecc` v2.0.0) is installed user-level, so its skills are available in every session without setup. Rather than rewriting each prompt, append the relevant line below to whichever session you're running.
+
+| Session / track | Append to the prompt |
+|---|---|
+| Deriver work (Flags #30, #20, #14, #9) | *"Use `ecc:deep-research` and `ecc:search-first` for literature sourcing. Report the strength of each source: peer-reviewed and on-point, adjacent-context, or weak/analogical."* |
+| Session 3, 4 (math-auditor) | *"Use `ecc:verification-loop` to structure the reproduce-then-compare cycle."* |
+| Session 5 (code-stressor) | *"Use `ecc:verification-loop` and `ecc:eval-harness` for the regeneration and reproducibility gates."* |
+| Any long audit session | *"Use `ecc:strategic-compact` to suggest compaction points rather than auto-compacting late."* |
+| The eventual `src/secpi` refactor | `/ecc:plan` first, then `ecc:python-reviewer` on the result |
+
+**Caveat, unresolved:** it is not confirmed whether *subagents* can invoke ECC skills, or only the orchestrator. Subagent tool inheritance is version-dependent. Invoking at the orchestrator level is known to work — if a skill appears to no-op inside a delegated session, that's the likely cause, not a broken skill.
+
+**Never** run `/ecc:learn` or `/ecc:evolve` in this project. Instinct extraction writes cross-project heuristics, and an instinct absorbed from unrelated work must never influence a manuscript claim.
+
+---
+
 ## Standing session hygiene
 
 Open every session by reading `CLAUDE.md`, `docs/DECISIONS.md`, `docs/STATE.md`, and the tail of `docs/PROJECT_LOG.md`.
