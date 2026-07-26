@@ -98,6 +98,34 @@ Use `/model opus` for this one.
 
 ---
 
+## Session 2b — Complete the interrupted flag derivation (#75–#94) — ✅ RUN 2026-07-26 (Project Log Entry 6)
+
+> ✅ **Discharged.** Delivered **#75–#95** (15 POTENTIAL ROADBLOCK, 5 PENDING VERIFICATION, 1 SEVERE). The SEVERE item is **#82**, not #75.
+>
+> ⚠️ **This prompt as written contains one factual error — kept verbatim for the audit trail, corrected here.** It asserts *"SI is defined as normalized (∈[0,1]), so 1.3068 is impossible either way."* **SI is not bounded to [0,1]** — it is `|SECPI_high − SECPI_low| / SECPI_baseline`, a difference-to-baseline ratio that would legitimately exceed 1 if a parameter's effect exceeded the baseline SECPI. Arguing the defect from a bound hands the authors a valid rebuttal to a correct objection. **The sound argument is `mean ≤ max`**, which requires no assumption at all. Do not reuse the bracketed premise. See Flag #82 and Entry 6 §C.
+
+**Do this before anything else touches `FLAGS.md`.** Session 2 crashed mid-task. It wrote flags #52–#74 (independently verified — see Entry 5), then terminated before deriving the remaining scope: §3.5 Sensitivity Analysis and the Conclusion. `FLAGS.md`'s own header currently claims flags up to #94 that don't exist, and the project's first SEVERE flag is only a forward reference, not a registered entry.
+
+> Use the `editorial-flagger` agent. Read `CLAUDE.md`, `docs/STATE.md`, `docs/FLAGS.md` (note its own truncation notice under the Executive Summary and the resumption brief at the bottom), and `docs/PROJECT_LOG.md` Entry 5 in full before starting.
+>
+> **Scope, and only this scope:** `manuscript/sections/06_results_discussion.md` §3.5 (roughly lines 597–725) and `manuscript/sections/07_conclusion.md` in full. Do not re-read or re-flag §3.1–§3.4.4 — that work is done and verified.
+>
+> Assign new flags starting at **#75**. Do not renumber #52–#74.
+>
+> Four findings were already identified as forward references and spot-checked verbatim against the manuscript by a prior session — confirm them properly rather than assuming they're already flags:
+> - The claimed first ROADBLOCK (SEVERE): §3.5.2 reports a Species Morphology category mean SI of 1.3068 while the largest single SI in §3.5.1 is 0.4435 and all other parameters are below 0.005. A mean cannot exceed its largest member, and SI is defined as normalized (∈[0,1]), so 1.3068 is impossible either way. Verify this arithmetic yourself before classifying it — do not take the prior spot-check on faith.
+> - §3.5.3 states allometric constants were "sourced from literature" — Entry 3 already established they have no literature source. This is a false-provenance claim, refining Flag #30.
+> - The Conclusion asserts the framework was "successfully developed and validated" — no field or remote-sensing validation exists anywhere in this synthetic study. Extends Flag #8.
+> - The Conclusion contains a real-world planting prescription for Philippine urban planners and a transferability claim across "climate-vulnerable cities" — both collide with the synthetic, non-georeferenced scope. Extends Flags #10/#11.
+>
+> Do not stop at these four — read the full scope and flag whatever else is there, the same way Session 2 found problems nobody had specifically gone looking for.
+>
+> When done: replace `FLAGS.md`'s truncation notice and the `PLACEHOLDER` stub with the real content — the register should no longer describe itself as incomplete. Append a `PROJECT_LOG.md` entry (Entry 6) stating this closes out Entry 5's unfinished scope. Sync `docs/STATE.md`'s counts by re-enumerating the file, not by adding to the old numbers. Then delegate to `interpreter` to regenerate `docs/STATUS.md` against the now-complete register. Commit everything as one unit, and push before ending the session — do not leave this uncommitted a second time.
+
+Use `/model opus`. This is reasoning- and precision-heavy, same as the original Session 2.
+
+---
+
 ## Session 3 — Close the Entry 3 provenance gap
 
 > Use the `math-auditor` agent.

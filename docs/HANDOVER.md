@@ -150,26 +150,50 @@ Full detail in `docs/DECISIONS.md`. Summary:
 
 ## 7. CURRENT STATE — the flag register
 
-**74 live flags** (authoritative, per-flag enumerated in `STATE.md`):
-- 29 Resolved-Cleared · 2 Resolved-Deferred · 25 Pending Verification · **18 Potential Roadblock** · **1 Roadblock (SEVERE)**
-- Next free flag: **#75**
+> ⚠️ **SUPERSEDED 2026-07-26 by Project Log Entry 6.** This block previously read *"**74 live flags** · 29 Resolved-Cleared · 2 Resolved-Deferred · 25 Pending Verification · **18 Potential Roadblock** · **1 Roadblock (SEVERE)** · Next free flag: **#75**"*. Two defects: those five categories sum to **75**, not 74; and the severe count was **0** at #74 — the SEVERE item was a forward reference to an unwritten flag, not a registered entry. Both are now moot; the derivation is complete.
 
-Session 2 added #52–#74 (23 flags) from the first-ever editorial read of Results/Discussion/Conclusion, and escalated #39 and #44. **Four were independently spot-checked against the manuscript this session and all four held** (#52, #64, #67, #75). That materially raises confidence in the batch — but the batch is not each-flag-verified.
+**95 live flags** — re-enumerated per-flag from `FLAGS.md` on 2026-07-26, not carried forward from any summary line:
+- 29 Resolved-Cleared · 2 Resolved-Deferred · 30 Pending Verification · **33 Potential Roadblock** · **1 Roadblock (SEVERE)** — sums to **95** ✓
+- Next free flag: **#96**
 
-**⚠️ Two integrity notes carried in the register:**
-1. **Entry 5 / v3 is TRUNCATED at #74.** The flagger crashed before deriving #75–#94 (§3.5 tail + Conclusion). The SEVERE flag is *described* as #75 in the log narrative but the register formally stops at #74. **The first job in the next session is completing this derivation** — see §8 step 1.
-2. **Flag #64's attestation is wrong (finding is right).** It claims all six k=1 monoculture values come from §3, but two (Kabiki 3.094, Banaba 3.068) come only from the recovered CSV via D-06. The arithmetic conclusion (mean 3.514 ≠ manuscript's 2.990) is verified correct; the *source citation* needs fixing. Don't let the wrong attestation discredit the right finding.
+Session 2 added #52–#74 (23 flags) from the first-ever editorial read of Results/Discussion/Conclusion, and escalated #39 and #44. All 23 were independently verified against the manuscript in Entry 5 §C: every quotation verbatim-accurate, 18 confirmed in full, 5 carrying reasoning or sourcing defects.
+
+Session 2b (Entry 6) completed the interrupted scope, adding **#75–#95** (21 flags — 15 Potential Roadblock, 5 Pending Verification, **1 SEVERE**) from §3.5 Sensitivity Analysis and the Conclusion, and repaired the five defective flags.
+
+**⚠️ Integrity notes carried in the register:**
+1. ~~**Entry 5 / v3 is TRUNCATED at #74.**~~ — **DISCHARGED 2026-07-26 (Entry 6).** The derivation is complete, the truncation notice and `PLACEHOLDER` stub are gone from `FLAGS.md`, and every forward reference now resolves to a real flag. The forward-referenced numbers did **not** land where predicted: the SEVERE item is **#82**, not #75; §3.5.3 false provenance is **#84**, not #79; the Conclusion "validated" claim is **#87**, not #90.
+2. ~~**Flag #64's attestation is wrong.**~~ — **REPAIRED 2026-07-26 (Entry 6)** as a marked `v4 CORRECTION` block, together with #53, #59, #68 and #70. Original finding text preserved throughout; #64's arithmetic conclusion was always correct and stands.
 
 ---
 
-## 8. TRIAGE OF THE 74 — what the next chat should actually do
+## 8. TRIAGE OF THE 95 — what the next chat should actually do
 
 The register is a **map, not a to-do list to clear today.** Sorted into three buckets by urgency for the *preprint* (not the eventual journal):
 
 ### BUCKET A — Blocks the preprint. Must resolve before a DOI is minted.
 
-**A1 — The SEVERE flag (#75): §3.5 category-mean SI of 1.3068 is arithmetically impossible.**
-SI is defined as normalized (∈[0,1]); the largest single value is 0.4435; a "mean" of 1.3068 exceeds both its largest member and the [0,1] bound. It's labeled a mean but behaves like a sum. *Verified this session.* This is a desk-reject / retraction risk if it ships. Needs a research-lead decision (propose **D-11**): relabel sum-vs-mean, or re-run the sensitivity aggregation.
+**A1 — The SEVERE flag (now #82, not #75): §3.5.2's category-mean sensitivity indices are arithmetically impossible.**
+
+> ⚠️ **CORRECTED 2026-07-26 (Entry 6 §C). The previous version of this item argued the defect two ways that are both wrong, and proposed a remedy that cannot work.** It read: *"SI is defined as normalized (∈[0,1]); the largest single value is 0.4435; a 'mean' of 1.3068 exceeds both its largest member and the [0,1] bound. It's labeled a mean but behaves like a sum… Needs a research-lead decision (propose **D-11**): relabel sum-vs-mean, or re-run the sensitivity aggregation."* **Do not use that argument and do not open that D-11.** Corrected statement below; authoritative text is Flag **#82** in `FLAGS.md`.
+
+**All four** reported category means are impossible, not just Species Morphology. The correct argument is **`mean ≤ max`** — nothing else is needed:
+
+| Category | n | Largest member (manuscript-printed) | Reported mean |
+|---|---|---|---|
+| Species Morphology | 12 | 0.4435 | **1.3068** |
+| Species Allometry | 24 | < 0.005 | **0.1857** |
+| Cooling Model *(duplicate-labelled)* | 3 | 0.0032 | **0.0727** |
+| Weighting | **1** | 0.0017 | **0.0236** |
+
+**The Weighting row settles it in one line:** the category has exactly one member, whose SI §3.5.2 itself prints as 0.0017 thirteen lines below giving the category a mean of 0.0236. A one-element mean *is* that element.
+
+Two things the old text got wrong, both of which matter tactically:
+- **SI is NOT bounded to [0,1].** It is `|SECPI_high − SECPI_low| / SECPI_baseline` — a difference-to-baseline ratio that would legitimately exceed 1 if an effect exceeded the baseline. Arguing from a bound hands the authors a valid rebuttal to a correct objection.
+- **The values are NOT sums.** Weighting's sum equals its mean equals 0.0017 (n=1) ≠ 0.0236; Cooling Model's sum is 0.0068 ≠ 0.0727. **"Relabel sum-vs-mean" is arithmetically dead** — acting on it would replace one wrong number with another. The overstatement factors (2.95 / 50.2 / 22.7 / 13.9) share no common factor, so no single mis-scaling explains them either.
+
+Mitigating diagnosis: §3.5.1's **parameter-level** values reproduce cleanly (1.356/3.0576 = 0.4435 ✓). The defect localizes to the **aggregation step** and Figure 34 — which points at `SensitivityAnalyzer`, not at four transcription slips.
+
+Desk-reject / retraction risk if it ships. **If a `D-11` is opened it must be scoped to the regeneration of §3.5, not to relabelling.** Resolution requires regenerating the sensitivity analysis under Option B and having `math-auditor` report what the aggregation function actually computes.
 
 **A2 — The "noise-vs-effect" cluster (#64, #65, #67, #68).** The manuscript treats a difference as a real effect when it supports the headline and as noise when it doesn't. Root cause: **the run-to-run SD of the ACO is never quantified anywhere.** Half these flags dissolve or harden depending on that one unmeasured number. → This is a **code-stressor** job: measure the ACO's restart variance. It's also entangled with D-02/D-03. Nothing in Results can be honestly rewritten until this number exists.
 
@@ -198,13 +222,13 @@ SI is defined as normalized (∈[0,1]); the largest single value is 0.4435; a "m
 
 ## 9. Recommended sequence for the next chat
 
-1. **Finish Entry 5's derivation (#75–#94).** Re-run the flagger against §3.5 (lines 597–725 of `06_results_discussion.md`) and the Conclusion, assigning from #75. Confirm the SEVERE flag formally. Then commit the completed register — it's currently uncommitted/interrupted.
-2. **Fix Flag #64's attestation** (right finding, wrong source citation).
-3. **Raise D-11** for the SEVERE sensitivity-table decision.
+1. ~~**Finish Entry 5's derivation (#75–#94).**~~ — **DONE 2026-07-26 (Entry 6).** Delivered #75–#95; the SEVERE flag is registered as **#82**.
+2. ~~**Fix Flag #64's attestation.**~~ — **DONE 2026-07-26 (Entry 6)**, with #53, #59, #68, #70.
+3. **Raise D-11** for the SEVERE sensitivity-table decision — **scoped to §3.5 regeneration only.** ⚠️ **Do not offer "relabel sum-vs-mean" as an option; it is arithmetically dead** (see §8 A1).
 4. **Run the ACO variance measurement** (code-stressor). This is the keystone.
 5. **Then** Gab tackles D-02/D-03/D-07 with a real noise floor in hand, and the editor can begin honest Results reconstruction.
 
-Do NOT try to "fix all 74." Triage, sequence, and keep the research lead deciding.
+Do NOT try to "fix all 95." Triage, sequence, and keep the research lead deciding.
 
 ---
 

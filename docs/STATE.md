@@ -1,6 +1,6 @@
 # STATE.md — Live Ownership Board
 
-Last synchronized with: **Project Log Entry 5 / Flag Archive v3 (truncated at #74)** — synced 2026-07-26.
+Last synchronized with: **Project Log Entry 6 / Flag Archive v4 (complete, #1–#95)** — synced 2026-07-26.
 Update this file at the end of every session. It answers one question: *what is the next person supposed to do?*
 
 ---
@@ -16,24 +16,26 @@ Update this file at the end of every session. It answers one question: *what is 
 | ROADBLOCK (SEVERE) | 0 | **0** | — |
 | **Total** | 41 | 41 | — |
 
-> ⚠️ **SUPERSEDED 2026-07-26 (Entry 5) — do not quote this line.** It read: *"Current live total: 51 flags (41 original + #42–#51 added during migration)… Next free number: #52."* Both figures are stale. **The live total is 74 and the next free number is #75.** See the authoritative count block immediately below.
+> ⚠️ **SUPERSEDED twice — do not quote this line.** It originally read: *"Current live total: 51 flags (41 original + #42–#51 added during migration)… Next free number: #52."* Entry 5 corrected that to 74 / #75. **Entry 6 supersedes both: the live total is 95 and the next free number is #96.** See the authoritative count block immediately below.
 
-### 🔢 Authoritative flag counts — synced 2026-07-26 (Entry 5)
+### 🔢 Authoritative flag counts — synced 2026-07-26 (Entry 6)
 
 | Category | Count |
 |---|---|
 | RESOLVED — Cleared Up | **29** |
 | RESOLVED — Deferred | **2** |
-| PENDING VERIFICATION | **25** |
-| POTENTIAL ROADBLOCK | **18** |
-| ROADBLOCK (SEVERE) | **0** |
-| **TOTAL LIVE FLAGS** | **74** |
+| PENDING VERIFICATION | **30** |
+| POTENTIAL ROADBLOCK | **33** |
+| **ROADBLOCK (SEVERE)** | **1** |
+| **TOTAL LIVE FLAGS** | **95** |
 
-**Next free flag number: #75.**
+**Next free flag number: #96.**
 
-Derived by per-flag enumeration of `docs/FLAGS.md`, not by carrying forward any summary line. Basis: the 51-flag baseline (29 / 2 / 17 / 3 / 0), plus v3's escalations of **#39** and **#44** (PENDING → POTENTIAL ROADBLOCK), plus the 23 flags actually written in v3 (**#52–#74**: 13 POTENTIAL ROADBLOCK, 10 PENDING VERIFICATION).
+Derived by per-flag enumeration of `docs/FLAGS.md`, not by carrying forward any summary line. Basis: the 51-flag baseline (29 / 2 / 17 / 3 / 0), plus v3's escalations of **#39** and **#44** (PENDING → POTENTIAL ROADBLOCK), plus the 23 flags written in v3 (**#52–#74**: 13 POTENTIAL ROADBLOCK, 10 PENDING VERIFICATION), plus the 21 flags written in v4 (**#75–#95**: 15 POTENTIAL ROADBLOCK, 5 PENDING VERIFICATION, 1 ROADBLOCK (SEVERE)). Re-enumerated from the file on 2026-07-26; the five categories sum to 95 ✓.
 
-> 🔴 **`docs/FLAGS.md` is truncated. Flags #75–#94 were announced but never written** — the v3 session terminated mid-write. Its Executive Summary claims **94 flags, 30 potential roadblocks and 1 ROADBLOCK (SEVERE)**; those describe a file that does not exist. **This project's severe count is 0.** The claimed severe item (#75, §3.5's category-level sensitivity means) survives only as a forward reference; the underlying arithmetic defect was spot-checked and looks real, but no flag registers it. Do not report a severe roadblock to the research lead on the strength of a forward reference. Full detail: Project Log Entry 5 §A.
+> ✅ **TRUNCATION CLOSED (Entry 6).** `docs/FLAGS.md` was truncated at #74 from 2026-07-25 to 2026-07-26, with flags #75–#94 announced but never written. **That is now discharged** — the register is complete through #95, the truncation notice and the `PLACEHOLDER` stub are gone, and every forward reference resolves to a real flag. Note the predicted numbers did **not** hold: the SEVERE item is **#82** (not #75), §3.5.3 false provenance is **#84** (not #79), and the Conclusion "validated" claim is **#87** (not #90). The v3 preamble predicted a 14 / 5 / 1 split for this range; the true split is **15 / 5 / 1 = 21**.
+
+> 🔴 **This project now carries its first ROADBLOCK (SEVERE): Flag #82.** §3.5.2's four category-level mean sensitivity indices each exceed the maximum SI of their own member set — the Weighting category has exactly one member (shade_weight, SI 0.0017) and is reported with a mean of 0.0236. Confirmed by hand arithmetic on manuscript-printed values; no execution required. **Do not argue this from a [0,1] bound and do not describe the values as sums — both are wrong** (see #82 and Entry 6 §C). The correct argument is `mean ≤ max`. Resolution requires regenerating §3.5, not rewording it.
 
 > **Prior arithmetic defect, now closed.** The former summary line read *"28 cleared · 2 deferred · 19 pending · 3 potential roadblocks · 0 severe · 51 total"* — five categories summing to **52**, not 51. Flag Archive v3 identified this and correctly routed it to the orchestrator rather than editing it. Resolved 2026-07-26 in favour of the per-flag record.
 
@@ -82,7 +84,7 @@ Derived by per-flag enumeration of `docs/FLAGS.md`, not by carrying forward any 
 
 **Corroboration from the same extraction:** §3.4.4 states SECPI spans **"3.023 to 4.393... across the 63 configurations"** — matching the recovered `run_20260213_222844` CSV exactly (best 4.393, and a `k2_Tal_Ban_SECPI_3.023.png` file). Independent confirmation that D-06's located output is the source of the manuscript's Results.
 
-~~Next free flag number: **#52**.~~ — **superseded 2026-07-26: the next free number is #75.** See the authoritative count block at the top of this file.
+~~Next free flag number: **#52**.~~ ~~— superseded 2026-07-26: the next free number is #75.~~ — **superseded again 2026-07-26 (Entry 6): the next free number is #96.** See the authoritative count block at the top of this file.
 
 ---
 
@@ -122,9 +124,11 @@ Four flags added during migration (Project Log Entry 4 and dependency verificati
 
 **Flag #45 detail.** The Abstract states ACO was implemented "via the scikit-opt Python library"; `AuditedCode_1.py` contains no `sko` import and hand-implements `AntColonySystemACO`. §2.4.2 credits "Matplotlib and Seaborn"; only matplotlib is imported. Verified dependencies are numpy, matplotlib, scipy (`cdist` only), tqdm, and pandas (soft, try/except-guarded). A reviewer attempting reproduction would install scikit-opt and find nothing uses it — this is a reproducibility defect, not a wording nit.
 
-~~Revised counts: **28 cleared · 2 deferred · 19 pending · 3 potential roadblocks · 0 severe · 51 total.**~~ — ⚠️ **superseded 2026-07-26.** These five categories summed to **52**, not 51; the arithmetic defect is resolved in favour of the per-flag record. **Current counts: 29 cleared · 2 deferred · 25 pending · 18 potential roadblocks · 0 severe · 74 total** — see the authoritative block at the top of this file.
+~~Revised counts: **28 cleared · 2 deferred · 19 pending · 3 potential roadblocks · 0 severe · 51 total.**~~ — ⚠️ **superseded 2026-07-26.** These five categories summed to **52**, not 51; the arithmetic defect is resolved in favour of the per-flag record. ~~Current counts: 29 cleared · 2 deferred · 25 pending · 18 potential roadblocks · 0 severe · 74 total.~~ — **superseded 2026-07-26 (Entry 6). Current counts: 29 cleared · 2 deferred · 30 pending · 33 potential roadblocks · 1 SEVERE · 95 total** — see the authoritative block at the top of this file.
 
-The **18** potential roadblocks: the original three — #46 (mis-stated diversity claim), #48 (assumed heights beyond calibration), #30 (pending its remaining 3 species without field data) — plus #39 and #44 escalated in the v3 pass, plus the 13 new ones from #52–#74 listed above.
+The **33** potential roadblocks: the original three — #46 (mis-stated diversity claim), #48 (assumed heights beyond calibration), #30 (pending its remaining 3 species without field data) — plus #39 and #44 escalated in the v3 pass, plus the 13 from #52–#74 listed above, plus the 15 added in v4 (#75, #78, #79, #80, #83, #84, #85, #86, #87, #88, #90, #91, #92, #93, #94).
+
+The **1** ROADBLOCK (SEVERE): **#82** — §3.5.2's four category-level mean sensitivity indices are each greater than the maximum SI of their own member set.
 
 ---
 
@@ -155,16 +159,24 @@ D-02 (normalization ceiling), D-03 (statistical outcome metric), D-04 (final tit
 All confirmed; none blocked. See `CLAUDE.md` §7. Closes Flags #25, #28, #33, #35, #38, #41, plus the §2.2.1 BFS rewrite.
 Then: author the new Results section once regeneration completes.
 
-### Editorial-flagger — two-thirds done, resume at §3.5
+### Editorial-flagger — ✅ COMPLETE. Every manuscript section now has editorial coverage.
 
-~~Review has never reached **Results, Discussion, or Conclusion**.~~ — **partially discharged 2026-07-25** (Project Log Entry 5). The v3 pass covered **§3.1 through §3.4.4** and produced flags **#52–#74**. It confirmed the prediction: 13 of 23 are POTENTIAL ROADBLOCK, in a manuscript that had zero before this section was read.
+~~Review has never reached **Results, Discussion, or Conclusion**.~~ — **partially discharged 2026-07-25** (Entry 5): the v3 pass covered **§3.1 through §3.4.4**, producing **#52–#74**.
 
-**Still uninspected — resume here:**
+~~**Still uninspected — resume at §3.5 and the Conclusion. Assign from #75.**~~ — **DISCHARGED 2026-07-26 (Project Log Entry 6).** The v4 pass covered **§3.5 Sensitivity Analysis** and the **Conclusion, Recommendations and back matter**, producing **#75–#95** (15 POTENTIAL ROADBLOCK, 5 PENDING VERIFICATION, **1 ROADBLOCK (SEVERE)**). The five defective flags (#53, #59, #64, #68, #70) were repaired in place as marked `v4 CORRECTION` blocks with original text preserved.
 
-1. **§3.5 Sensitivity Analysis** — `manuscript/sections/06_results_discussion.md:597–725`. **Highest priority.** A spot-check found §3.5.2 reporting a Species Morphology category mean SI of **1.3068** while the largest single SI anywhere in §3.5.1 is **0.4435**, with the other 39 parameters below 0.005 — a mean cannot exceed its own maximum. The same sentence lists **"Species Allometry" twice** (0.1857, 0.0727) where the following paragraph implies the second is *Cooling Model*. The v3 session intended to register this as the project's first **ROADBLOCK (SEVERE)** (#75) and never wrote it.
-2. **Conclusion, Recommendations, back matter** — `manuscript/sections/07_conclusion.md`. Four findings were identified and left unwritten: **#79** (§3.5.3's "sourced from literature" is a false provenance claim, refining #30), **#90** ("successfully developed and validated" — no field or remote-sensing validation exists), **#91 / #92** (a real-world planting prescription for Philippine planners, and a transferability claim across "climate-vulnerable cities", both colliding with the synthetic non-georeferenced design). All four quotations were verified verbatim against the manuscript; only their flag entries are missing.
+**Entry 4's handoff note 3 is now fully discharged.** No manuscript section remains without at least one editorial pass.
 
-**Assign from #75.** Do not renumber #52–#74. Also owed: repair of the five defective flags (#53, #59, #64, #68, #70) per the table above.
+**What v4 found that the forward references had not anticipated:**
+
+- **#82 (SEVERE)** — the §3.5.2 defect is **four** impossible category means, not one. Weighting has a single member (shade_weight, SI 0.0017) reported with a mean of 0.0236, which refutes it in one line with no assumptions. The **`[0,1]` bound argument and the "these are sums" reading are both wrong** and must not be used.
+- **#75** — Methods §2.5.3 names the **Morris method**; §3.5.1 actually executes a local two-level OAT sweep from a single baseline. Different method, and §2.5.3's stated scope excludes the parameter that produces the headline result.
+- **#83** — §3.5.2's causal explanation ("Narra and Akleng-parang rank highest on both CPA and LAI") is **refuted by Table 3**: Akleng-parang has the **lowest LAI of the six**. The species pool exhibits precisely the trade-off the paragraph says it lacks.
+- **#88** — the Conclusion reports a morphological-robustness result **absent from §3 entirely**, says "six distinct land-use patterns" where Methods gives **three**, and attributes cooling to "synergistic shading" from building clusters — a mechanism §2.3 states is not modelled.
+- **#81** — §3 carries 28 figure captions and exactly **one** in-text figure reference, which is itself a broken placeholder.
+- **#85** — the near-zero allometric sensitivity indices are the expected signature of *off-path* parameters under D-09; the manuscript reads them as "sufficient buffering." Flagged as the highest-value unexecuted check in the batch (`math-auditor`).
+
+**Next free flag number: #96.**
 
 ---
 

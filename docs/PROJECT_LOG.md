@@ -609,6 +609,220 @@ The five defective flags (#53, #59, #64, #68, #70) were **left in place unmodifi
 
 ---
 
+## Entry 6 — Editorial Flagger, §3.5 + Conclusion — completion of Entry 5's unfinished scope — [2026-07-26]
+
+**From:** `editorial-flagger`
+**Reviewed:** `CLAUDE.md`, `docs/STATE.md`, `docs/FLAGS.md` (whole file), `docs/PROJECT_LOG.md` Entry 5 in full, `docs/DECISIONS.md` (D-09 in full, decision index), `docs/STATUS.md` §4, `docs/HANDOVER.md` §8. Manuscript: `06_results_discussion.md` §3.5 (lines 597–725) plus targeted verification reads of §3.1.1 Tables 3/4, §3.2 headings, §3.4.2; `07_conclusion.md` in full; `02_methods_2.1_2.2_grid.md` §2.2 morphological archetypes; `03_methods_2.3_cooling.md` §2.3 height/shading; `05_methods_2.5_2.6_vv.md` §2.5.1–§2.6.
+**Context:** **This entry closes out the unfinished scope of Project Log Entry 5.** Entry 5 recorded that the v3 `editorial-flagger` session terminated mid-write, leaving `docs/FLAGS.md` truncated at #74 with a `## Resuming This Review — PLACEHOLDER` stub and four forward references to flags that were never written. Scope for this session was **§3.5 only** and **`07_conclusion.md` in full**, plus repair of the five defective flags Entry 5 §C identified. §3.1–§3.4.4 were **not** re-read or re-flagged.
+
+### What I found
+
+#### A. Twenty-one new flags, #75–#95, assigned contiguously from the next free number
+
+Registered in document order in `docs/FLAGS.md` under "v4 — New flags #75–#95". Full text lives there; this is the index plus the findings that need to survive in the log independently.
+
+| # | Section | Finding | Class |
+|---|---|---|---|
+| **75** | §2.5.3 vs §3.5.1 | Methods names the **Morris method**; Results executes a **local two-level OAT** from a single baseline. §2.5.3's stated scope (allometric + decay constants, 27 of 40 parameters) **excludes crown diameter**, which produces the headline result. | POTENTIAL ROADBLOCK |
+| **76** | §3.5.1 | Sensitivity baseline **SECPI = 3.0576** matches no configuration reported anywhere; parameter vector, experiment, k, arm, grid and seed all unstated. Every one of the 40 SIs is a ratio to it. | PENDING VERIFICATION |
+| **77** | §3.5.1 | *"averaged over three independent ACO runs"* — a **third** restart count against `n_runs = 5`; and no SD/SE/CI/n for any of 40 indices. | PENDING VERIFICATION |
+| **78** | §3.5.1 | SI ranks 2–40 (absolute effects **0.009–0.014**) sit below the noise scale the manuscript itself declares (§3.3.1 gap **0.05–0.07**; §3.4.2 calls **0.0014** noise), yet are ranked and called *"not negligible."* Absence of measured sensitivity reported as demonstrated insensitivity. | POTENTIAL ROADBLOCK |
+| **79** | §3.5.1 vs §3.5.3 | Morphology swept over **full trait ranges**, allometrics over **±15%** — a **3.19×** wider relative span for the dominant parameter. SI is an effect size, not an elasticity, so the cross-parameter ranking is invalid as measured. | POTENTIAL ROADBLOCK |
+| **80** | §3.5.1 | Cross-reference to *"Section 3.2"* for the performance cliff is **wrong** (§3.2 is grid generation and contains no prose — #56; the cliff is §3.4.3). Plus a cross-experiment comparison to *"top-ranked combinatorial configurations."* | POTENTIAL ROADBLOCK |
+| **81** | §3.5 | Figures 33 and 34 **never cited in text**. Document-wide: §3 carries **28 figure captions (Figures 7–34) and one in-text reference**, itself a broken placeholder at `:549`. | PENDING VERIFICATION |
+| **82** | **§3.5.2** | **All four category-level mean SIs exceed the maximum SI of their own member sets.** See §B. | **ROADBLOCK (SEVERE)** |
+| **83** | §3.5.2 | The stated mechanism for `shade_weight` insensitivity — *"Narra and Akleng-parang rank highest on both CPA and LAI"* — is **false against Table 3**: Akleng-parang has the **lowest LAI of the six**. The pool exhibits exactly the CPA–LAI trade-off the paragraph says it lacks. | POTENTIAL ROADBLOCK |
+| **84** | §3.5.3 | *"allometric constants **sourced from literature**"* — false provenance, directly contrary to **D-09** and Entry 3. *(= the forward-referenced "#79".)* | POTENTIAL ROADBLOCK |
+| **85** | §3.5.3 | Near-zero allometric SIs are the **expected signature of off-path parameters** (D-09: hardcoded LAI canonical, allometric chain sensitivity-only), reported as robustness. *"Sufficient buffering"* reads **#30**'s confirmed defect as a design feature. | POTENTIAL ROADBLOCK |
+| **86** | §3.5.3 | A **trait-range** sweep recast as measurement error, plus a real-world field-survey prescription (*"For planning applications…"*) — first instance of the #10/#11 scope violation located **inside Results**. | POTENTIAL ROADBLOCK |
+| **87** | Conclusion | *"successfully developed and **validated**."* No external validation (§2.6 concedes it), **and** none of §2.5's four internal validation stages has a reported result meeting its stated criterion. *(= the forward-referenced "#90", widened.)* | POTENTIAL ROADBLOCK |
+| **88** | Conclusion | Morphological-robustness result **absent from §3**; *"six distinct land-use patterns"* vs Methods' **three** archetypes; *"Dense Organic"* undefined (occurs once in the manuscript); *"building clusters create synergistic shading"* attributes a mechanism §2.3 states is not modelled. | POTENTIAL ROADBLOCK |
+| **89** | Conclusion | *"Sensitivity Index = **0.46**"* vs §3.5.1's **0.4435**. Direction of the fix unknown. Inherits #82. | PENDING VERIFICATION |
+| **90** | Conclusion | Terminal propagation point for **#62** (°C), **#63** (42% / 0.19 / 0.11), **#67** (3.13 / 28%), **#69** (*"proved effective"*), plus its own dimensional error *"100 x 100 m²."* Cannot be polished independently. | POTENTIAL ROADBLOCK |
+| **91** | Conclusion | Planting prescription addressed to *"Philippine urban planners"* from a synthetic non-georeferenced study, resting on a finding **#46** shows is inverted, with an unmentioned diversity/resilience trade-off. | POTENTIAL ROADBLOCK |
+| **92** | Conclusion | *"transferable methodology"* / *"actionable"* / *"across climate-vulnerable cities"* on generalizability evidence **#88** shows does not exist; every result comes from **one** synthetic grid §3.2 never characterizes (#56). | POTENTIAL ROADBLOCK |
+| **93** | Recommendations | *"Due to the **theoretical nature** of the framework"* directly contradicts the Conclusion ~45 lines above. **The Recommendations are correct; the Conclusion is what must move.** Plus a future-work proposal duplicating §3.3.3. | POTENTIAL ROADBLOCK |
+| **94** | Author Contributions | **Five contributor entries against six named authors** — one author (on the initials, Suarez) has none. Initials do not disambiguate three V-surnames. No CRediT. Only the research lead can fix this. | POTENTIAL ROADBLOCK |
+| **95** | Acknowledgment | An **IDE** acknowledged as a contributor; no **funding**, **competing-interests**, **data-availability** or **code-availability** statement anywhere in the manuscript. Compounds #45. | PENDING VERIFICATION |
+
+#### B. 🔴 Flag #82 — ROADBLOCK (SEVERE), the project's first. §3.5.2's category means are arithmetically impossible.
+
+I verified this myself against the manuscript rather than taking Entry 5's spot-check on faith, and **the defect is larger than the forward reference described**: it is not one bad category mean, it is **all four**.
+
+**Step 1 — the SI definition is sound and reproducible.** §3.5.1 defines SI = |SECPI_high − SECPI_low| / SECPI_baseline, baseline **3.0576**. Narra crown diameter: 4.380 − 3.024 = **1.356** ✓ as the manuscript states; 1.356 / 3.0576 = **0.44348** ≈ the reported **0.4435** ✓. The definition also reproduces the secondary tier: 0.0045 × 3.0576 = **0.0138** ≈ the stated 0.014 ✓; 0.0028 × 3.0576 = **0.0086** ≈ the stated 0.009 ✓. And §3.5.2's own `shade_weight` figure: 0.0017 × 3.0576 = **0.0052** ≈ the stated *"SECPI difference of only 0.005"* ✓. **The parameter-level layer is internally consistent.**
+
+**Step 2 — category membership is forced by the manuscript, not assumed.** §3.5.1's own four-category definition, with six species: Morphology (CD, height) = **12**; Allometry (l0, l1, h0, h1) = **24**; Cooling Model (decay lambda, CCA threshold, competition steepness) = **3**; Weighting (shade-ET ratio) = **1**. **12 + 24 + 3 + 1 = 40**, matching §3.5.1's own *"swept 40 parameters."*
+
+**Step 3 — every category mean exceeds its own maximum member.**
+
+| Category | n | Largest member SI | Ceiling on the mean | Reported | Factor |
+|---|---|---|---|---|---|
+| Species Morphology | 12 | 0.4435 | (0.4435+0.0043+0.0033+0.0027+8×0.005)/12 = **0.0412** | **1.3068** | ≥31.7× ceiling; 2.95× its max member |
+| Species Allometry | 24 | 0.0037 | all <0.005 ⇒ **<0.005** | **0.1857** | ≥37×; 50.2× its max named member |
+| Cooling Model *(duplicate-labelled)* | 3 | 0.0032 | (0.0032+0.0021+0.0015)/3 = **0.002267** exact | **0.0727** | 32.1×; 22.7× |
+| Weighting | **1** | 0.0017 | one-element mean = **0.0017** exact | **0.0236** | 13.9× |
+
+**The Weighting row is the single-line refutation.** The category has exactly one member by §3.5.1's own definition, and §3.5.2 prints that member's SI as 0.0017 thirteen lines below giving the category a mean of 0.0236. A one-element mean is that element. No reading of "mean" reconciles them.
+
+**Step 4 — the argument is `mean ≤ max`, NOT a [0,1] bound.** SI as defined is a difference-to-baseline ratio and is **not** bounded above by 1 — it would legitimately exceed 1 if a parameter's effect exceeded baseline SECPI. Any objection resting on a normalized-index bound is refutable by the authors and must not be used. **`mean ≤ max` requires no assumption whatsoever.**
+
+**Step 5 — the three benign explanations are all excluded.** (i) *Units/scaling:* the overstatement factors are 2.95 / 50.2 / 22.7 / 13.9 against max members and 31.7 / ≥37 / 32.1 / 13.9 against ceilings — **no common factor**, so no single mis-scaling produces them. (ii) *Mislabelled sum:* Weighting's sum **is** 0.0017 (n=1) ≠ 0.0236; Cooling Model's sum is 0.0068 ≠ 0.0727; Morphology's sum is at most 0.4938 ≠ 1.3068. **The values are not sums.** (iii) *Transcription:* four uncorrelated errors in one sentence is more consistent with a defective aggregation function than with four slips.
+
+**Step 6 — the sentence contradicts itself.** It says removing Narra CD *"would reduce the category mean to approximately 0.002."* If the 11 remaining members average 0.002, the 12-member mean is (0.4435 + 11×0.002)/12 = **0.0388**. Its own two halves differ by **33.7×**, and the second half is the one consistent with §3.5.1.
+
+**Step 7 — the label set is wrong.** *"Species Allometry"* is named **twice** (0.1857, 0.0727); **Cooling Model is never named**, yet the next paragraph opens *"The relatively low sensitivity of the Cooling Model category is noteworthy"* and discusses its three members. Distinct from **#51**, which covers only the `3.4.2`/`3.4.3` heading-number duplication.
+
+**Why SEVERE and not POTENTIAL ROADBLOCK — the justification, stated precisely because this is the project's first.** The register reserves SEVERE for a finding *confirmed unresolvable as written, requiring rework rather than rewording.* All three hold, none contingent: **(1) Confirmed, not pending** — the proof closes over manuscript-printed values; nothing needs executing, sourcing or deciding. **(2) Unresolvable as written** — correct values are not recoverable from the manuscript (only ceilings are), there is no common factor to undo, and one of the four labels is itself wrong; an editor cannot repair the sentence. **(3) The section must be reworked** — §3.5.2's hierarchy claim, Figure 34, and the Conclusion's *"SI = 0.46"* (#89) all fall with it, and the aggregation must be recomputed from raw output that per `CLAUDE.md` §4 is itself obsolete under Option B. A numerate referee's first check on a category table is the one-element mean; it takes seconds and returns a printed result that cannot be true. **Desk-reject class. It must not reach a DOI-minted preprint.**
+
+**Mitigating diagnosis, offered as direction not as a downgrade:** because the parameter-level layer reproduces cleanly (Step 1), the defect **localizes to the aggregation step and Figure 34**. §3.5.1 may be salvageable subject to #75–#80; §3.5.2 is not.
+
+#### C. ⚠️ Two derived project documents carry a wrong argument and a wrong remedy for #82 — I did not edit them
+
+`docs/STATUS.md:48` — *"SI is defined as normalized (∈[0,1])… A mean cannot exceed its largest member, **and a normalized index cannot exceed 1.0. It is labelled a mean but behaves like a sum.**"*
+`docs/HANDOVER.md:171–172` — *"a 'mean' of 1.3068 **exceeds both its largest member and the [0,1] bound**. It's labeled a mean but behaves like a sum… Needs a research-lead decision (propose **D-11**): **relabel sum-vs-mean**, or re-run the sensitivity aggregation."*
+
+**Both are wrong on two counts, and one of them proposes an invalid remedy.** (i) SI is not bounded by [0,1] — see §B Step 4; the bound-based half of the argument is refutable and would let the authors dismiss a correct objection. (ii) The values are **not sums** — see §B Step 5; Weighting's sum equals its mean equals 0.0017 against a reported 0.0236, and Cooling Model's sum is 0.0068 against 0.0727. **The "relabel sum-vs-mean" option HANDOVER.md proposes for D-11 would not fix anything**, and acting on it would produce a second wrong number in place of the first.
+
+**I did not edit either file.** `docs/STATUS.md` is the `interpreter`'s artefact and `CLAUDE.md` §8.1 directs that it be **regenerated rather than reconciled by hand**; `docs/HANDOVER.md` has no assigned owner in my brief. The correction is recorded in full in **Flag #82** in `docs/FLAGS.md` (authoritative) and here. **Action owed:** regenerate `STATUS.md` and correct `HANDOVER.md` §A1 from #82's text before either is shown to the research lead. Flagged to the orchestrator.
+
+#### D. Verification of the four pre-identified findings — all four confirmed, two wider than described
+
+I re-derived each against the manuscript rather than accepting the prior spot-check.
+
+1. **§3.5.2 category means** — confirmed and **wider**: all four means impossible, not one. Registered **#82**, SEVERE. See §B.
+2. **§3.5.3 false provenance** — confirmed verbatim at `06:700–703`, *"The allometric constants sourced from literature (l0, l1, h0, h1)."* Contradicts **D-09** (DECIDED): *"disclosed as author-estimated… **do not present it as sourcing LAI**."* Registered **#84**. I also found a second, larger §3.5.3 defect the forward reference did not anticipate — **#85**, that the near-zero allometric SIs are the expected signature of off-path parameters and that *"sufficient buffering"* reports #30's confirmed defect as a feature.
+3. **Conclusion "successfully developed and validated"** — confirmed verbatim at `07:55`. Registered **#87**, and **widened**: beyond #8's no-external-validation lock, I found that **none of the four validation stages Methods §2.5 specifies has a reported result meeting its criterion** — §2.5.1's greedy-benchmark verification is absent from §3 entirely, and §2.5.2's own pass criterion (*"outperform random placements"*, `05:91`) has **no random-placement baseline anywhere in §3**.
+4. **Conclusion prescription and transferability** — confirmed verbatim at `07:81–86` and `07:120–128`. Registered **#91** and **#92** (the split is by remediation; the numbers coinciding with the forward reference is coincidence, not deference). I also found a **third** instance inside Results — §3.5.3's *"For planning applications…"* — registered **#86**.
+
+#### E. Material findings NOT among the four pre-identified items
+
+Listed because these are what the pass found by reading rather than by checking:
+
+- **#75 — Morris vs local OAT.** Methods §2.5.3 names *"a **Morris-method** One-at-a-Time (OAT) screening approach."* §3.5.1 describes *"Each parameter… evaluated at its low and high bounds while all others were held at baseline values"* from **a single baseline**. That is a local OAT, not Morris: no randomized trajectories, no multiple base points, no elementary effects, no μ*/σ. Weaker in precisely the dimension that matters, since §2.1/§3.4.2 assert the objective is **non-submodular** (interaction-dominated) and a single-base-point OAT cannot see interactions. Compounded by §2.5.3's scope covering only 27 of the 40 parameters swept, **excluding the one that produces the headline**.
+- **#83 — Table 3 refutes §3.5.2's stated mechanism.** LAI midpoints: Kabiki 5.25 > Talisay 4.75 > Narra 4.50 > Banaba 4.00 > Duhat 3.25 > **Akleng-parang 3.00**. Identical ordering under maxima. §3.5.2's *"the two dominant species (Narra and Akleng-parang) rank highest on both CPA and LAI dimensions"* is **false for LAI under every convention** — Akleng-parang is **last of six**. And the closing claim that the pool lacks *"trees with high LAI but small crowns, or vice versa"* is refuted by the same table: **Kabiki** is highest-LAI with a 10–12 m crown, **Akleng-parang** is second-largest CPA with the lowest LAI. Table 3 is arithmetically sound and safe to rely on — CPA reproduces from CD for all six species (π/4·12² = 113.1 ✓, π/4·34² = 907.9 ✓, π/4·18² = 254.5 ✓, π/4·30² = 706.9 ✓).
+- **#88 — the Conclusion reports a result §3 never contains.** No morphological-robustness subsection exists in §3. *"Six distinct land-use patterns"* against §2.2's **three** archetypes (Organic/Clustered, Sparse/Suburban, Linear/Corridor, `02:341–360`). *"Dense Organic"* occurs **exactly once in the whole manuscript** — that sentence — and is not one of the three names. And *"building clusters create synergistic shading opportunities"* attributes cooling to building shade when §2.3 (`03:112–118`) states *"the simplified model does not explicitly model three-dimensional solar geometry"* — same failure mode as **#73**.
+- **#78 — the sensitivity secondary tier is below the manuscript's own noise floor.** Effects of 0.009–0.014 against §3.3.1's 0.05–0.07 best-vs-average gap and §3.4.2's dismissal of 0.0014 as noise. The robustness conclusion is what an under-powered design returns when it cannot resolve anything.
+- **#79 — unequal sweep spans.** Crown diameter 12→34 m about a 23.0 m midpoint is **±47.8%**; allometrics **±15%**; ratio **3.19×**. Span-corrected, Narra CD 0.4435/0.957 = **0.464** vs Talisay.h1 0.0045/0.30 = **0.0150** — a **30.9×** ratio against the raw **98.6×** the manuscript calls *"nearly two orders of magnitude."* **Stated fairly: the dominance survives directionally.** What fails is the magnitude and the like-for-like framing.
+- **#76 — baseline anomaly.** 3.0576 − 3.024 = **0.0336**; 4.380 − 3.0576 = **1.3224**. The baseline sits ~39× closer to the low bound than the high bound, which is not what a 23.0 m midpoint baseline should produce unless the response is extremely convex. Compounds **#52**.
+- **#81 — no figure in §3 is cited in text.** Figures 7–34 = **28 captions**; exactly one in-text reference, `06:549`, itself a broken placeholder: *"(Figure [Single Tree Radial Decay: Narra])"*. Consequence for §3.5: the 30 parameters never named in prose exist **only** in uncited Figure 33.
+- **#94 — five contributor entries, six authors.** L.G., V.J., D.L.Z., V.L., V.E. against Lacuanan, Valenzuela, De Leon, Villadolid, Valdes, **Suarez**. Three V-surnames, three V-initialed entries, no key. Submission-blocking; only the author team can resolve it.
+- **#95 — missing back matter.** No funding, competing-interests, data-availability or code-availability statement anywhere in the manuscript, for a study whose entire evidentiary basis is one ~3,670-line script.
+- **#93 — the Recommendations contradict the Conclusion, and the Recommendations are the correct half.** *"Due to the theoretical nature of the framework"* (`07:132`) sits ~45 lines after *"successfully developed and validated"*, *"significant practical weight for Philippine urban planners"* and *"actionable."* The fix has a direction, and it is not the obvious one: **the Conclusion moves, not the Recommendations.**
+
+**Out-of-scope observation, not flagged, recorded for whoever owns it:** §2.2 defines **P as "Prohibited"** (`02:315–316`, *"to convert to the Prohibited (P) state"*), while `CLAUDE.md` §3 lists **P as "public."** §3.4.4 also uses *"reclassified as Prohibited cells."* This is outside §3.5/Conclusion scope and I did not register a flag; it may already be covered, and it may be a `CLAUDE.md` error rather than a manuscript one. Routing to the orchestrator.
+
+#### F. Class split against Entry 5's prediction — it did not match
+
+Entry 5's v3 preamble predicted **14 POTENTIAL ROADBLOCK / 5 PENDING VERIFICATION / 1 SEVERE = 20** for the #75–#94 range. I derived the split independently, in document order, and compared afterwards.
+
+**True split for #75–#95: 15 POTENTIAL ROADBLOCK / 5 PENDING VERIFICATION / 1 ROADBLOCK (SEVERE) = 21.**
+
+- POTENTIAL ROADBLOCK (15): #75, #78, #79, #80, #83, #84, #85, #86, #87, #88, #90, #91, #92, #93, #94
+- PENDING VERIFICATION (5): #76, #77, #81, #89, #95
+- ROADBLOCK (SEVERE) (1): #82
+
+**It is close but it is not the same set, and the closeness is coincidence.** The prediction reserved #75 for the SEVERE item; the SEVERE item is **#82**. The prediction named #79, #90 for findings that landed at **#84**, **#87**. The count differs by one flag (21 vs 20) and by one POTENTIAL ROADBLOCK (15 vs 14). Nothing was merged, dropped or added to make the numbers approach the prediction.
+
+#### G. The five defective flags — repaired in place
+
+Per Entry 5 §C, five flags in #52–#74 carried verbatim-accurate quotations but defective reasoning or sourcing. Entry 5 correctly declined to fix them (correcting a flagger's finding is the flagger's job). All five are now repaired in `docs/FLAGS.md` as **clearly-marked `⚠️ v4 CORRECTION` blocks appended directly beneath each original flag**. **No original finding text was deleted or rewritten** — append-don't-overwrite, per `CLAUDE.md` §2.3. **No class changed on any of the five.**
+
+| Flag | What was withdrawn or corrected | What stands |
+|---|---|---|
+| **#53** | (i) *"using midpoints, Akleng-parang outranks Narra"* — **withdrawn, not reproducible**: CPA midpoints give Narra 0.957 vs Akleng 0.830; CPA-from-CD-midpoints give Narra 0.900 vs Akleng 0.871. Narra leads under both. (ii) *"the two omitted are precisely the ones whose LAI is highest"* — **withdrawn**, false for Banaba (3.5–4.5, fourth of six by midpoint); only Kabiki supports it. (iii) The 0.70/0.30 weighting **re-cited to §2.3.2** (`03:213–215`), not §2.3.1. | Objection (a) — Kabiki and Banaba never scored, four of six reported. And the maxima check: Akleng-parang computes ≈**0.72** against a reported **0.856**, while Narra computes ≈0.95 against 0.943. Class unchanged: PENDING VERIFICATION. |
+| **#59** | Headline *"iteration-best and global-best traces are conflated"* — **withdrawn**. The manuscript names the two traces in separate sentences and is internally consistent; a per-iteration best legitimately fluctuates. **Recast** as: it cannot be determined which series Figure 11 plots — the caption is bare *"ACO Convergence Line Graph"* and the figure is never cited in text (compounds new **#81**). | Objection (b) — pheromone attribution with no pheromone, diversity or entropy diagnostic. Class unchanged: PENDING VERIFICATION. |
+| **#64** | Attestation corrected. The flag claimed *"hand arithmetic on the manuscript's own printed values"* for all six mono-species values, but **Kabiki 3.094 and Banaba 3.068 appear nowhere in §3** — they come from the D-06 `run_20260213_222844` CSV. The 3.514 mean is **mixed-source** arithmetic. | The finding survives **intact and manuscript-internal**: §3.4.1's k=1 mean of **2.990** is below **3.0396**, the lowest single k=1 value the manuscript itself prints. That check needs none of the CSV values. Class unchanged: POTENTIAL ROADBLOCK. |
+| **#68** | Re-sourced. Δ = **0.0396** used the CSV's Kabiki 3.094. **Manuscript-only margin is 3.1336 − 3.0396 = 0.094.** Quote 0.094 going forward; cite 0.0396 only with its D-06 provenance. | The objection holds at either value, and slightly harder at 0.094. Talisay − Duhat = **0.0669** is manuscript-internal and unaffected. Both sit at or above §3.3.1's unmeasured 0.05–0.07 gap, from n=1 vs n=1. Class unchanged: POTENTIAL ROADBLOCK. |
+| **#70** | Objection (b) **demoted from assertion to hypothesis**. The flag asserted as fact that *"the software was told when to print SUCCESS and it printed SUCCESS."* No project record establishes that `"[SUCCESS] HIGH EQUITY"` is threshold-triggered — `STATE.md` documents a **different** function, `interpret_scenario_comparison()` → `"Difference: SIGNIFICANT"` on `\|Δ\| > 0.1`. That is inference by analogy from another code path. Owner assigned: `math-auditor`; artefact: an enumeration of every verdict string `AutomatedInterpreter` emits and its trigger condition. | Objection (a) — *"significantly higher mean SECPI of 3.08"* with no test, n, p or dispersion — **confirmed**, and it is a second instance beyond §2.5.2, making the defect systemic. This half alone sustains the class. Class unchanged: POTENTIAL ROADBLOCK. |
+
+### What I changed / decided
+
+**Decided nothing.** No `D-xx` closed or edited. No existing flag downgraded or closed. No manuscript prose written. No code executed.
+
+Two files changed:
+
+1. **`docs/FLAGS.md`** — (a) flags **#75–#95** written into a new "v4 — New flags #75–#95" block; (b) the **🔴 THIS FILE IS TRUNCATED notice replaced** by a "✅ TRUNCATION CLOSED" block that preserves its substance, resolves all four forward references to the numbers actually assigned, and states the true class split against the prediction; (c) the terminal **`## Resuming This Review — PLACEHOLDER` stub replaced** by the v4 flag block and a "Register status" section; (d) Executive Summary table updated to the true per-flag counts with the v3 *claimed* column retained and labelled as such; (e) header and all internal "next free flag number" references corrected to **#96**; (f) the three stale v3 forward references under "What moved and why", the POTENTIAL ROADBLOCK heading note and the ROADBLOCK (SEVERE) heading note **struck and annotated, not deleted**; (g) the #30, #10/#11 and #8 rows of the Escalations table updated with the real flag numbers; (h) the five **v4 CORRECTION** blocks appended beneath #53, #59, #64, #68, #70.
+2. **`docs/PROJECT_LOG.md`** — this entry, appended. **No prior entry modified or deleted.**
+
+**Not changed, deliberately:** `docs/STATE.md` (orchestrator syncs it), `docs/DECISIONS.md` (out of bounds), `docs/STATUS.md` and `docs/HANDOVER.md` (derived/other-owned — see §C), `legacy/AuditedCode_1.py` and all code (read-only session), all `manuscript/sections/*.md` (I flag; `editor` rewrites). Nothing committed.
+
+**Flag counts after this session — derived by per-flag enumeration of `docs/FLAGS.md`, not carried forward from any summary line:**
+
+| Category | Before (#1–#74) | Added (#75–#95) | **After (#1–#95)** |
+|---|---|---|---|
+| RESOLVED — Cleared Up | 29 | 0 | **29** |
+| RESOLVED — Deferred | 2 | 0 | **2** |
+| PENDING VERIFICATION | 25 | +5 | **30** |
+| POTENTIAL ROADBLOCK | 18 | +15 | **33** |
+| **ROADBLOCK (SEVERE)** | 0 | **+1** | **1** |
+| **TOTAL** | 74 | +21 | **95** |
+
+**Next free flag number: #96.**
+
+### Still open / unresolved
+
+1. **🔴 #82 is the project's first ROADBLOCK (SEVERE) and the research lead must be told.** It is registered on evidence, not on a forward reference — the distinction Entry 5 handoff note 2 insisted on. It blocks §3.5.2 and Figure 34 entirely, and blocks the Conclusion's *"SI = 0.46"* (#89). **No number from §3.5.2 may be quoted anywhere until the sensitivity analysis is regenerated.**
+2. **`docs/STATUS.md` and `docs/HANDOVER.md` carry a refuted argument and an invalid proposed remedy for #82** (see §C). Regenerate STATUS.md; correct HANDOVER.md §A1 from #82's text. **Do not open a D-11 on "relabel sum-vs-mean" — that option is arithmetically dead.**
+3. **Recommendation to the orchestrator, not a decision:** #94 (author contributions — five entries, six authors) is a **submission-blocking item that no agent can resolve**. It needs the research lead to supply the full author/initial mapping and a statement for the sixth author. This looks like a candidate `D-xx`; raising it is the orchestrator's call, not mine.
+4. **Second recommendation:** #75's Morris-vs-local-OAT question and #77's three-vs-five restart question are both *"which design was actually run"* questions that only the research lead can answer definitively, and both gate whether §3.5.1 is salvageable or must be regenerated wholesale. They may warrant bundling into one decision item alongside the #82 regeneration.
+5. **Execution obligations created this session, none discharged.** `math-auditor`: #76 (baseline vector), #79 (per-parameter sweep bounds), #82 (aggregation function), #83 (LAI-term marginal contribution), #85 (allometric call-path trace — **the highest-value single check in this batch**), #88 (morphology preset count/names), #70 (verdict-string enumeration, from the repair). `code-stressor`: #77 (per-index dispersion), #78 (noise floor), #82 (regenerated sensitivity table), #87/#88 (the §2.5 validation protocol including a **random-placement baseline**), #89 (regenerated crown-diameter SI). `deriver`: #84 (confirm no source has appeared since Entry 3), #92 (via #9).
+6. **`08_references_appendices.md` has never had an editorial pass** — the reference list itself and Appendices A–B. **#81** shows the unreferenced-figure problem is document-wide, which makes Appendix A's Figures A1–A28 a live concern. Schedule a references/appendices pass; assign from **#96**.
+7. **Out-of-scope terminology item:** P = "Prohibited" in §2.2/§3.4.4 vs P = "public" in `CLAUDE.md` §3 (see §E). Not flagged; routed to the orchestrator.
+
+### Handoff notes for the next chat
+
+1. **`docs/FLAGS.md` is no longer truncated and no longer forward-references anything.** The truncation notice and the `PLACEHOLDER` stub are both gone, replaced with real content that preserves their substance. Every section of the manuscript has had at least one editorial pass. **Totals: 29 / 2 / 30 / 33 / 1 = 95. Next free: #96.**
+2. **The severe flag is #82, not #75.** Anyone who read the v3 file or Entry 5 will expect #75. #75 is the Morris-vs-OAT method contradiction. The other forward references also moved: #79→**#84**, #90→**#87**; #91/#92 kept their numbers by coincidence of content.
+3. **Do not use the [0,1]-bound argument for #82, and do not describe the values as sums.** Both are wrong and both are currently in `STATUS.md` and `HANDOVER.md`. The correct argument is `mean ≤ max`, and the Weighting category (n = 1, member 0.0017, reported 0.0236) refutes it in one line with no assumptions.
+4. **The Conclusion cannot be sent for an Option A polish yet.** #90 registers it as the terminal propagation point for #62, #63, #67 and #69; polishing it now would harden numbers scheduled for deletion. The Conclusion regenerates alongside the Abstract, §3.3.2 and §3.4.4, or not at all.
+5. **§3.5.1 may be salvageable; §3.5.2 is not.** The parameter-level arithmetic reproduces cleanly (§B Step 1); the defect localizes to aggregation and Figure 34. But §3.5.1 is still gated on #75 (which design), #76 (which baseline), #77 (how many restarts) and #79 (which sweep spans).
+6. **#85 is the highest-value unexecuted check in this batch.** If `math-auditor` finds l0/l1/h0/h1 are off the canonical path, §3.5.3's entire robustness conclusion is vacuous rather than merely overstated, and #30 gains a second confirmation route. One call-path trace settles it.
+7. **This session ran read-only.** Nothing here discharges any "closes when" clause in #52–#74 or #75–#95.
+
+### Flags touched
+
+- **#75–#95 created (21 flags).** Numbering confirmed: **#75 was the next free number** per `docs/STATE.md`'s authoritative count block and Entry 5 §A/Flags-touched. The range is contiguous, no gaps, no reuse, and **#52–#74 were not renumbered.**
+  - **ROADBLOCK (SEVERE) (1):** #82
+  - **POTENTIAL ROADBLOCK (15):** #75, #78, #79, #80, #83, #84, #85, #86, #87, #88, #90, #91, #92, #93, #94
+  - **PENDING VERIFICATION (5):** #76, #77, #81, #89, #95
+- **#53, #59, #64, #68, #70 — repaired, classes unchanged.** Corrections appended in place beneath each flag; no original text deleted or rewritten. Detail in §G. These are **corrections to the flagger's own reasoning, not reclassifications** — no downgrade occurred, so no downgrade justification is owed.
+- **#30 — refinement extended.** #84 registers the §3.5.3 false-provenance instance (the Escalations table's "#79"); #85 registers the new finding that the near-zero allometric SIs may be #30's defect showing up as apparent robustness. Class unchanged: POTENTIAL ROADBLOCK.
+- **#8 — extension registered as #87**, widened from "no external validation" to "no validation stage in §2.5 has a reported result meeting its criterion." Class unchanged.
+- **#10 / #11 — extensions registered as #91, #92** (Conclusion) **and #86** (a third instance, inside Results §3.5.3). Classes unchanged.
+- **#51 — noted as insufficient**, not reclassified. #51 covers the `3.4.2`/`3.4.3` heading-number duplication under §3.5; it does **not** cover §3.5.2's duplicate *"Species Allometry"* category label, which is part of **#82**. Renumbering the headings will not fix the label.
+- **No flag was downgraded, closed, or reclassified this session.**
+
+### Decisions raised or closed
+
+**None closed. No `D-xx` edited** — `docs/DECISIONS.md` was read but not modified, per brief.
+
+Three items are **recommendations to the orchestrator for routing**, not decisions taken here:
+
+- **#94** — author contributions: five entries, six authors. Only the research lead can supply the mapping and the missing statement. Submission-blocking for the preprint.
+- **#75 / #77** — which sensitivity design was actually run (Morris vs local OAT) and at what restart count. Both gate whether §3.5.1 survives; candidates for bundling with the #82 regeneration.
+- **#82** — a decision will be needed on the regeneration scope for §3.5. **If a `D-11` is opened, it must not offer "relabel sum-vs-mean" as an option** — §B Step 5 shows the values are not sums, so that remedy is arithmetically dead. `docs/HANDOVER.md:172` currently proposes it.
+
+**D-09 was cited, not touched.** It is the decisive evidence for #84 and #85 and it is already DECIDED.
+
+### Reproducibility attestation
+
+**No code was executed in this session.** No script run, no seed set, no number regenerated, no file in `legacy/`, `src/` or `results/` opened. Every number asserted above is exactly one of three kinds, labelled inline throughout:
+
+1. **A verbatim value quoted from `manuscript/sections/*.md`, cited by file and line.** All §3.5 values (`06_results_discussion.md:597–725`), all Conclusion/Recommendations/back-matter values (`07_conclusion.md`), Table 3 and Table 4 (`06:85–128`), and the Methods cross-checks (`02:315–316`, `02:341–360`; `03:112–118`, `03:213–215`; `05:75–81`, `05:85–92`, `05:101–112`, `05:113–127`, `05:133–136`). These files are the Phase 1.5 verbatim extraction from `manuscript/MCS02_SECPI_original.pdf` (commit `6c3192a`); their provenance banners note that flattened equations still require visual comparison against the PDF. **The SI definition in §3.5.1 is one such flattened equation** — I read it as |SECPI_high − SECPI_low| / SECPI_baseline, which is corroborated because it reproduces four independent printed values (0.4435 from 1.356/3.0576; 0.014 and 0.009 from the rank-2 and rank-10 SIs; 0.005 from shade_weight's 0.0017). That corroboration is why #82 does not depend on the extraction being faithful.
+2. **Hand arithmetic on those quoted values, performed by me this session, with the working shown inline** so it can be checked without rerunning anything:
+   - **#82:** 4.380 − 3.024 = 1.356; 1.356/3.0576 = 0.44348; 0.0045 × 3.0576 = 0.0138; 0.0028 × 3.0576 = 0.0086; 0.0017 × 3.0576 = 0.0052; 12 + 24 + 3 + 1 = 40; (0.4435+0.0043+0.0033+0.0027+8×0.005)/12 = 0.0412; (0.0032+0.0021+0.0015)/3 = 0.002267; (0.4435 + 11×0.002)/12 = 0.0388; overstatement factors 2.95 / 50.2 / 22.7 / 13.9 and 31.7 / ≥37 / 32.1 / 13.9.
+   - **#76:** 3.0576 − 3.024 = 0.0336; 4.380 − 3.0576 = 1.3224.
+   - **#79:** (34 − 12)/23 = 0.957; 0.4435/0.957 = 0.464; 0.0045/0.30 = 0.0150; 0.464/0.0150 = 30.9; 0.4435/0.0045 = 98.6; 0.957/0.30 = 3.19.
+   - **#83:** LAI midpoints 4.00 / 4.50 / 5.25 / 3.25 / 3.00 / 4.75 from Table 3's printed ranges. CPA-from-CD checks: π/4·12² = 113.1, π/4·34² = 907.9, π/4·18² = 254.5, π/4·30² = 706.9, π/4·10² = 78.5, π/4·8² = 50.3.
+   - **#90:** (0.19 − 0.11)/0.19 = 0.421; (0.19 − 0.131)/0.19 = 0.310; 1.2315/4.3651 = 0.2821.
+   - **#53 repair:** Narra 0.957 vs Akleng 0.830 (CPA midpoints 510.5 / 480.5); Narra 0.900 vs Akleng 0.871 (CPA from CD midpoints π/4·23² = 415.5, π/4·24² = 452.4). These reproduce Entry 5 §C's independent derivation and I re-derived them rather than copying.
+   - **#68 repair:** 3.1336 − 3.0396 = 0.094; 3.1065 − 3.0396 = 0.0669.
+3. **A value cited from a named log entry, `DECISIONS.md`, `STATE.md` or `CLAUDE.md`, identified as such at the point of use.** Specifically: `n_runs = 5` (`CLAUDE.md` §3) in #77; the 6-morphology-preset count in code (`STATE.md`, Code health) in #88; D-09's *"hardcoded LAI canonical / allometric chain sensitivity-only / author-estimated"* in #84 and #85; Entry 3's 22–77× refit discrepancy and Entries 1–2's h < h₀, DBH 0.17–0.66 m, LAI 50–420× findings in #85; D-06's Kabiki 3.094 / Banaba 3.068 and the 28.73% derivation in the #64/#68 repairs and #90; `STATE.md`'s `interpret_scenario_comparison()` / `\|Δ\| > 0.1` in the #70 repair; the `SensitivityAnalyzer` hardcoded-10-ants history (`STATE.md`, Code health) in #77; Entry 4's verified dependency list in #95; #9's Quezon City 81% figure in #92. **None of these was re-verified this session and none is presented as if it were.**
+
+**No number in this entry rests on a subagent's return summary, and no number was carried forward from any summary line.** The 95-flag count and the 29/2/30/33/1 split were derived by enumerating every `**#N —` heading in `docs/FLAGS.md` and adding the 21 assigned here to the #1–#74 per-flag record Entry 5 §B established.
+
+---
+
 ---
 
 ## ENTRY TEMPLATE (copy this for your session, fill in, append after the last entry — do not overwrite prior entries)
