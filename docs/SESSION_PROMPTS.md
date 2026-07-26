@@ -56,6 +56,16 @@ Note the namespacing: plugin installs use `/ecc:plan "..."`, manual installs use
 
 ---
 
+## Session 0 — Status check (run anytime, ~2 min)
+
+Run this whenever you want to know where things stand, before opening a work session, or after one completes.
+
+> Use the `interpreter` agent. Regenerate `docs/STATUS.md` from current state. Derive every count by enumeration, not by copying a summary line — and if a derived count disagrees with a stated total anywhere, report both and flag the discrepancy rather than adopting either. Group flags by root cause, not by number. Rank by leverage (what unblocks the most), not severity alone, and state the leverage reasoning so I can disagree with it.
+
+Then read `docs/STATUS.md` yourself. It's written for you, not for the agents.
+
+---
+
 ## Session 1 — Verify the migration
 
 > Read `CLAUDE.md`, `docs/DECISIONS.md`, and `docs/STATE.md`. Do not read anything else yet, and do not use any tools beyond reading those three files.

@@ -125,6 +125,7 @@ Defined in `.claude/agents/`. Each writes a `PROJECT_LOG.md` entry at session en
 | `code-stressor` | Seed sweeps, robustness, edge cases, statistical test execution |
 | `editorial-flagger` | Flag register maintenance, reviewer-objection anticipation |
 | `editor` | Manuscript prose, Option A/Option B rewrites, Results authorship |
+| `interpreter` | `docs/STATUS.md` dashboard, flag triage, session-prompt drafts. Read-only on state. |
 
 **Coordination contract:** agents never speak to each other directly. All cross-agent communication goes through `docs/PROJECT_LOG.md` (findings) and `docs/DECISIONS.md` (requests for sign-off). A finding that isn't logged did not happen.
 
@@ -150,6 +151,28 @@ Its job is to hold the decision queue, delegate to subagents, and refuse to let 
 
 **The main thread must not write manuscript prose.** Editorial work is delegated to `editor`, always. If the orchestrator finds itself drafting a sentence for the paper, it has taken the wrong seat.
 
+### The orchestrator is also the research lead's interpreter
+
+Beyond dispatch, the orchestrator owes the research lead genuine collaboration. This is a duty, not a style preference:
+
+- **Present decisions with premises stated first**, then the options, then a recommendation labelled as a recommendation. Never bury a decision inside a status update.
+- **Explain tradeoffs, not just conclusions.** The research lead has to defend these choices in peer review; "the tooling picked it" is not defensible.
+- **Volunteer bad news early and plainly.** A confirmed defect stated late is worse than an uncertain one stated early.
+- **Correct your own errors out loud.** If a number you asserted turns out wrong, say which one, why, and what it changes. Silent correction destroys the audit trail this project runs on.
+- **Push back when the research lead is about to do something costly.** Deference that lets a preventable error through is not helpfulness.
+
+**What the orchestrator may not do, even while interpreting:** close a `D-xx`, reclassify a flag, or assert a number it has not verified this session.
+
+### The `interpreter` subagent
+
+Delegate to `interpreter` for the *artifact-producing* half of interpretation: generating `docs/STATUS.md`, re-triaging the flag register, drafting session prompts. It is read-only on all state files and may write only `docs/STATUS.md`.
+
+**It is not a tier between the research lead and the orchestrator.** It produces documents; the orchestrator has the conversation. Anything requiring multi-turn discussion with the research lead stays with the orchestrator, because a subagent gets exactly one turn and its return is lossy.
+
+Run it when: the research lead asks where things stand, before opening a work session, after a session completes, or whenever the flag register moves.
+
+**Treat `docs/STATUS.md` as derived, never as a source.** If it disagrees with `FLAGS.md` or `DECISIONS.md`, those win and STATUS.md is stale — regenerate it rather than reconciling by hand.
+
 ### Subagent returns are lossy — plan for it
 
 Each subagent runs in its own context window and returns only a summary. It cannot see any other subagent's context, and its own context is discarded when it finishes. A subagent may execute forty seeds, observe exact values, and return four sentences.
@@ -171,6 +194,7 @@ Therefore:
 | "Does this hold across seeds / is this significant?" | `code-stressor` |
 | "What would a reviewer object to here?" | `editorial-flagger` |
 | "Rewrite this section" | `editor` |
+| "Where are we / what's the status / what's next" | `interpreter` (artifact) + orchestrator (conversation) |
 
 Sequential, not parallel, wherever one agent's output is another's input — flag before regenerating, regenerate before writing. Parallelism is only safe across genuinely independent tracks (e.g. Deriver literature work alongside a code audit).
 
