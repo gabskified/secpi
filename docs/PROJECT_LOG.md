@@ -823,6 +823,114 @@ Three items are **recommendations to the orchestrator for routing**, not decisio
 
 ---
 
+## Entry 7 — Orchestrator, research-lead decision session — [2026-07-26]
+
+**From:** the orchestrator (main thread), recording decisions taken by the research lead in conversation.
+**Reviewed:** `docs/DECISIONS.md` in full, `docs/STATE.md`, `docs/FLAGS.md` (v4, complete through #95), Entry 6.
+
+**Context:** Entry 6 closed out the flag register and registered the project's first ROADBLOCK (SEVERE), #82. This entry records the decision queue moving for the first time since D-09.
+
+### What I changed / decided
+
+**I decided nothing.** All four movements below are the research lead's, taken in conversation and transcribed here. One item (D-11) was *opened* at their instruction — opening a numbered item is orchestrator remit; closing one is not.
+
+#### D-11 — OPENED
+
+§3.5 Sensitivity Analysis regeneration scope, scoped to regeneration only at the lead's explicit instruction. Source: Flag #82.
+
+Written with two guardrails baked in, because both errors were live in project documents before this session:
+- **"Relabel sum-vs-mean" is excluded as an option.** It is arithmetically dead — Weighting's sum equals its mean equals 0.0017 against a reported 0.0236; Cooling Model's sum is 0.0068 against 0.0727. `docs/HANDOVER.md` had proposed it; that proposal is withdrawn.
+- **The `[0,1]`-bound argument is excluded.** SI is a difference-to-baseline ratio and is not bounded above by 1. The sound argument is `mean ≤ max`.
+
+Options recorded: (a) aggregation-only, (b) full §3.5 regeneration under Option B — recommended, (c) scope §3.5 out of the preprint. Noted as a prerequisite: **#75 must settle first**, since Methods §2.5.3 names the Morris method while §3.5.1 executes a local two-level OAT — regenerating before that resolves reproduces the mismatch in fresh numbers.
+
+#### D-02 — DECIDED: ceiling = 3.75
+
+Floor 0.0, ceiling 3.75, framed as a pre-specified design constant per the verified precedents (UNDP HDI, OECD/JRC 2008, Cedefop ESI; **not** World Bank distance-to-frontier, discontinued 2021 after a data-integrity investigation).
+
+**Standing re-check obligation recorded.** 3.75 sits just above 3.52, the empirical max from 500 *random* valid placements. The ACO optimizes harder than random sampling, so 3.52 is a weak lower bound. After Option-B regeneration, `code-stressor` reports the optimizer's best raw SECPI; if solutions approach or exceed 3.75, near-optimal configurations pin at 5.0 and discrimination is lost precisely where the headline results sit. The lead re-confirms or raises before any Results prose is written.
+
+#### D-03 — DECIDED: report BOTH metrics, pre-specified, Bonferroni-corrected
+
+**This supersedes the earlier "pre-specify one, do not test both" guidance**, which was aimed at the test-both-report-the-winner failure mode. The adopted design forecloses that mode explicitly and is stronger than a single-metric design, since divergence between the two metrics is itself informative.
+
+Two pre-specified hypotheses, both SECPI-independent (so both satisfy #69's circularity objection): **H1** proportion of delivered cooling landing in V-zones; **H2** proportion of trees placed adjacent to V-zones. Paired Wilcoxon signed-rank, n = 30, paired on grid and tree count. Report test, n, statistic, two-sided p, rank-biserial effect size for each.
+
+Four binding conditions set by the lead: both reported regardless of outcome; both pre-specified in Methods before execution; the "redirection of resources" claim scoped to match which hypotheses actually held; **Bonferroni α = 0.025 per test**.
+
+**Orchestrator note carried, not a decision:** the two metrics are strongly correlated — trees adjacent to V-zones is largely the mechanism by which cooling reaches V-zones — making Bonferroni conservative. Holm–Bonferroni is uniformly more powerful for two tests and equally standard. Offered; **plain Bonferroni stands as decided unless the lead says otherwise.**
+
+**Not discharged by this decision:** #70's manuscript-wide "significantly" sweep. Every significance claim not backed by these two tests must still be removed.
+
+#### D-07 — DECIDED: `s` = subset/palette size, `k` = tree count
+
+Consequences recorded: §3.1 becomes an `s`-axis experiment and its Abstract/Conclusion references follow; **D-03's pairing axis remains `k`**, so the statistical design is unaffected by the rename; **#64 is NOT closed** — §3.4.1's per-`k` means are arithmetically incompatible with the same dataset's individual values regardless of symbol, so §3.4.1 must still be regenerated rather than rewritten; **#44's downgrade is not automatic**, since it also covers two incommensurable experiments interleaved in one narrative — `editorial-flagger` reassesses after regeneration.
+
+**Applied to `docs/DECISIONS.md`, `docs/STATE.md`, and this entry. No manuscript prose was written. No flag was reclassified.**
+
+### Still open / unresolved
+
+**Five open decisions: D-04, D-05, D-08, D-10, D-11.** Plus D-06's three residual sub-decisions (confirm §3.1 regenerates under Option B; confirm the Flag #46 diversity-claim reframing; decide whether `species_actually_used` becomes a reported variable).
+
+- **D-05 cannot be answered by any agent** — it turns on authorial intent for "Chebyshev space (ℤ²)". Only the author team can say whether it was meant as a lattice/indexing convention or is simply an error.
+- **D-08** carries a real cost either way: re-anchoring heights propagates through crown geometry into every cooling calculation.
+- **D-11** blocks the preprint independently of everything else.
+
+**Sequencing note given to the lead:** D-02, D-03, D-07 and D-11 all feed the same regeneration. Settling them together means one pipeline run. Three of the four are now settled; D-11 is the remaining gate.
+
+### Flags touched
+
+**None created, none reclassified, none closed.** #39, #69, #70 now have a decided test design behind them but remain open pending execution. #64 and #44 explicitly recorded as *not* closed by D-07.
+
+### Decisions raised or closed
+
+- **D-11 — OPENED** (orchestrator, at the lead's instruction).
+- **D-02 — DECIDED** (research lead): ceiling 3.75, with a standing post-regeneration re-check.
+- **D-03 — DECIDED** (research lead): both metrics, pre-specified as H1/H2, all four conditions binding, Bonferroni α = 0.025. Supersedes the prior single-metric guidance.
+- **D-07 — DECIDED** (research lead): `s` = subset/palette size, `k` = tree count.
+
+### Reproducibility attestation
+
+**No code was executed in this session.** No number was regenerated. Every value quoted above is either a decision stated by the research lead in conversation, or a value already on the durable record and cited to it — the 3.52 empirical max and 0.588 baseline from D-02's existing body; the 0.0017 / 0.0236 / 0.0068 / 0.0727 sensitivity figures from Flag #82 and Entry 6; the n = 30 design from D-03's existing body. Nothing here discharges any execution obligation; D-02's ceiling re-check and D-03's two tests both remain unexecuted and are assigned to `code-stressor`.
+
+### ADDENDUM to Entry 7 — same session, 2026-07-26 — two further decisions
+
+Appended rather than folded into the body above, so the sequence of the research lead's decisions stays visible. **Both items below supersede statements made earlier in this same entry.** Nothing above was altered or deleted.
+
+#### D-11 — DECIDED: option (b), full §3.5 regeneration under Option B
+
+Entry 7 above records D-11 as *opened, awaiting the lead*. **It is now decided.** The lead selected **(b)** — re-run the parameter sweep and the aggregation together.
+
+Rationale recorded in `DECISIONS.md`: the existing sweep predates Option B (D-01), so its SECPI values are void under the same reasoning that voided every other Results number. Option (a), aggregation-only, would have produced correct arithmetic over obsolete inputs — a second wrong table arrived at more carefully.
+
+**Two prerequisites recorded, both of which must settle before the run:**
+- **#75** — Methods §2.5.3 names the **Morris method** while §3.5.1 executes a **local two-level OAT** from a single baseline. Different methods. Regenerating first reproduces the mismatch in fresh numbers and wastes the run.
+- **#77** — the sweep averaged over **three** ACO runs against a project standard of `n_runs = 5`. Fix in the same pass.
+
+**Required output:** a machine-written per-parameter table (`parameter · category · low_bound · high_bound · SECPI_low · SECPI_high · SI · n · SD`) emitted to a single named run directory in `results/`, with category aggregates computed **from that table** rather than hand-entered.
+
+**Orchestrator note carried forward:** `math-auditor` should still report what `SensitivityAnalyzer`'s aggregation function actually computes. Four *uncorrelated* overstatements (2.95 / 50.2 / 22.7 / 13.9×) point at a code defect rather than four transcription slips, and that diagnosis should not be skipped merely because the numbers are being replaced — if the defect is in code, regeneration alone reproduces it.
+
+#### D-03 — AMENDED: Holm–Bonferroni replaces plain Bonferroni
+
+Entry 7 above records *"plain Bonferroni stands as decided unless the lead says otherwise."* **The lead said otherwise.** Multiplicity correction is now **Holm–Bonferroni, m = 2, FWER = 0.05.**
+
+Rationale: the two outcome metrics are strongly correlated — trees adjacent to V-zones is largely the mechanism by which cooling reaches V-zones — so plain Bonferroni is conservative and costs power unnecessarily. Holm is uniformly more powerful for two tests and equally standard.
+
+**Procedure written out in `DECISIONS.md` so it cannot be misapplied at execution time.** Step-down: order the raw two-sided p-values ascending; compare `p_(1)` against α/2 = 0.025; **if `p_(1) > 0.025`, stop — neither hypothesis is rejected and the second is never tested**; otherwise reject and compare `p_(2)` against α/1 = 0.05. The step-down gate is what makes Holm a valid FWER procedure rather than two independent tests, and it is the part most often dropped in implementation.
+
+**Reporting requirement:** both **raw** p-values, the Holm-adjusted decision for each, and the effect size for each — regardless of outcome. Methods must name the procedure as "Holm–Bonferroni (m = 2, FWER = 0.05)"; "corrected for multiple comparisons" is not sufficient. D-03's other three binding conditions are unchanged.
+
+#### Revised state after this addendum
+
+**Four open decisions: D-04, D-05, D-08, D-10** — down from five. Plus D-06's three residual sub-decisions, unchanged.
+
+**Every decision on the Results-regeneration critical path is now settled:** D-01 ✔, D-02 ✔, D-03 ✔, D-07 ✔, D-11 ✔. The path is no longer decision-blocked; it is blocked on **#75 and #77 settling**, then execution. D-04 remains the only DOI-blocking item.
+
+**Attestation for this addendum:** no code executed, no number regenerated, no flag created or reclassified. The 2.95 / 50.2 / 22.7 / 13.9 overstatement factors are quoted from Flag #82; everything else is a decision stated by the research lead in conversation.
+
+---
+
 ---
 
 ## ENTRY TEMPLATE (copy this for your session, fill in, append after the last entry — do not overwrite prior entries)

@@ -134,10 +134,27 @@ The **1** ROADBLOCK (SEVERE): **#82** — §3.5.2's four category-level mean sen
 
 ## Open work by owner
 
-### Research lead — 7 open decisions
-D-02 (normalization ceiling), D-03 (statistical outcome metric), D-04 (final title), D-05 (Chebyshev terminology), D-07 (`k` notation — now a three-way collision), D-08 (assumed heights), D-10 (`p0 = 1.0` sign-off). D-01, D-09 decided; D-06 resolved (outcome b). See `DECISIONS.md`.
+### Research lead — 4 open decisions *(updated 2026-07-26, Entry 7 + addendum)*
 
-**D-02 and D-03 gate the Results rewrite.** D-06 is resolved — the combinatorial output was located and confirmed as outcome (b), so §3.1 regenerates rather than being reconstructed from scratch.
+~~7 open: D-02, D-03, D-04, D-05, D-07, D-08, D-10.~~ — **superseded.** D-02, D-03, D-07 and D-11 were all **DECIDED 2026-07-26**; D-11 was opened and closed the same day.
+
+**Open: D-04** (final title — **the only DOI-blocking item**), **D-05** (Chebyshev terminology), **D-08** (assumed heights), **D-10** (`p0 = 1.0` sign-off).
+
+> ✅ **Every decision on the Results-regeneration critical path is now settled** — D-01, D-02, D-03, D-07, D-11. The path is **no longer decision-blocked.** It is blocked on **#75 and #77 settling**, then execution.
+**Decided:** D-01, D-02, D-03, D-07, D-09. **D-06** resolved (outcome b), but carries **three residual sub-decisions** — confirm §3.1 regenerates under Option B, confirm the Flag #46 diversity-claim reframing, and decide whether `species_actually_used` becomes a reported variable.
+
+**Decisions taken 2026-07-26 (see `DECISIONS.md` and Entry 7):**
+
+| Decision | Outcome |
+|---|---|
+| **D-02** | **Ceiling = 3.75**, floor 0.0, framed as a pre-specified design constant. ⚠️ **Standing re-check:** 3.75 sits just above 3.52, the max from 500 *random* placements — the ACO optimizes harder than random. `code-stressor` reports the optimizer's best raw SECPI after regeneration; if solutions approach 3.75, raise it or near-optimal configurations all pin at 5.0. |
+| **D-03** | **Report BOTH metrics**, pre-specified as **H1** (proportion of delivered cooling in V-zones) and **H2** (proportion of trees adjacent to V-zones). Paired Wilcoxon, n = 30. Four binding conditions: both reported regardless of outcome; both pre-specified in Methods *before* execution; the "redirection of resources" claim scoped to whichever held; **Holm–Bonferroni, m = 2, FWER = 0.05** (~~plain Bonferroni α = 0.025~~ — amended same session). Supersedes the earlier "pick one" guidance. |
+| **D-11** | **Option (b) — full §3.5 regeneration under Option B.** Re-run sweep *and* aggregation together; aggregation-only was rejected because the existing sweep predates Option B and its values are void. ⚠️ **#75 and #77 must settle first.** Output: a machine-written per-parameter table, aggregates computed from it. |
+| **D-07** | **`s` = species subset / palette size · `k` = tree count.** D-03's pairing axis stays `k`, so the statistical design is unaffected. **#64 is NOT closed by this** — §3.4.1's per-`k` means are arithmetically incompatible with the same dataset regardless of symbol, so §3.4.1 regenerates rather than being rewritten. **#44's downgrade is not automatic.** |
+
+**D-11 now gates the Results rewrite alone.** D-02, D-03 and D-07 are settled and feed the same regeneration; D-11 is the remaining decision on that path, and #82 blocks the preprint independently of everything else. **#75 must settle before §3.5 regenerates** — Methods §2.5.3 names the Morris method while §3.5.1 executes a local two-level OAT; regenerating first just reproduces the mismatch.
+
+**D-05 cannot be answered by any agent** — it turns on authorial intent and only the author team can close it.
 
 ### Deriver — 5 literature items, zero code dependency
 | Item | Flag | Ask |
@@ -150,8 +167,14 @@ D-02 (normalization ceiling), D-03 (statistical outcome metric), D-04 (final tit
 
 **Flag #30 detail (confirmed twice, independently):** using the manuscript's own Table 4 constants, all six species yield `h < h0` (ratio 0.278–0.742), producing DBH of 0.17–0.66 m — physically implausible — and computed LAI 50–420× smaller than the LAI values the model actually uses. The DBH-from-height inversion runs opposite to typical FORMIND allometrics. **This is a real defect, not a suspicion.** Allometric sensitivity results are invalid until it closes.
 
-### Code-stressor — blocked on D-03, then execute
-1. Run the Wilcoxon signed-rank test once D-03 fixes the metric. n = 30, paired on grid + k.
+### Code-stressor — ✅ UNBLOCKED on D-03 (decided 2026-07-26). Sequenced, not blocked.
+
+**Sequencing constraint:** `editor` must write H1 and H2 into Methods §2.5.2 **before** the tests are executed — D-03's condition 2 requires pre-specification, and running first would void it.
+
+1. Run the paired Wilcoxon signed-rank test on **both** pre-specified metrics — **H1** proportion of delivered cooling landing in V-zones, **H2** proportion of trees placed adjacent to V-zones. n = 30, paired on grid + `k` (tree count). Report **raw** two-sided p, statistic, n, and rank-biserial effect size **for each**, regardless of outcome.
+   **Holm–Bonferroni, m = 2, FWER = 0.05 — apply exactly:** order raw p ascending; test `p_(1)` against **0.025**; **if `p_(1) > 0.025`, stop — neither is rejected and `p_(2)` is never tested**; otherwise reject and test `p_(2)` against **0.05**. The step-down gate is the part most often dropped in implementation.
+2. **New (D-02):** report the optimizer's best raw SECPI from the Option-B regeneration so the research lead can confirm or raise the 3.75 ceiling before any Results prose is written.
+3. **New (D-11):** regenerate **all of §3.5** — parameter sweep *and* aggregation — under Option B, emitting a per-parameter table (`parameter · category · low_bound · high_bound · SECPI_low · SECPI_high · SI · n · SD`) to a named `results/` run, with category aggregates computed from that table. ⚠️ **Blocked until #75** (Morris vs local OAT) **and #77** (`n_runs` 3 vs 5) settle — running first reproduces the mismatch.
 2. Regenerate Results under Option B (code is ready as-is).
 3. **Note for V-density stress testing:** the BFS produces exactly **8 V-cells every run, zero seed variance**. Vary `v_target_range` midpoint explicitly — seed variation will *not* explore the 5–10% band.
 

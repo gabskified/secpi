@@ -14,9 +14,19 @@ Status vocabulary: `OPEN` · `DECIDED` · `SUPERSEDED`
 
 ---
 
-## D-02 — Normalization goalpost ceiling — **OPEN — BLOCKING**
+## D-02 — Normalization goalpost ceiling — **DECIDED**
 
-**Question:** Confirm the upper goalpost for the 0–5 SECPI presentation scale.
+> ### ✅ DECIDED 2026-07-26 by the research lead
+>
+> **Ceiling = 3.75.** Floor = 0.0. `SECPI_norm = 5 × (SECPI_raw − 0) / (3.75 − 0)`, clamped to [0, 5].
+>
+> **Framing:** present the ceiling as a **pre-specified design constant**, consistent with every verified precedent (UNDP HDI fixed goalposts; OECD/JRC 2008; Cedefop European Skills Index). **Do not cite World Bank "distance to frontier"** — Doing Business was discontinued in September 2021 following a data-integrity investigation.
+>
+> **⚠️ Standing re-check obligation.** 3.75 was set just above the empirical max of **3.52** from 500 *random* valid placements. The ACO optimizes harder than random sampling, so 3.52 is a weak lower bound. **After the Option-B regeneration, compare the optimizer's best raw SECPI against 3.75.** If solutions routinely approach or exceed it, near-optimal configurations all pin at 5.0 and discrimination is lost exactly where the headline results live — raise the ceiling before the Editor writes any Results prose. Owner: `code-stressor` to report the max; the research lead to re-confirm or raise.
+>
+> **Code impact:** `normalize_secpi()` only — reporting layer. The ACO continues to optimize on raw SECPI. **Not yet applied.**
+
+**Question (original, for the record):** Confirm the upper goalpost for the 0–5 SECPI presentation scale.
 
 **Context.** The original scheme normalized against *theoretical* extrema (raw min −1.0, max 7.5). This is mathematically valid but practically useless: the no-intervention baseline maps to **0.588**, not 0, and realistic study outcomes occupy only the bottom ~35% of the scale.
 
@@ -52,9 +62,48 @@ Status vocabulary: `OPEN` · `DECIDED` · `SUPERSEDED`
 
 ---
 
-## D-03 — Statistical test outcome metric — **OPEN — BLOCKING**
+## D-03 — Statistical test outcome metric — **DECIDED**
 
-**Question:** Pre-specify the single outcome metric for the "statistically significant redirection of resources" claim in §2.5.2.
+> ### ✅ DECIDED 2026-07-26 by the research lead — **report BOTH metrics, pre-specified, with multiplicity correction**
+>
+> This **supersedes** the earlier "pre-specify one, do not test both" guidance in the body below. That guidance was aimed at the *test-both-report-the-winner* failure mode. The design adopted here forecloses that failure mode explicitly and is stronger than a single-metric design, because a divergence between the two metrics is itself an informative result.
+>
+> **Two pre-specified hypotheses**, both SECPI-independent (so both satisfy Flag #69's circularity objection):
+>
+> | | Hypothesis | Outcome metric |
+> |---|---|---|
+> | **H1** | Cooling delivered is redirected toward vulnerable zones | Proportion of **delivered cooling** landing in V-zones |
+> | **H2** | Tree placement is redirected toward vulnerable zones | Proportion of **trees placed adjacent** to V-zones |
+>
+> **Test:** paired **Wilcoxon signed-rank**, WITH-vulnerable vs WITHOUT-vulnerable, paired on shared grid and tree count. **n = 30** (`k` = 1…6 tree counts × 5 restarts per `k`). *(Note: under D-07's notation this pairing axis remains `k` — tree count — so the design is unaffected by the rename.)*
+>
+> **Report for each:** test name, n, statistic, two-sided p, and matched-pairs rank-biserial correlation as effect size.
+>
+> **Four binding conditions, all set by the research lead:**
+>
+> 1. **Both results are reported regardless of outcome.** If H1 is significant and H2 is not, both go in the paper. Reporting only the one that "worked" is the exact practice this design exists to prevent.
+> 2. **Both hypotheses are pre-specified in Methods before the test runs**, stated as two named hypotheses — not selected post-hoc after inspecting results.
+> 3. **The "redirection of resources" claim is scoped to match the outcome.** Both significant → the claim may stay broad. Only one significant → the claim narrows to whichever held, e.g. *"a greater proportion of trees were redirected to V-zones, though the cooling delivered did not differ significantly"* (or the converse). Neither significant → descriptive language only, no significance wording, and this outcome **must not be reframed**.
+> 4. **Multiplicity correction: Holm–Bonferroni, FWER = 0.05.** ~~Bonferroni, α = 0.025 per test.~~ — **amended 2026-07-26 by the research lead, same session.** Rationale: the two metrics are strongly correlated (trees adjacent to V-zones is largely *the mechanism by which* cooling reaches V-zones), which makes plain Bonferroni conservative and costs power unnecessarily. Holm is uniformly more powerful for two tests and equally standard.
+>
+> ### The Holm–Bonferroni procedure, written out — apply exactly this
+>
+> Step-down, two hypotheses, family-wise error rate 0.05. **This is a pre-specified procedure and must not be altered after seeing the p-values.**
+>
+> 1. Compute both raw two-sided p-values, `p_H1` and `p_H2`.
+> 2. Order them ascending: `p_(1) ≤ p_(2)`.
+> 3. **Compare `p_(1)` against α / 2 = 0.025.** If `p_(1) > 0.025`, **stop — neither hypothesis is rejected.** Do not test the second.
+> 4. If `p_(1) ≤ 0.025`, reject that hypothesis, then **compare `p_(2)` against α / 1 = 0.05.** Reject if `p_(2) ≤ 0.05`.
+>
+> **Note the step-down gate in step 3:** if the *smaller* p-value fails at 0.025, the larger one is never tested, regardless of its value. This is what makes Holm a valid FWER procedure rather than two independent tests.
+>
+> **Report:** both **raw** p-values, the Holm-adjusted decision for each, and the effect size for each — whether or not either is rejected. Naming the procedure as "Holm–Bonferroni (m = 2, FWER = 0.05)" in Methods is required; "corrected for multiple comparisons" is not sufficient.
+>
+> **Owners:** `editor` writes the two hypotheses into Methods §2.5.2 **before** execution; `code-stressor` executes both tests once D-07's notation and the Option-B regeneration are in place; `editor` writes the result with the claim scoped per condition 3.
+>
+> **Flags this bears on:** #39, #69, #70. Note that #70's "significantly" sweep is **not** discharged by this decision — every instance of significance language not backed by these two tests must still be removed manuscript-wide.
+
+**Question (original, for the record):** Pre-specify the single outcome metric for the "statistically significant redirection of resources" claim in §2.5.2.
 
 **Context.** The manuscript asserts significance with no test, no n, no p-value. A reviewer will reject this on sight.
 
@@ -225,7 +274,23 @@ If no seed is set, exact reproduction may be impossible — compare distribution
 
 ---
 
-## D-07 — Meaning of `k` — **OPEN**
+## D-07 — Meaning of `k` — **DECIDED**
+
+> ### ✅ DECIDED 2026-07-26 by the research lead
+>
+> **`s` = species subset / available palette size. `k` = number of trees placed.**
+>
+> Apply consistently across Methods, Results, the figures, and the D-03 statistical design. The three-way collision (subset size / available palette size / tree count) collapses to two symbols on two orthogonal axes.
+>
+> **Consequences:**
+> - **§3.1 becomes an `s`-axis experiment** (s = 1…6 palette sizes, trees fixed at five). Its `k` must be rewritten to `s` throughout, along with the Abstract and Conclusion references to it.
+> - **D-03's pairing axis remains `k`** (tree count 1…6 × 5 restarts, n = 30). The rename does not alter the statistical design.
+> - **Flag #64 is a numbering-independent defect and is NOT closed by this decision.** §3.4.1's per-`k` means (2.990–3.017) are arithmetically incompatible with the same dataset's individual values regardless of what the symbol is called. §3.4.1 must still be **regenerated, not rewritten**.
+> - **Flag #44 downgrade is not automatic** — the notation fix removes the ambiguity, but the flag also covers the interleaving of two incommensurable experiments in one Results narrative. `editorial-flagger` to reassess after regeneration.
+>
+> **Owner:** `editor` applies the notation once Results regenerate; do not apply it to prose that is about to be regenerated anyway.
+
+**Question (original, for the record):** disambiguate `k`.
 
 `k` denotes species subset size in §3.1 (k=1 mono-species → k=6 full palette, trees fixed at five) and number of trees placed in the code, in `SuboptimalScenariosGenerator`, and in the D-03 Wilcoxon pairing design. Two orthogonal experimental axes, one symbol.
 
@@ -287,3 +352,66 @@ Entry 3 settled the provenance question: **no Almeida initial-condition conventi
 **Recommendation: fix `p0 = 1.0` and let γ absorb the calibration.** This removes the undocumented parameter and leaves exactly the two manuscript-named parameters. Needs research-lead sign-off; touches `grid.py` / CA generation.
 
 **Citation hygiene:** "Almeida et al., 2002" is ambiguous — confirm whether CASA Working Paper 42 (UCL) or the Buenos Aires ISRSE proceedings. The full journal version is **de Almeida et al. (2003), *Computers, Environment and Urban Systems* 27(5), 481–509**. Cite Almeida for the *framework only*; present the multiplicative rule + p0/γ as the team's own adaptation.
+
+---
+
+## D-11 — §3.5 Sensitivity Analysis regeneration scope — **DECIDED**
+
+> ### ✅ DECIDED 2026-07-26 by the research lead — **option (b), full §3.5 regeneration under Option B**
+>
+> Opened and decided the same day. Re-run the parameter sweep **and** the aggregation together — not the aggregation alone.
+>
+> **Why (b) and not (a):** the existing sweep predates Option B (D-01), so its SECPI values are void under the same reasoning that voided every other Results number. Aggregation-only regeneration would produce correct arithmetic over obsolete inputs — a second wrong table, arrived at more carefully.
+>
+> **⚠️ Prerequisite — #75 must settle first.** Methods §2.5.3 names the **Morris method**; §3.5.1 executes a **local two-level OAT** sweep from a single baseline. These are different methods. Regenerating before that is resolved reproduces the mismatch in fresh numbers and wastes the run. Settle whether the intended method is Morris (in which case the sweep design changes) or local OAT (in which case §2.5.3 is corrected).
+>
+> **Also settle before running — #77:** the sweep averaged over **three** ACO runs where the project standard is `n_runs = 5`. Fix the restart count in the same pass.
+>
+> **Required output — a machine-written per-parameter table**, one row per swept parameter: `parameter · category · low_bound · high_bound · SECPI_low · SECPI_high · SI · n · SD`. Category aggregates are computed **from that table**, never hand-entered. Emitted to a single named run directory in `results/`.
+>
+> **Owners:** `code-stressor` regenerates and emits the table; `math-auditor` reports what the aggregation function in `SensitivityAnalyzer` actually computes — four uncorrelated overstatements point at a code defect rather than four transcription slips, and that diagnosis should not be skipped just because the numbers are being replaced; `editor` writes §3.5.2 and Figure 34 from the emitted table only.
+>
+> **Falls with §3.5.2 and regenerates alongside it:** Figure 34, and the Conclusion's "Sensitivity Index = 0.46" (**#89** — 0.4435 does not round to 0.46 at any precision).
+>
+> **Until the regeneration lands:** §3.5.2 must not be rewritten, and **no number from it may be quoted in the manuscript, the Abstract, or the Conclusion.**
+
+**Opened 2026-07-26 at the research lead's instruction, scoped to regeneration only.** Raised by the orchestrator. Source: **Flag #82 (ROADBLOCK — SEVERE)**, Project Log Entry 6.
+
+**Question:** What is the regeneration scope for §3.5 — the aggregation layer alone, or the whole sensitivity analysis including the parameter sweep?
+
+### ⚠️ Read this before considering any option
+
+**"Relabel sum-vs-mean" is NOT an available remedy and must not be offered as one.** An earlier note in `docs/HANDOVER.md` proposed exactly that; it is arithmetically dead and has been withdrawn. Acting on it would replace one wrong number with another.
+
+**Do not argue this defect from a `[0,1]` bound either.** SI is `|SECPI_high − SECPI_low| / SECPI_baseline` — a difference-to-baseline ratio, **not** bounded above by 1. It would legitimately exceed 1 if a parameter's effect exceeded the baseline SECPI. A bound-based objection is refutable and would let a reviewer dismiss a correct finding. **The sound argument is `mean ≤ max`.**
+
+### The defect
+
+All **four** of §3.5.2's category-level mean sensitivity indices exceed the maximum SI of their own member sets. Category membership is forced by §3.5.1's own definition (12 + 24 + 3 + 1 = 40, matching its stated "swept 40 parameters"):
+
+| Category | n | Largest member (manuscript-printed) | Reported mean | Overstatement |
+|---|---|---|---|---|
+| Species Morphology | 12 | 0.4435 | **1.3068** | 2.95× its own largest member |
+| Species Allometry | 24 | < 0.005 | **0.1857** | ≥ 37× the ceiling |
+| Cooling Model *(duplicate-labelled)* | 3 | 0.0032 | **0.0727** | 22.7× |
+| **Weighting** | **1** | **0.0017** | **0.0236** | **13.9×** |
+
+**The Weighting row settles it in one line, with no assumptions:** the category has exactly one member — the shade–evapotranspiration weighting ratio — whose SI §3.5.2 itself prints as **0.0017** thirteen lines below giving the category a mean of **0.0236**. A one-element mean *is* that element.
+
+The three benign explanations are all excluded: the overstatement factors (2.95 / 50.2 / 22.7 / 13.9) share **no common factor**, so no single mis-scaling produces them; and they are not sums (Weighting's sum is 0.0017; Cooling Model's is 0.0068 vs 0.0727). The sentence also contradicts itself — it says removing Narra CD would drop the category mean to "approximately 0.002," which implies a starting mean near 0.039, not 1.3068.
+
+**Diagnosis, not mitigation:** §3.5.1's *parameter-level* values reproduce cleanly (1.356 / 3.0576 = 0.4435 ✓; 0.0045 × 3.0576 ≈ 0.014 ✓). The defect **localizes to the aggregation step and Figure 34**. Four uncorrelated overstatements are more consistent with a code defect in `SensitivityAnalyzer` than with four transcription slips.
+
+### The options
+
+- **(a) Aggregation-only regeneration.** Recompute category aggregates from the existing per-parameter sweep output. Cheapest. **Risk:** the existing sweep predates Option B (D-01), so its SECPI values are void under the same reasoning that voided all other Results numbers. This option produces correct arithmetic over obsolete inputs.
+- **(b) Full §3.5 regeneration under Option B — *recommended*.** Re-run the parameter sweep and the aggregation together, emitting a machine-written per-parameter table (parameter, category, low/high bound, SECPI_low, SECPI_high, SI, n, SD) plus category aggregates computed from that table, from a single named run in `results/`. Consistent with how every other Results section must be handled.
+- **(c) Scope §3.5 out of the preprint** with a stated limitation, and restore it for journal submission.
+
+**Interacts with:** #75 (Methods §2.5.3 names the **Morris method**; §3.5.1 executes a local two-level OAT from one baseline — the stated and executed methods differ, and this must be settled *before* regenerating or the regeneration reproduces the mismatch) and #77 (the sweep averaged over **three** ACO runs where the project standard is `n_runs=5`).
+
+**Also falls with §3.5.2:** Figure 34, and the Conclusion's "Sensitivity Index = 0.46" (**#89** — 0.4435 does not round to 0.46 at any precision).
+
+**Owners once decided:** `code-stressor` regenerates; `math-auditor` reports what the aggregation function in `SensitivityAnalyzer` actually computes; `editor` writes §3.5.2 and Figure 34 from the emitted table only.
+
+**Until this closes:** §3.5.2 must not be rewritten — it must be regenerated — and **no number from it may be quoted in the manuscript, the Abstract, or the Conclusion.**
