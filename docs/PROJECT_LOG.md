@@ -1606,6 +1606,69 @@ Claims I made from direct inspection this session, with their basis:
 
 ---
 
+## Entry 11 — Orchestrator, agent-brief fact correction (R0): five stale statements in `.claude/agents/` — [2026-07-27]
+
+**From:** orchestrator (main thread)
+**Reviewed:** `.claude/agents/editorial-flagger.md`, `.claude/agents/code-stressor.md`, `.claude/agents/editor.md` (all read in full before patching), `docs/STATE.md`, `docs/DECISIONS.md`, `docs/FLAGS.md` (header enumeration + #42), `docs/PROJECT_LOG.md` Entry 10, `manuscript/sections/` listing.
+**Scope:** narrow and surgical. Five statements of fact that the live state files contradict, and which would cause damage if an agent acted on them. **No file outside `.claude/agents/` was touched except this log.**
+
+### The governing statement
+
+**No agent's mandate, method, authority, or tone was changed — only statements of fact the live files contradict.** Every patch below replaces a claim that is demonstrably false against `FLAGS.md`, `STATE.md`, or `DECISIONS.md` as they stand today. No scope was widened or narrowed, no tool grant altered, no frontmatter touched, no new authority conferred on any agent, and nothing that belongs to the research lead was decided here.
+
+### Verification before patching
+
+Each claim was checked against the live files first; **none was already fixed, so none was skipped.** All five patches applied.
+
+| # | File | The false statement, as it stood | Verified against |
+|---|---|---|---|
+| 1 | `editorial-flagger.md` | "Flags #1–#41 … Next free: **#42** (reserve for the V-zone buffer geometry item)" | `FLAGS.md` runs to **#97**; `STATE.md` authoritative block gives next free **#98**; **#42 is an assigned flag** (`FLAGS.md:177`, PENDING VERIFICATION) |
+| 2 | `editorial-flagger.md` | "Results, Discussion, and Conclusion have never been reviewed … your first job" | Discharged by Entry 5 (#52–#74) and Entry 6 (#75–#95); `STATE.md` records editorial coverage **COMPLETE** for every section |
+| 3 | `code-stressor.md` | "Regenerate Results under Option B. **The code is ready as-is.**" | D-12 authorized **and unapplied**; #96 leaves the sensitivity path mutating class-level state; D-11's 2026-07-27 amendment adds a third prerequisite |
+| 4 | `code-stressor.md` | "**Blocked on D-03**… Do not run both candidate metrics" | D-03 **DECIDED 2026-07-26** — mandates running *both* H1 and H2 under Holm–Bonferroni, m = 2, FWER = 0.05 |
+| 5 | `editor.md` | (absent) | D-03's pre-specification sequencing constraint lives in `DECISIONS.md`, `STATE.md` and `STATUS.md` but **nowhere in the agent that must act on it** |
+
+### What each patch now says
+
+**1 — flag numbering (highest risk).** The hardcoded number is gone and **was not replaced with #98**; substituting a fresher hardcoded number is the same defect with a longer fuse. The brief now carries a *derivation instruction*: numbers are immutable; **never hardcode a next-free number in this file**; enumerate `FLAGS.md` headers, cross-check `STATE.md`'s authoritative count block, treat `FLAGS.md` as the record of what exists if they disagree, and **state the derivation in the log entry**. Added: numbers are *assigned*, never *reserved* — #42 is named as the worked counter-example. Had an agent acted on the old line it would have collided with 56 existing flags, permanently.
+
+**2 — priority assignment.** Replaced with the *actual* remaining uninspected surface: `manuscript/sections/08_references_appendices.md` — the reference list beyond spot-checks, and Appendices A–B including Figures A1–A28 — assigning from the derived next-free number.
+
+**3 — regeneration readiness (highest cost).** Rewritten as a sequence with **item 0 = apply D-12's fix**, carrying Entry 10 §3's finding that a dict-level restore is insufficient: `max_CPA`/`max_LAI` are cached instance attributes and live denominators at `:1630–1631`, so both must be restored, not merely `SPECIES_DATA`. Includes the `Cooling_Model`/`Weighting` bit-identity control, the STEP 7 → STEP 8 contamination check as a before/after in the same pass, and the note that its finding is flagged **on evidence, from the derived next-free number** — deliberately unflagged today because it is inferred, not executed. Then: §3.1–§3.4 blocked on **execution only**; §3.5 **additionally blocked on #75** (three-way) **and #77**.
+
+**4 — the D-03 line.** The anti-cherry-picking rule is preserved verbatim in intent and stated as the rule that *survives*: you may not run two candidate metrics and report the one that worked. What changed is that D-03 forecloses that by pre-specifying **both** H1 and H2 and binding the agent to report both regardless of outcome, with the Holm step-down gate written out explicitly (`p_(1) > 0.025` → stop, `p_(2)` never tested). Added: the `editor`-writes-Methods-first sequencing constraint; D-02's standing obligation to report best raw SECPI against the provisional 3.75 ceiling; and D-11's dispersion column with the explicit note that **`SD` must be added, not extracted** (`low_scores`/`high_scores` collapsed by `np.mean` at `:997–998` and discarded), plus why it matters — SI noise floor ≈ 0.0098, only 2 of 40 indices clear it.
+
+**5 — editor sequencing.** Added to the immediate queue: write H1 and H2 into Methods §2.5.2 **before** `code-stressor` executes, with the plain statement that pre-specification **cannot be applied retroactively** — run first and the two-hypothesis design is forfeit, unrecoverable by rewording. Also added: #70's manuscript-wide "significant/significantly" sweep is **not** discharged by D-03, and §3.5 is expected to be **rewritten, not adjusted** (D-13).
+
+### Still open / not done here
+
+- **Nothing in `docs/` was patched.** `docs/STATUS.md` regeneration, if state has moved since Entry 10, remains `interpreter`'s and is out of this session's scope.
+- **The three other agent briefs** (`math-auditor`, `deriver`, `interpreter`) were **not read or audited** this session. Whether they carry comparable stale statements is unknown, not cleared — route to a later pass.
+
+### Flags touched
+
+**None.** No flag was created, closed, reclassified, or renumbered. The next-free number remains **#98**.
+
+### Decisions raised or closed
+
+**None.** Nothing here required research-lead sign-off: every patch corrects a statement the live files already contradict, and no agent's scope, method, or authority changed. No `D-xx` was opened, closed, or amended.
+
+### Reproducibility attestation
+
+**No scientific quantity was produced this session, and no code was executed.** Every number written into the three agent briefs is transcribed from a prior durable record — `DECISIONS.md` (D-02, D-03, D-11, D-12), `STATE.md`'s authoritative count block, and Project Log Entries 8 and 10 — and each carries Entry 8's binding scope limit at its source: one grid, one morphology, one seed, `n_samples=3`, no D-02 ceiling applied, `normalize_secpi()` not exercised; diagnostic, not the D-11 regeneration; **no number in them may be quoted as a manuscript value.**
+
+Claims made from direct inspection this session, with basis:
+
+| Claim | Basis |
+|---|---|
+| `FLAGS.md`'s highest assigned flag is #97 | `grep` of flag-number tokens and section headers in `docs/FLAGS.md` |
+| #42 is assigned, PENDING VERIFICATION, V-zone buffer geometry | `Read docs/FLAGS.md:175–185` |
+| `manuscript/sections/08_references_appendices.md` exists | `ls manuscript/sections/` |
+| All three agent briefs carried the stated defects verbatim | `Read` of each file in full before editing |
+| Working tree clean before patching | `git status --porcelain` → empty |
+
+---
+
 ## ENTRY TEMPLATE (copy this for your session, fill in, append after the last entry — do not overwrite prior entries)
 
 ## Entry [N] — [Role name, e.g. "Mathematical Auditor #2" / "Stressor" / "Renderer" / "Editor" / "Deriver"] — [date]

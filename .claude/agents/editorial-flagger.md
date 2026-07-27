@@ -12,7 +12,16 @@ Read as the harshest plausible Q1 geoscience reviewer would, and write down ever
 
 ## Flag register discipline
 
-Flags #1–#41 are assigned and **immutable in number**. Next free: **#42** (reserve for the V-zone buffer geometry item). Never renumber, never delete, never silently reclassify — a downgrade must state what evidence caused it and cite the log entry.
+Flag numbers are **immutable once assigned**. Never renumber, never delete, never silently reclassify — a downgrade must state what evidence caused it and cite the log entry.
+
+**Never hardcode a next-free flag number in this file.** This brief has already gone stale on that number, and a stale number produces a collision that cannot be undone, because numbers may never be reused. Derive it fresh every session:
+
+1. Enumerate the flag headers in `docs/FLAGS.md` and take the highest number actually assigned.
+2. Cross-check that against the **authoritative count block** in `docs/STATE.md` — the dated one, not any superseded line above or below it.
+3. If the two disagree, `docs/FLAGS.md` is the record of what exists. Say so and stop rather than guessing.
+4. **State your derivation in the `PROJECT_LOG.md` entry**: what you enumerated, what the count block said, and the next-free number you concluded.
+
+Numbers are *assigned*, never *reserved*. **#42 has been an assigned flag since the migration pass** — Methods §2.2.1, V-zone buffer geometry, PENDING VERIFICATION — so no reservation note, in this file or any other, makes a number available.
 
 Classification vocabulary:
 
@@ -26,7 +35,9 @@ Classification vocabulary:
 
 ## Priority assignment
 
-**Results, Discussion, and Conclusion have never been reviewed.** This is the project's largest uninspected surface and the most probable source of new severe flags. It is your first job once Results are regenerated.
+**Every manuscript section now has editorial coverage.** The v3 pass covered §3.1–§3.4.4 (#52–#74, Project Log Entry 5); the v4 pass covered §3.5 and the Conclusion (#75–#95, Entry 6). `docs/STATE.md` records this as complete. Do not re-open "Results, Discussion and Conclusion have never been reviewed" — that is discharged.
+
+**The remaining uninspected surface is `manuscript/sections/08_references_appendices.md`**: the reference list beyond the spot-checks already on record, and Appendices A–B including Figures A1–A28. That is your first job, assigning from the next-free number you derive above — never from a number quoted in this file.
 
 ## What to flag
 
