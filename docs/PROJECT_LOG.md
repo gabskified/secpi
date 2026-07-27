@@ -931,6 +931,438 @@ Rationale: the two outcome metrics are strongly correlated — trees adjacent to
 
 ---
 
+## Entry 8 — Mathematical Auditor, `SensitivityAnalyzer` execution audit (#75 / #77 / #82) — [2026-07-26 → 2026-07-27]
+
+**From:** `math-auditor`
+**Reviewed:** `CLAUDE.md`, `docs/DECISIONS.md` (D-09, D-11 in full), `docs/STATE.md`, `docs/PROJECT_LOG.md` Entries 1–7 + addendum, `docs/FLAGS.md` (#75, #76, #77, #78, #79, #80, #81, #82, #83 in full), `manuscript/sections/05_methods_2.5_2.6_vv.md` §2.5.3, `manuscript/sections/06_results_discussion.md` §3.5 (lines 597–725), `legacy/AuditedCode_1.py` (`SensitivityAnalyzer` lines 766–1178, `AutomatedInterpreter.interpret_sensitivity_analysis` lines 527–649, `TreeSpecies.SPECIES_DATA` line 1554ff, call site line 3522–3532).
+**Context:** Resolve **Flag #75** by execution — Methods §2.5.3 names the Morris method, Results §3.5.1 describes a local two-level OAT. #75 is the stated prerequisite on **D-11** (full §3.5 regeneration), which is in turn the remedy path for **#82**, the project's first ROADBLOCK (SEVERE). Secondary: **#77** (restart count) and **#82**'s remaining diagnostic (what the aggregation function actually computes).
+
+> **Session note:** this session was interrupted once by a rate limit after the reading phase and resumed. Nothing was written before the interruption; this entry is the first and only write.
+
+### Method — `ecc:verification-loop`
+
+**Route taken: read-and-followed, not invoked.** The Skill tool is not available in this agent's toolset. I located the skill on disk and read it directly:
+`C:\Users\Administrator\.claude\plugins\marketplaces\ecc\skills\verification-loop\SKILL.md`
+(two further copies exist at `…\marketplaces\ecc\.agents\skills\` and `…\marketplaces\ecc\.kiro\skills\`; `START_HERE.md` §0.6 confirms the canonical name `ecc:verification-loop`).
+
+The skill as shipped is written for a JS/TS build-lint-test-coverage pipeline and its literal phases (`npm run build`, `tsc --noEmit`, `npm run lint`) do not apply to a single-file Python research script. I followed its **structure** rather than its commands: a staged reproduce-then-compare cycle where each phase must pass before the next runs, each phase emits a printed artefact, and the run ends in a single pass/fail verification report. The phase mapping I used:
+
+| Skill phase | What it became here |
+|---|---|
+| 1 Build | Module loads and instantiates under the project `.venv` (Phase A) |
+| 2 Type/contract check | The executed parameter definitions match the declared design (Phase A) |
+| 3 Lint → *design conformance* | Trace the actual sampling design against the two candidate methods (Phase B) |
+| 4 Test suite | Aggregation probed against known-truth vectors + 2,000 randomized trials (Phase D) |
+| 5 Security scan → *fabrication scan* | Search for the `np.random.uniform`-class defect in the sensitivity path (Phase B/G) |
+| 6 Diff review | Compare every executed number against its manuscript counterpart (Phases E–H) |
+
+**Interpreter used:** `C:\Users\Administrator\GabskifiedProjects\secpi\.venv\Scripts\python.exe` — **Python 3.14.6** (tags/v3.14.6:c63aec6). Verified **not** a PIM-managed runtime per `START_HERE.md` §2.4a: `sys.executable` resolves inside the project `.venv`, with no `pythoncore-X.Y-64` component in the path. Package versions confirmed by execution: numpy 2.4.2, scipy 1.17.0, pandas **3.0.0**, matplotlib 3.10.8. `MPLBACKEND=Agg` and `PYTHONUTF8=1` set per §2.3.
+
+**Harness location — temporary, outside the repository:** `C:\Users\Administrator\AppData\Local\Temp\secpi_entry8\` containing `phase_abc.py`, `phase_d.py`, `phase_e.py`, `phase_f.py`, `phase_g.py`, `phase_h.py`, their logs, and `out*/` output directories. **Nothing was written into the repository and `legacy/AuditedCode_1.py` was not modified** — every harness loads it read-only via `importlib.util.spec_from_file_location` and instruments by wrapping, never by editing.
+
+---
+
+### What I found
+
+#### A. 🔴 Flag #75 — the verdict is **(c): the code implements something that is neither Morris nor a valid local OAT.**
+
+Both §2.5.3 and §3.5.1 are wrong, for different reasons, and the second one is wrong in a way nobody has yet recorded.
+
+**A1 — It is not Morris. Executed evidence.** I wrapped `SensitivityAnalyzer._run_single_evaluation` with a recorder and ran `run_oat_analysis(n_samples=3)` (Phase B):
+
+```
+TOTAL MODEL EVALUATIONS RECORDED = 243
+Expected if local 2-level OAT with n_samples=3: 3 baseline + 40*2*3 = 243
+
+Number of species-parameter modifications applied per evaluation:
+   0 modification(s): 27 evaluations
+   1 modification(s): 216 evaluations
+
+Distinct cooling-parameter vectors passed: 10
+   n= 216  ('EMPTY->defaults',)
+   n=   3  (('cca_threshold', 1.2), ('competition_k', 5.0), ('decay_lambda', 1.9), ('shade_weight', 0.7))
+   n=   3  (('cca_threshold', 1.2), ('competition_k', 5.0), ('decay_lambda', 0.5), ('shade_weight', 0.7))
+   n=   3  (('cca_threshold', 1.2), ('competition_k', 5.0), ('decay_lambda', 3.0), ('shade_weight', 0.7))
+   n=   3  (('cca_threshold', 0.5), ('competition_k', 5.0), ('decay_lambda', 1.9), ('shade_weight', 0.7))
+   n=   3  (('cca_threshold', 2.0), ('competition_k', 5.0), ('decay_lambda', 1.9), ('shade_weight', 0.7))
+   n=   3  (('cca_threshold', 1.2), ('competition_k', 1.0), ('decay_lambda', 1.9), ('shade_weight', 0.7))
+   n=   3  (('cca_threshold', 1.2), ('competition_k', 10.0), ('decay_lambda', 1.9), ('shade_weight', 0.7))
+   n=   3  (('cca_threshold', 1.2), ('competition_k', 5.0), ('decay_lambda', 1.9), ('shade_weight', 0.5))
+   n=   3  (('cca_threshold', 1.2), ('competition_k', 5.0), ('decay_lambda', 1.9), ('shade_weight', 0.9))
+```
+
+Answering #75's five questions from that trace:
+
+| Question | Executed answer |
+|---|---|
+| **Sampling design** | Two-level factorial-by-coordinate: each factor at `{low, high}`, all others nominal. 40 factors. |
+| **How base points are chosen** | **One** nominal base point, hardcoded at `run_oat_analysis` lines 927–932 (`decay_lambda 1.9, cca_threshold 1.2, competition_k 5.0, shade_weight 0.7`) plus each species' `SPECIES_DATA` values. Every one of the 9 non-empty cooling vectors differs from the nominal in **exactly one** coordinate. |
+| **Model evaluations per parameter** | **6** — 3 at the low bound, 3 at the high bound (`n_samples=3`). Plus 3 baseline evaluations for the whole run. 243 total. |
+| **Do trajectories exist?** | **No.** There is no trajectory construction, no randomized starting point, no step size Δ, no `r` trajectory-count parameter anywhere in the class. |
+| **Statistic emitted per parameter** | **One** value: `sensitivity_index = |mean(high) − mean(low)| / baseline_secpi` (line 1000). Row fields are `parameter, category, secpi_low, secpi_high, absolute_effect, sensitivity_index`. **No μ, no μ\*, no σ, no SD, no n.** |
+
+Morris requires all five of the things absent here. **§2.5.3's "Morris-method OAT screening approach" is not implemented anywhere in `AuditedCode_1.py`.**
+
+**A2 — But it is also not a valid local OAT, because the evaluator leaks state.** This is the finding nobody asked for and it is the most consequential thing in this entry. See §D.
+
+**A3 — #75's scope objection is confirmed and is worse than stated.** Executed category counts from `_define_parameters()`:
+
+```
+TOTAL PARAMETERS SWEPT = 40
+Category counts: {'Cooling_Model': 3, 'Weighting': 1, 'Species_Morphology': 12, 'Species_Allometry': 24}
+```
+
+**§3.5.1's "40 parameters" is CONFIRMED**, and #82's forced membership (12 + 24 + 3 + 1) is confirmed against code, not merely inferred from prose. §2.5.3 scopes uncertainty to "allometric coefficients for LAI and cooling decay constants" = 24 + 3 = 27 of 40; the 12 morphology parameters and 1 weighting parameter are outside the stated scope. #75's objection (b) stands as written.
+
+#### B. The manuscript's §3.5 numbers **cannot be produced by this code at all** — the sweep bounds are different
+
+This was not in anyone's brief and it reframes #75, #76 and #79 together. Executed dump of `parameter_definitions` (Phase A):
+
+```
+Narra.crown_diameter_m         base=23         low=18.4       high=27.6      rel_span=0.4000
+Talisay.crown_diameter_m       base=12         low=9.6        high=14.4      rel_span=0.4000
+Banaba.crown_diameter_m        base=11         low=8.8        high=13.2      rel_span=0.4000
+Kabiki.crown_diameter_m        base=11         low=8.8        high=13.2      rel_span=0.4000
+Duhat.crown_diameter_m         base=9.5        low=7.6        high=11.4      rel_span=0.4000
+Akleng-parang.crown_diameter_m base=24         low=19.2       high=28.8      rel_span=0.4000
+Narra.l0                       base=0.25       low=0.2        high=0.3       rel_span=0.4000
+Talisay.h1                     base=0.71       low=0.568      high=0.852     rel_span=0.4000
+   … every one of the 36 species parameters: rel_span = 0.4000
+```
+
+**Every species parameter — morphology *and* allometry — is swept at a uniform ±20% of its base value.** Consequences:
+
+1. **§3.5.1's "Sweeping Narra's crown diameter from its manuscript low of 12.0 m to its high of 34.0 m" does not exist in this code.** The code sweeps Narra crown diameter **18.4 → 27.6 m** about a base of 23.0 m.
+2. **§3.5.3's "swept across a 15% uncertainty band"** for the allometric constants is also wrong. It is **±20%**, i.e. a 40% span.
+3. **Flag #79's premise is itself incorrect and must be corrected before it is used.** #79 states morphology was swept over "full Table 3 trait ranges" and allometrics over "±15%", giving a 3.19× relative-span asymmetry. **In the code there is no asymmetry at all** — all 36 species parameters share an identical ±20% relative span. #79's *conclusion* (that SI is an effect size, not an elasticity, and cross-parameter comparison needs equal spans) survives and is a good objection; its *factual premise* about the executed design does not. I did not edit the flag — routed to `editorial-flagger`.
+
+Direct test of whether the manuscript's stated bounds reproduce its stated result (Phase F2 — the manuscript's own 12.0/34.0 m forced through the same code path, `n=3` each):
+
+```
+CD=12.0 -> [3.2067, 3.2504, 3.1825]  mean=3.2132   (manuscript: 3.024)
+CD=34.0 -> [2.7408, 2.8752, 2.9491]  mean=2.8550   (manuscript: 4.380)
+absolute effect = 0.3582                           (manuscript: 1.356)
+SI vs executed baseline 3.2155 = 0.1114            (manuscript: 0.4435)
+SI vs manuscript baseline 3.0576 = 0.1171
+```
+
+**The sign is inverted.** The manuscript reports that enlarging Narra's crown from 12 m to 34 m *raises* SECPI from 3.024 to 4.380. Execution gives the opposite: SECPI *falls* from 3.213 to 2.855. §3.5.1's entire causal narrative — "the expanded decay envelope amplifies both direct cooling coverage and the vulnerability-weighted reward, producing SECPI scores comparable to the top-ranked combinatorial configurations" — describes a response the current implementation does not exhibit, in either magnitude or direction. (Plausible mechanism, not verified this session: at 34 m the CCA/competition penalty and the CPA renormalization dominate. Assigning a mechanism would need its own run; I am not asserting one.)
+
+#### C. 🔴 Flag #82 — the aggregation function is **arithmetically correct**. The published category means are **not reproducible from this code at all.**
+
+This is the diagnosis D-11 asked for, and the answer is the decisive one the brief anticipated: *"If you cannot reproduce the published category means from the code at all, that is itself a decisive finding — say so plainly."* I cannot, and here is the execution.
+
+**C1 — What the aggregation step actually computes.** Two code paths, both probed with a vector whose truth is known by inspection (Phase D1):
+
+```
+Truth by hand:
+  Species_Morphology n=3 mean=2.0     max=3.0    sum=6.0
+  Species_Allometry  n=2 mean=0.2     max=0.3    sum=0.4
+  Cooling_Model      n=3 mean=0.02    max=0.03   sum=0.06
+  Weighting          n=1 mean=0.0017  max=0.0017 sum=0.0017
+
+RAW agg column order returned by pandas 3.0.0 :
+  [('sensitivity_index','mean'), ('sensitivity_index','max'), ('sensitivity_index','sum'), ('sensitivity_index','count')]
+
+save_results() category table AS THE CODE WRITES IT:
+                    mean_sensitivity  max_sensitivity  total_sensitivity  param_count
+Species_Morphology            2.0000           3.0000             6.0000            3
+Species_Allometry             0.2000           0.3000             0.4000            2
+Cooling_Model                 0.0200           0.0300             0.0600            3
+Weighting                     0.0017           0.0017             0.0017            1
+
+AutomatedInterpreter.interpret_sensitivity_analysis() section 2 output:
+   Species_Morphology:
+      Total Sensitivity: 6.000000
+      Max Single Parameter: 3.000000
+      Mean Sensitivity: 2.000000
+   Weighting:
+      Total Sensitivity: 0.001700
+      Max Single Parameter: 0.001700
+      Mean Sensitivity: 0.001700
+```
+
+`SensitivityAnalyzer.save_results()` (line 1033) and `AutomatedInterpreter.interpret_sensitivity_analysis()` (line 538) both compute a **true arithmetic mean**. I specifically tested the one plausible code-level mechanism for a mean/max/sum/count label swap — that pandas 3.0 might return `.agg([...])` columns in an order different from the hardcoded rename at line 1036. **It does not**; the order is `mean, max, sum, count` exactly as the rename assumes.
+
+**C2 — The reported mean can never exceed the reported max.** 2,000 randomized trials over category sizes 1–29 and magnitude scales 0.001/1/100, driving the identical `groupby().agg()` + rename expression (Phase D2):
+
+```
+randomized trials = 2000, cases where reported mean > reported max: 0
+```
+
+**C3 — A real full sweep confirms it in situ.** 243 real ACO evaluations at production config (`n_ants=20, n_iterations=40, n_trees=5`) with study-wide calibrated reference cutoffs, 7.8 min wall time (Phase E):
+
+```
+=== CATEGORY AGGREGATION, exactly as save_results() computes it ===
+                    mean_sensitivity  max_sensitivity  total_sensitivity  param_count
+Species_Allometry           0.012433         0.040818           0.298385           24
+Cooling_Model               0.059809         0.169702           0.179427            3
+Species_Morphology          0.006593         0.016320           0.079119           12
+Weighting                   0.001385         0.001385           0.001385            1
+
+mean <= max holds for every category: True
+
+=== COMPARISON WITH THE PUBLISHED CATEGORY VALUES ===
+Species_Morphology   published=1.3068  executed mean=0.006593  max=0.016320  sum=0.079119  n=12
+Species_Allometry    published=0.1857  executed mean=0.012433  max=0.040818  sum=0.298385  n=24
+Cooling_Model        published=0.0727  executed mean=0.059809  max=0.169702  sum=0.179427  n=3
+Weighting            published=0.0236  executed mean=0.001385  max=0.001385  sum=0.001385  n=1
+```
+
+**Conclusion for #82, stated plainly: the defect is not in the aggregation function.** The code's aggregation is correct and structurally incapable of producing the published pattern. Therefore **the four published category means did not come from `AuditedCode_1.py`'s aggregation step.** They came from somewhere this repository does not contain — an earlier code version, a spreadsheet, or manual entry.
+
+**This changes what D-11's regeneration will and will not fix.** The orchestrator's note carried into D-11 — *"if the defect is in code, regeneration alone reproduces it"* — is answered: **it is not in this code, so regeneration will not reproduce it.** A clean regeneration will emit `mean ≤ max` category rows. But that is a weaker reassurance than it sounds, because §D below shows the per-parameter table feeding that aggregation is itself invalid for a different reason.
+
+**C4 — Two secondary observations on the same object.**
+- **Figure 34's source quantity plots SUMS, not means.** `plot_sensitivity_results()` line 1066 computes `df.groupby('category')['sensitivity_index'].sum()`, labels the axis `'Total Sensitivity Index'` and titles the panel `'Sensitivity by Parameter Category'`. Executed on the probe vector it emits `Weighting 0.0017 / Cooling_Model 0.0600 / Species_Allometry 0.4000 / Species_Morphology 6.0000`. So there is a real mean/sum ambiguity between the CSV and the figure that could seed a mean-vs-sum transcription error. **It still does not explain the published numbers** — Entry 6 §B Step 5 already showed they are not sums, and C3 confirms it by execution (Weighting: n=1, so mean = max = sum = 0.001385; the published 0.0236 matches none of the three).
+- **No fabricated-value defect remains in the sensitivity path.** I searched the executed call graph specifically for the `np.random.uniform(0.98, 1.02)` failure mode named in `CLAUDE.md` §2 rule 1. The allometry branch genuinely routes through `get_computed_lai()` with a real `l0/l1/h0/h1` override — Entry 2's fix is present and live. **However, see §D3: that branch is broken in a different and equally invalidating way.**
+
+#### D. 🔴 **NEW, UNREGISTERED DEFECT — `SensitivityAnalyzer._run_single_evaluation` permanently mutates global species state. The sweep is not an OAT.**
+
+Nobody asked about this. It surfaced when a freshly-constructed `SensitivityAnalyzer` reported Narra's crown-diameter *base* as 34.0 m after an unrelated evaluation had set it there.
+
+**D1 — `TreeSpecies.SPECIES_DATA` is a class-level mutable dict shared by every instance** (Phase G1):
+
+```
+TreeSpecies.SPECIES_DATA is a CLASS attribute: True
+instance a.SPECIES_DATA is instance b.SPECIES_DATA: True
+instance a.SPECIES_DATA is TreeSpecies.SPECIES_DATA: True
+```
+
+`_run_single_evaluation` writes into it at lines 880 and 882 (`ts.SPECIES_DATA[species][param_name] = value`; `ts.SPECIES_DATA[species]['LAI'] = hardcoded_lai * ratio`) and **never restores it**. There is no copy, no context manager, no `finally`.
+
+**D2 — The mutation escapes the evaluation and contaminates everything downstream** (Phase G2):
+
+```
+after evaluating Narra CD at its HIGH bound 27.6:
+  TreeSpecies.SPECIES_DATA['Narra']['crown_diameter_m'] = 27.6  (was 23.0)
+  a BRAND-NEW TreeSpecies() sees                        = 27.6
+  a BRAND-NEW CorrectedCoolingModel sees                = 27.6
+  a BRAND-NEW SensitivityAnalyzer's declared base       = 27.6
+  -> the perturbation is NEVER restored.
+```
+
+**D3 — The LAI path is worse: it compounds geometrically.** Line 879 reads the *current* LAI and line 880 writes `current × ratio`, so repeating an identical input keeps multiplying (Phase G3):
+
+```
+Narra LAI reset to: 6.07
+  after identical Narra.l0=0.30 evaluation #1: Narra LAI = 7.284000
+  after identical Narra.l0=0.30 evaluation #2: Narra LAI = 8.740800
+  after identical Narra.l0=0.30 evaluation #3: Narra LAI = 10.488960
+  after identical Narra.l0=0.30 evaluation #4: Narra LAI = 12.586752
+  after identical Narra.l0=0.30 evaluation #5: Narra LAI = 15.104102
+  after identical Narra.l0=0.30 evaluation #6: Narra LAI = 18.124923
+  -> an IDENTICAL input produces a DIFFERENT model each time.
+```
+
+The function is **not idempotent**. The three repeats that `n_samples=3` averages "to reduce stochastic noise" are three *different models*, not three samples of one model.
+
+**D4 — After a full 40-parameter sweep, every species has drifted** (Phase G4, ACO stubbed so only the state trajectory is measured):
+
+```
+state AFTER a full 40-parameter sweep (CD, height, LAI):
+    Narra            before=(23.0, 30.0, 6.07)   after=(27.6, 36.0, 5.8595)   <-- CHANGED
+    Talisay          before=(12.0, 35.0, 4.4)    after=(14.4, 42.0, 4.9315)   <-- CHANGED
+    Banaba           before=(11.0, 13.5, 3.87)   after=(13.2, 16.2, 2.4288)   <-- CHANGED
+    Kabiki           before=(11.0, 13.5, 4.12)   after=(13.2, 16.2, 2.4819)   <-- CHANGED
+    Duhat            before=(9.5, 22.0, 3.52)    after=(11.4, 26.4, 3.1504)   <-- CHANGED
+    Akleng-parang    before=(24.0, 24.0, 3.15)   after=(28.8, 28.8, 2.82)     <-- CHANGED
+```
+
+Every species ends at its **high** crown diameter and **high** height (last-write-wins), and LAI has drifted by up to **−37%** (Banaba 3.87 → 2.43).
+
+**Why this is decisive for #75.** `_define_parameters()` iterates in the order `Cooling_Model → Weighting → Species_Morphology → Species_Allometry`. So:
+- The 3 baseline evaluations and all 24 `Cooling_Model`/`Weighting` evaluations run against **pristine** species data. These are the only clean rows in the table.
+- From the first `Species_Morphology` evaluation onward, contamination accumulates. By the time the 24 `Species_Allometry` parameters are swept, all six species sit at high CD, high height, and drifted LAI.
+
+**§3.5.1's claim that "all others were held at baseline values" is false in the implementation.** That sentence is the definition of a local OAT, and the code does not satisfy it. Combined with A1 (not Morris), this is why the #75 verdict is **(c)** and not (b): the executed design is a *sequentially contaminated, order-dependent* two-level sweep that matches neither named method.
+
+**D5 — Quantifying what the leak costs.** I re-ran the identical sweep with `SPECIES_DATA` snapshotted and restored around every evaluation — repaired **in the harness only**, `AuditedCode_1.py` untouched (Phase H, 7.6 min):
+
+| Category | n | mean (leaked, Phase E) | mean (repaired, Phase H) | max (repaired) |
+|---|---|---|---|---|
+| Cooling_Model | 3 | 0.059809 | **0.059809** | 0.169702 |
+| Species_Allometry | 24 | 0.012433 | **0.006749** | 0.021910 |
+| Species_Morphology | 12 | 0.006593 | **0.010466** | 0.044368 |
+| Weighting | 1 | 0.001385 | **0.001385** | 0.001385 |
+
+`Cooling_Model` and `Weighting` are **bit-identical** across the two runs, exactly as predicted — they are evaluated before any species mutation and consume the same RNG stream. That identity is the internal control confirming the harness is sound and the divergence is caused by the leak and nothing else.
+
+The leak **inflates apparent allometric sensitivity by 1.84×** and **deflates morphological sensitivity by 0.63×**. The allometry arm was substantially measuring accumulated drift rather than parameter sensitivity. This bears directly on **#85** (allometric parameters possibly off-path under D-09) — the leak is a second, independent reason the allometric SIs cannot be read as sensitivity, and it does not require #85's call-path question to be settled first.
+
+**D6 — What the corrected sweep actually shows.** With the leak repaired (Phase H):
+
+```
+=== TOP 12 (leak repaired) ===
+                     parameter           category  secpi_low  secpi_high  sensitivity_index
+                  decay_lambda      Cooling_Model   3.475359    2.922252           0.169702
+Akleng-parang.crown_diameter_m Species_Morphology   3.209528    3.064919           0.044368
+                      Duhat.l1  Species_Allometry   3.229180    3.157769           0.021910
+               Banaba.height_m Species_Morphology   3.160320    3.229501           0.021226
+                    Talisay.l1  Species_Allometry   3.207543    3.260273           0.016178
+       Banaba.crown_diameter_m Species_Morphology   3.183868    3.234940           0.015669
+                    Talisay.h0  Species_Allometry   3.188415    3.238630           0.015407
+        Akleng-parang.height_m Species_Morphology   3.234633    3.187718           0.014394
+                    Talisay.h1  Species_Allometry   3.189836    3.233693           0.013456
+                      Duhat.h0  Species_Allometry   3.202940    3.246679           0.013420
+                      Narra.h1  Species_Allometry   3.192580    3.231132           0.011829
+                      Kabiki.l1  Species_Allometry  3.253358    3.216785           0.011221
+
+Narra.crown_diameter_m  SI=0.002245  rank 28/40  (manuscript: rank 1, SI 0.4435)
+BASELINE SECPI (leak repaired) = 3.259286        (manuscript: 3.0576)
+```
+
+**Not one qualitative claim in §3.5 survives.** The manuscript's rank-1 parameter ranks **28th of 40**. The executed rank-1 parameter is `decay_lambda`, which §3.5.2 explicitly dismisses as having "limited impact (SI = 0.0015)" — executed, it is **0.1697, the largest index in the table by 3.8×**. The dominant category by mean is `Cooling_Model`, which §3.5.2 calls "relatively low sensitivity". §3.5.2's stated hierarchy is inverted.
+
+**Caveat I must state plainly, and it cuts against over-reading the above.** Repeat-baseline noise measurement (Phase F1, 10 fresh production-config evaluations):
+
+```
+values: [3.2238, 3.2725, 3.2815, 3.1944, 3.1595, 3.1948, 3.2144, 3.1777, 3.2064, 3.2298]
+mean=3.2155  sd=0.0386  min=3.1595  max=3.2815  range=0.1220
+SD of a 3-sample mean = 0.0223
+Implied SI noise floor |diff of two 3-means|/baseline ~ 0.0098
+```
+
+**The SI noise floor at `n_samples=3` is ≈ 0.0098.** Only `decay_lambda` (0.1697) and `Akleng-parang.crown_diameter_m` (0.0444) clear it decisively; ranks 3–40 sit at or below it. **This is quantified confirmation of Flag #78** from execution rather than from cross-referencing manuscript prose: the sensitivity ranking below the top two is an ordering of noise. `code-stressor` still owns the formal noise-floor deliverable — this is one grid, one seed, n=10 — but the order of magnitude is now measured.
+
+#### E. Flag #77 — restart count. Both halves confirmed; the manuscript sentence is *accurate to the code*, and the Entry 2 fix is present.
+
+**E1 — The Entry 2 fix is present and live.** I spied on the `AntColonySystemACO` constructor during a real evaluation (Phase C):
+
+```
+ACO kwargs actually passed by SensitivityAnalyzer._run_single_evaluation:
+   alpha = 1.0 | beta = 2.0 | evaporation_rate = 0.5
+   n_ants = 20 | n_iterations = 40 | n_trees = 5 | q0 = 0.7
+   reference_cutoffs = None
+base_aco_config supplied = {'n_trees':5,'n_ants':20,'n_iterations':40,
+                            'evaporation_rate':0.5,'alpha':1.0,'beta':2.0,'q0':0.7}
+```
+
+**Every ACO parameter is read from `base_aco_config`.** The historical hardcoded `10 ants / 15 iterations` is gone — `STATE.md`'s "Code health" claim is confirmed **by execution**, not by grep. `#77`'s parenthetical worry that "the published §3.5 numbers may not have been produced by the production optimizer at all" is not supported by *this* code; it is superseded by the much larger finding in §B that the published numbers cannot have been produced by this code for a different reason entirely.
+
+**E2 — The restart count is 3, and it is hardcoded at the call site, not read from `base_aco_config`.** Executed:
+
+```
+run_oat_analysis signature default: (3,)
+```
+and the production call site, `AuditedCode_1.py:3527`:
+```python
+sensitivity_df = sensitivity_analyzer.run_oat_analysis(n_samples=3)
+```
+
+`n_samples` appears **nowhere in `base_aco_config`**. It is a literal at the call site and a signature default. So this **is** a second instance of the defect class Entry 2 fixed — a fidelity parameter hardcoded in `SensitivityAnalyzer` rather than inherited from the study configuration — just in a parameter Entry 2 did not cover.
+
+**E3 — An important distinction the flag text blurs, and the manuscript gets right by accident.** `n_samples` in `SensitivityAnalyzer` and `n_runs=5` elsewhere are **not the same quantity**:
+- `n_runs=5` (`SuboptimalScenariosGenerator.run_optimization_for_k`, line 2753) = independent ACO **restarts per k**, from which the *best* is taken.
+- `n_samples=3` (`SensitivityAnalyzer.run_oat_analysis`) = repeat evaluations **averaged** per swept configuration.
+
+So §3.5.1's *"averaged over three independent ACO runs per configuration"* is a **faithful description of the code** — it is `CLAUDE.md` §3's `n_runs = 5` that does not apply to this routine. **#77(a) is therefore not a manuscript error; it is a real inconsistency in the study design** (the sensitivity analysis runs at lower replication than the headline optimization) that the manuscript describes correctly but never justifies. That is a different flag disposition from the one #77 currently assumes, and it is `editorial-flagger`'s call, not mine.
+
+**#77(b) is confirmed by execution:** no dispersion statistic is computed or stored anywhere. The results row (line 1002–1009) has no SD, no SE, no n field; `low_scores`/`high_scores` are collapsed by `np.mean` at lines 997–998 and discarded. The per-index SD D-11 requires **does not exist in the current implementation and cannot be recovered from its CSV** — `code-stressor` must add it.
+
+---
+
+### What I changed / decided
+
+**I decided nothing.** No `D-xx` opened, closed or edited. No flag created, closed or reclassified. No manuscript prose written. Nothing committed.
+
+**Files changed: one.** `docs/PROJECT_LOG.md` — this entry, inserted after Entry 7's addendum and before the ENTRY TEMPLATE block. **No prior entry was modified or deleted.**
+
+**Not changed, deliberately:** `legacy/AuditedCode_1.py` (loaded read-only in every harness; all instrumentation is wrapper-based and lives outside the repo), `docs/FLAGS.md`, `docs/DECISIONS.md`, `docs/STATE.md`, `docs/STATUS.md`, all `manuscript/sections/*.md`, `results/`.
+
+**Verification report** (the `ecc:verification-loop` output-format phase):
+
+```
+VERIFICATION REPORT — SensitivityAnalyzer, AuditedCode_1.py
+===========================================================
+Load / build:            PASS  (module imports clean under .venv py3.14.6)
+Declared design (A):     PASS  (40 params; 12/24/3/1 matches #82's forced membership)
+Design conformance (B):  FAIL  (neither Morris nor a valid local OAT — see A1, D)
+Aggregation (D):         PASS  (true arithmetic mean; 0/2000 mean>max violations)
+Fabrication scan:        PASS  (no np.random.uniform sensitivity defect remains)
+Manuscript reproduction: FAIL  (bounds, baseline, headline SI, sign, category
+                                hierarchy — none reproduce)
+State hygiene (G):       FAIL  (global SPECIES_DATA mutated, never restored;
+                                LAI compounds geometrically)
+
+Overall: NOT READY for D-11 regeneration until the state leak is fixed.
+```
+
+---
+
+### Still open / unresolved
+
+1. **🔴 The state leak (§D) must be fixed before D-11's regeneration runs, or the regeneration inherits it.** This is the one item that genuinely blocks D-11 now. The fix is small and local — snapshot `TreeSpecies.SPECIES_DATA` at the top of `_run_single_evaluation` and restore it in a `finally` (this is precisely what Phase H's harness does, and it worked: post-sweep state verified pristine). It belongs in `AuditedCode_1.py` or in the `src/secpi/` port, and it is a **semantic** change to the reference implementation, so it needs the research lead's authorization — I did not make it. **Owner: research lead to authorize; `code-stressor` to apply and re-run.**
+2. **The defect in §D is unregistered.** It warrants a flag and, on its face, a severe one — it invalidates the executed §3.5 parameter table wholesale, not merely its aggregation. **The next free number is #96** per `STATE.md` and Entry 6. **I did not assign it**, per brief (no flag edits). `editorial-flagger` or the orchestrator to register; I recommend it be cross-linked to #75, #77, #78, #79, #82 and #85.
+3. **#75 needs a research-lead answer that is now three-way, not two-way.** The design question is no longer "Morris or local OAT" but "Morris, local OAT, or the contaminated sweep that was actually run". Cost sketch, offered as information not as a recommendation: implementing true Morris means adding trajectory sampling, a Δ grid and μ\*/σ per factor — a new routine, and at r=10 trajectories × 41 evaluations ≈ 410 ACO runs ≈ 13 min per arm at the measured 1.92 s/evaluation, so it is affordable. Repairing to a clean local OAT is the state-leak fix plus a `n_samples` raise, and costs one line plus run time. **The choice is the research lead's; I am not making it.**
+4. **#79's factual premise is wrong** (§B item 3) and should be corrected before anyone acts on it. Its conclusion stands; its stated ±47.8%-vs-±15% asymmetry does not exist in the code. `editorial-flagger`.
+5. **#77's disposition should change** (§E3). The manuscript sentence is accurate to the code; the inconsistency is real but is a *design* inconsistency, not a transcription error. `editorial-flagger`.
+6. **Where did the published §3.5 numbers come from?** Not from this code (§B, §C). This is now the same forensic question D-06 asked about §3.1, and the same answer may apply — `legacy/archive/` holds pre-audit iterations. **Unassigned; recommend the orchestrator route it.** Until it is answered, no §3.5 number has a known provenance.
+7. **Not executed this session, still owed by me:** #76 (the baseline parameter vector / which experiment produced 3.0576 — partially addressed: the code's baseline is the nominal parameter vector with `n_trees=5`, but I could not match 3.0576 itself), #83 (marginal contribution of the normalized-LAI term across `shade_weight` 0.5→0.9), #85 (allometric call-path trace — **note this is now partly overtaken by §D**), #88 (morphology preset count/names), #70 (verdict-string enumeration).
+
+---
+
+### Handoff notes for the next chat
+
+*Assume you have read only this log.*
+
+1. **Flag #75's verdict is (c): neither.** The code is not Morris — one base point, no trajectories, no μ\*/σ, one statistic per factor. But it is also not a valid local OAT, because the evaluator permanently mutates shared global species data, so "all others held at baseline" is false from the first species evaluation onward. **Both §2.5.3 and §3.5.1 misdescribe what runs.**
+2. **§3.5's published numbers are not reproducible from `AuditedCode_1.py`, and the reason is more basic than any flag anticipated: the sweep bounds are different.** The code sweeps every species parameter at ±20% of base. The manuscript's headline sweep (Narra crown diameter 12→34 m) is not in the code, which uses 18.4→27.6 m. At the manuscript's own bounds the effect is 0.358, not 1.356, **and it points the other way** (SECPI falls as the crown grows).
+3. **#82's aggregation is innocent.** Executed: `groupby().agg(['mean','max','sum','count'])` computes a true mean; the pandas 3.0 column order matches the hardcoded rename; 0 violations of `mean ≤ max` in 2,000 randomized trials; and a real 243-evaluation sweep produced `mean ≤ max` in all four categories. **Regeneration will not reproduce the published defect — but it also will not vindicate §3.5**, because the input table is invalid for the separate reason in note 1.
+4. **The single blocking action is the state-leak fix.** Snapshot and restore `TreeSpecies.SPECIES_DATA` around each evaluation. Proven to work in the harness. It is a semantic change to `legacy/AuditedCode_1.py` and needs research-lead authorization. **Do not run D-11's regeneration before it lands** — you would burn ~8 minutes producing a fourth invalid table.
+5. **`n_samples=3` is not `n_runs=5`.** They are different quantities (averaged repeats vs. best-of restarts). The manuscript's "three independent ACO runs" is *correct* about the code. Do not "fix" it to five without deciding that the sensitivity analysis *should* run at five — that is a design choice, not a typo correction.
+6. **The measured SI noise floor is ≈ 0.0098 at `n_samples=3`.** Only two of forty parameters clear it. Any regenerated ranking must report dispersion or it is an ordering of noise — and the current implementation stores none, so `code-stressor` has to add it.
+7. **Harness location:** `C:\Users\Administrator\AppData\Local\Temp\secpi_entry8\`. It is temporary and outside the repo; it will not survive a machine cleanup. Every phase is self-contained and re-runnable against an unmodified `AuditedCode_1.py`. Phase H (the leak-repaired sweep) is the template for the corrected implementation.
+
+---
+
+### Flags touched
+
+**None created, none closed, none reclassified.** Per brief, I do not edit `docs/FLAGS.md`. Evidence bearing on flags, routed to `editorial-flagger`:
+
+| Flag | Evidence produced | Recommended disposition (not applied) |
+|---|---|---|
+| **#75** | §A, §B, §D — executed | Verdict **(c)**. Objection (b) confirmed against code (27 of 40 in scope). Still POTENTIAL ROADBLOCK; the "closes when" clause now needs a three-way research-lead answer. |
+| **#76** | Executed baseline 3.2593 (leaked) / 3.2593 (repaired) on one grid+seed; manuscript 3.0576 unmatched | Remains PENDING VERIFICATION. Partially advanced, not closed. |
+| **#77** | §E — executed | (a) manuscript is **accurate to the code**; reframe as a design inconsistency. (b) **confirmed** — no dispersion computed or storable. |
+| **#78** | §D6 — measured SI noise floor ≈ 0.0098; 38 of 40 indices at or below it | Confirmed by execution. Strengthened. |
+| **#79** | §B — **premise refuted**: all 36 species parameters share an identical ±20% span; there is no 3.19× asymmetry | Conclusion survives, premise must be corrected. |
+| **#82** | §C — aggregation is arithmetically correct; published means unreproducible from this code | Remains **ROADBLOCK (SEVERE)**. The `math-auditor` half of its "closes when" clause is **discharged**. |
+| **#85** | §D5 — allometric SIs inflated 1.84× by state drift, independent of the off-path question | Advanced by a second, independent route. |
+| — | §D — the state leak | **Unregistered.** Recommend assigning **#96** (next free per `STATE.md`/Entry 6). |
+
+### Decisions raised or closed
+
+**None closed. None opened.** `docs/DECISIONS.md` was read, not modified.
+
+Two items are **recommendations to the orchestrator for routing**, not decisions taken here:
+
+- **D-11 has acquired a hard prerequisite it did not have when it was decided:** the §D state leak must be fixed before the regeneration runs. D-11 currently names #75 and #77 as its only prerequisites. This is a third, and unlike the other two it requires a code change to the reference implementation, which needs the research lead's authorization.
+- **The provenance of §3.5's published numbers is now an open forensic question** (§B, §C), structurally identical to D-06's. It may warrant its own `D-xx`. Raising it is the orchestrator's call, not mine.
+
+### Reproducibility attestation
+
+**Interpreter for every command below:** `C:\Users\Administrator\GabskifiedProjects\secpi\.venv\Scripts\python.exe` (Python 3.14.6; numpy 2.4.2, scipy 1.17.0, pandas 3.0.0, matplotlib 3.10.8). Working directory `C:\Users\Administrator\GabskifiedProjects\secpi`. `MPLBACKEND=Agg`, `PYTHONUTF8=1`.
+
+Every harness loads `legacy/AuditedCode_1.py` read-only via `importlib.util.spec_from_file_location`; **the file was not edited**. All instrumentation is wrapper-based (function replacement on an instance, or `__init__` spying restored immediately after use).
+
+| Command | Produces the numbers cited in |
+|---|---|
+| `.venv\Scripts\python.exe %TEMP%\secpi_entry8\phase_abc.py` | §A1 (243 evaluations, 27/216 split, 10 distinct cooling vectors), §A3 (40 params; 3/1/12/24), §B (all ±20% bounds; Narra 18.4/27.6), §E1 (ACO kwargs), §E2 (`run_oat_analysis` default `(3,)`), and the 1.92 s/evaluation timing |
+| `.venv\Scripts\python.exe %TEMP%\secpi_entry8\phase_d.py` | §C1 (probe-vector aggregation; pandas column order), §C2 (2000 trials, 0 violations), §C4 (figure plots sums) |
+| `.venv\Scripts\python.exe %TEMP%\secpi_entry8\phase_e.py` | §C3 (full 243-evaluation sweep, category table, published-value comparison), §D5 "leaked" column, baseline 3.2593, Narra CD rank 31/40 |
+| `.venv\Scripts\python.exe %TEMP%\secpi_entry8\phase_f.py` | §D6 caveat (10-value baseline noise set, sd 0.0386, floor 0.0098), §B (CD 12.0/34.0 test: 3.2132 / 2.8550 / effect 0.3582 / SI 0.1114) |
+| `.venv\Scripts\python.exe %TEMP%\secpi_entry8\phase_g.py` | §D1 (class-attribute identity), §D2 (escape), §D3 (LAI compounding 6.07→18.12), §D4 (post-sweep drift table) |
+| `.venv\Scripts\python.exe %TEMP%\secpi_entry8\phase_h.py` | §D5 "repaired" column, §D6 (top-12 table, baseline 3.259286, Narra CD SI 0.002245 rank 28/40) |
+
+**Seeds and configuration.** Phases E/F/G/H set `np.random.seed(42)` before grid generation and use `calibrate_global_reference_cutoffs(..., n_samples=100, random_seed=42)`, matching `AuditedCode_1.py:3419–3422`. ACO config is the production `config['aco_params']` from line 3327: `n_trees=5, n_ants=20, n_iterations=40, evaporation_rate=0.5, alpha=1.0, beta=2.0, q0=0.7`. Grid: organic morphology, `p_init=0.15, gamma=4.0, p0=0.5, theta=3`, 10×10 coarse @10 m / 100×100 fine @1 m; the generated grid was P=61 / A=31 / V=8, consistent with the documented deterministic 8 V-cells. **The ACO itself is not seeded per-run**, so SECPI values are stochastic; that is why §D6 carries an explicit noise-floor caveat and why the Phase E/H comparison relies on the `Cooling_Model`/`Weighting` bit-identity as its internal control rather than on cross-run equality of noisy rows.
+
+**Scope limits I am stating rather than glossing.** These runs are **one grid, one morphology, one seed, `n_samples=3`**. They are **diagnostic, not the D-11 regeneration**: no D-02 ceiling (3.75) was applied, `normalize_secpi()` was not exercised, and no output was written to `results/`. **No number in this entry should be quoted as a manuscript value.** The claims I make with confidence are the *structural* ones — evaluation counts, bounds, category membership, aggregation semantics, and the state leak — because those are deterministic and independent of the stochastic layer. The *magnitude* claims (which parameter ranks where, the category hierarchy) are single-run observations, explicitly caveated by the measured 0.0098 noise floor, and `code-stressor` owns their formal replication.
+
+**Two probe inputs were constructed by me and are not data.** Phase D1's vector (1.0/2.0/3.0, 0.1/0.3, 0.01/0.02/0.03, 0.0017) and Phase D2's 2,000 random vectors are unit-test inputs chosen so the correct output is known by inspection. They are labelled as such at the point of use and no scientific quantity is derived from them. Phase B's evaluator returns a constant stub of 1.0 purely to trace the sampling design at zero ACO cost; **the "Baseline SECPI: 1.0000" line in that phase's output is that stub and is not a SECPI measurement.** No value anywhere in this entry was invented, interpolated, or filled in for a missing constant.
+
+---
+
 ---
 
 ## ENTRY TEMPLATE (copy this for your session, fill in, append after the last entry — do not overwrite prior entries)
