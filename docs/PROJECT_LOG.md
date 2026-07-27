@@ -1669,6 +1669,374 @@ Claims made from direct inspection this session, with basis:
 
 ---
 
+## Entry 12 — Code Stressor, D-12 applied: `SensitivityAnalyzer` state-leak fix + verification (#96) — [2026-07-28]
+
+**From:** `code-stressor`
+**Reviewed:** `CLAUDE.md`, `docs/DECISIONS.md` (**D-12 in full**, D-11's 2026-07-27 amendment, D-01/D-02/D-03/D-07/D-13 for context), `docs/STATE.md`, `docs/PROJECT_LOG.md` **Entry 8 in full** and **Entry 10 in full** (plus Entries 9 and 11), `.claude/agents/code-stressor.md`, `docs/FLAGS.md` (header enumeration for the next-free derivation), `legacy/AuditedCode_1.py` (`SensitivityAnalyzer` 766–1043, `TreeSpecies` 1546–1686, `CorrectedCoolingModel.__init__` 1688–1706, `MorphologicalRobustnessValidator.__init__` 2564–2580, `main_revised_validation` 3301–3560), `MIGRATION.md`.
+**Context:** Execute D-12 — apply the state-leak fix authorized 2026-07-27, the **first authorized semantic change to `AuditedCode_1.py` in the project's history** — and verify it by execution rather than by reading.
+
+> **Session dating note.** This session opened 2026-07-27 and crossed midnight. The R0 agent-brief corrections (Entry 11) and this session's pre-fix baseline reconstruction were performed 2026-07-27; the fix, verification and this entry are dated **2026-07-28**. The session was interrupted twice (one API error, one session limit); nothing was lost, and this entry was written incrementally from the first result onward for exactly that reason.
+
+> **Plugin commands skipped, deliberately.** The session prompt offered `/ecc:checkpoint`, `/ecc:tdd`, `/ecc:code-review`, `/ecc:verify`. Slash commands cannot be reliably invoked from a subagent context, so I performed the manual equivalent: failing test first → confirm it fails → apply fix → confirm it passes → self-review the diff against D-12's scope.
+
+### Next-free flag number — derived this session, not carried
+
+Per my brief I enumerated `docs/FLAGS.md` headers myself rather than trust any quoted number.
+
+| Step | Result |
+|---|---|
+| Individual flag headers (`^#{1,6} +(Flag )?#N`) | `#42`, then `#52`–`#97` contiguous |
+| Flags `#1`–`#41` and `#43`–`#51` | carried in tables, not headers (range headers at `FLAGS.md:102/127/147/165/185`) |
+| Tokens `#98`–`#199` anywhere in the file | one occurrence only, at `FLAGS.md:8`, and it is the *supersession notice declaring #98 free* — not an assignment |
+| **Highest assigned** | **#97** |
+| **Next free** | **#98** |
+
+This agrees with `STATE.md`'s authoritative block and with Entry 10 §5. **I assigned nothing.**
+
+### What I found
+
+#### 1. The defect is real, and the failing test proves it by execution
+
+`tests/test_species_data_isolation.py` is new — the first `tests/` directory in this repository. It was written and run **before** any code change. Its design point, which is what makes it stronger than Entry 8's ad-hoc Phase H prints: the `TreeSpecies` probe is constructed **once, before** the contaminating evaluations, and asserted against afterwards. A fresh instance per evaluation hides the defect by construction, because `__init__` recomputes `max_CPA`/`max_LAI` from whatever the dict currently holds and is therefore self-consistent even when the dict is corrupt.
+
+It guards four things, not one: `SPECIES_DATA`, `max_CPA`, `max_LAI`, and `get_normalized_cooling_potential()` for all six species — the last being the observable consequence of the first three diverging.
+
+**Pre-fix output, verbatim** (`logs/01_test_PRE_FIX_working_tree.txt`, exit 1):
+
+```
+implementation under test: C:\Users\Administrator\GabskifiedProjects\secpi\legacy\AuditedCode_1.py
+[FAIL] test_species_data_is_restored_after_evaluation
+Species state was NOT restored after 9 evaluations (10 difference(s)):
+    SPECIES_DATA['Akleng-parang']['CPA']: 452.3893421169302 -> 651.4406526483796
+    SPECIES_DATA['Akleng-parang']['crown_diameter_m']: 24.0 -> 28.8
+    SPECIES_DATA['Narra']['CPA']: 415.4756284372501 -> 598.2849049496402
+    SPECIES_DATA['Narra']['LAI']: 6.07 -> 18.12492288
+    SPECIES_DATA['Narra']['crown_diameter_m']: 23.0 -> 27.6
+    SPECIES_DATA['Talisay']['height_m']: 35.0 -> 42.0
+    get_normalized_cooling_potential('Akleng-parang'): 0.8556836902800659 -> 1.1636836902800658
+    get_normalized_cooling_potential('Narra'): 0.9428819444444445 -> 1.8215451999999999
+    freshly-constructed TreeSpecies.max_CPA = 651.4406526483796, long-lived probe = 452.3893421169302
+    freshly-constructed TreeSpecies.max_LAI = 18.12492288, long-lived probe = 6.07
+[FAIL] test_evaluation_is_idempotent
+identical evaluations produced 6 distinct Narra LAI values, expected 1:
+    repeat 1: 7.284
+    repeat 2: 8.7408
+    repeat 3: 10.48896
+    repeat 4: 12.586752
+    repeat 5: 15.1041024
+    repeat 6: 18.12492288
+
+0/2 passed
+```
+
+Running the identical test against the pre-fix evidence anchor — `git show 87d4528:legacy/AuditedCode_1.py` — produces **byte-identical output apart from the path line** (`logs/02_test_PRE_FIX_87d4528_baseline.txt`; `diff` of the two logs returns only line 1). This confirms `87d4528` is a valid anchor and that the working tree carried no undocumented drift.
+
+**Two things here are new evidence, not restatements of Entry 8.**
+
+- **`get_normalized_cooling_potential()` leaves its physical range.** On the long-lived probe it rises to **1.8215** for Narra and **1.1637** for Akleng-parang. This quantity is a weighted sum of two ratios each intended to be ≤ 1 (`CPA/max_CPA`, `LAI/max_LAI`), so > 1 is not a large value — it is an **out-of-range** one. It arises precisely because the contaminated numerators are read from the shared dict while the denominators remain those cached on the live instance. This is the concrete harm D-12's implementation note predicted at the normalization level, now measured rather than inferred.
+- **The LAI compounding reproduces Entry 8 exactly** — 6.07 → 18.12492288 over six identical inputs, against Entry 8 §D3's 18.124923. Independent confirmation at full precision, from a different harness.
+
+#### 2. What changed in `legacy/AuditedCode_1.py` — the exact diff
+
+**One function touched: `SensitivityAnalyzer._run_single_evaluation`.** `git diff --stat` → **63 insertions, 1 deletion** (the deletion is the one-line docstring, replaced by the expanded one). `py_compile` passes. **No other function, class or line in the file is modified.** Pre-fix evidence anchor: **`87d4528`**. Post-fix commit hash: *placeholder — the orchestrator commits after reviewing the diff; I made no git state change.*
+
+Three hunks:
+
+| Hunk | Location | What it does |
+|---|---|---|
+| 1 | top of `_run_single_evaluation` (now `:846–882`) | Expanded docstring stating the invariant, then `species_data_snapshot = copy.deepcopy(TreeSpecies.SPECIES_DATA)` and `normalization_snapshot = None`, both **before the `try:`** and therefore before *any* write point — including the `CorrectedCoolingModel(...)` construction, which builds a `TreeSpecies` and so rewrites every species' `CPA`. `copy` was already imported at line 17; **no import was added.** |
+| 2 | `:894–898`, immediately after `ts = cooling_model.tree_species` | `normalization_snapshot = (ts, ts.max_CPA, ts.max_LAI)` — captures the two cached denominators **from the very instance that will run `_calculate_cpa_and_normalize()` at :888**, before any perturbation is applied. |
+| 3 | new `finally:` at `:954–973`, after the existing `except` | Restores all three. |
+
+The `finally` restores the dict **in place at both levels** — outer mapping and each species' inner mapping — rather than rebinding the class attribute, so that any held reference stays valid. `get_species_params()` returns the inner dict *itself*, so rebinding would leave such a reference pointing at a stale object:
+
+```python
+finally:
+    live_species_data = TreeSpecies.SPECIES_DATA
+    for species_name in list(live_species_data.keys()):
+        if species_name not in species_data_snapshot:
+            del live_species_data[species_name]
+    for species_name, saved_fields in species_data_snapshot.items():
+        live_fields = live_species_data.get(species_name)
+        if live_fields is None:
+            live_species_data[species_name] = copy.deepcopy(saved_fields)
+        else:
+            live_fields.clear()
+            live_fields.update(copy.deepcopy(saved_fields))
+
+    if normalization_snapshot is not None:
+        snapshot_ts, saved_max_cpa, saved_max_lai = normalization_snapshot
+        snapshot_ts.max_CPA = saved_max_cpa
+        snapshot_ts.max_LAI = saved_max_lai
+```
+
+**Four properties of this shape, each required by D-12 and each deliberate:**
+
+1. **Unconditional `finally`.** The existing `except Exception` swallows errors and returns 0; the `finally` runs after it, so an exception mid-evaluation still leaves shared state clean. Success-path-only restoration would reproduce the gap in Entry 8's original diagnosis.
+2. **Whole-dict deep copy, not a partial copy.** `CPA` is a *derived* value stored back into its own source dict (`:1673`), so restoring only the perturbed field would leave `CPA` stale. Copying everything removes the need to reason about which fields are derived.
+3. **The scalars are restored from the snapshot, never recomputed.** §4.3 of my brief forbids restore-by-recomputation, and I did not use it. I make **no** claim that re-running `_calculate_cpa_and_normalize()` would reproduce them bit-for-bit; the snapshot makes bit-identity true by construction rather than by argument.
+4. **Snapshot taken unconditionally**, not only when `species_modifications` is truthy, because the cooling-model construction writes `CPA` for all six species regardless.
+
+#### 3. Post-fix: the test passes
+
+```
+implementation under test: C:\Users\Administrator\GabskifiedProjects\secpi\legacy\AuditedCode_1.py
+[PASS] test_species_data_is_restored_after_evaluation
+[PASS] test_evaluation_is_idempotent
+
+2/2 passed
+```
+
+(`logs/03_test_POST_FIX.txt`, exit 0.) The test is kept in the tree at `tests/test_species_data_isolation.py` — the first `tests/` directory in this repository — so this is a durable, re-runnable guard rather than a one-off harness.
+
+#### 4. Verification A — state-isolation replicate sweeps
+
+Two designs were run, because they answer different questions and the first alone would have been misleading.
+
+**A-i — Sequential replicates in one process (n = 30, full 40-parameter sweep, ACO stubbed).**
+
+| Metric | PRE-FIX mean | SD | min | max | POST-FIX (all 30) |
+|---|---|---|---|---|---|
+| max abs relative drift, `SPECIES_DATA` | 7.12896e+21 | 3.77973e+22 | 0.397604 | **2.07155e+23** | **0** (SD 0) |
+| n changed fields | 18 | 0 | 18 | 18 | **0** (SD 0) |
+| fresh-minus-probe `max_CPA` | 849685 | 1.81485e+06 | 199.051 | 7.78892e+06 | **0** (SD 0) |
+| fresh-minus-probe `max_LAI` | 3.03827e+22 | 1.61108e+23 | −0.210486 | 8.82981e+23 | **0** (SD 0) |
+| max normalized cooling potential | 3.22541 | 2.53588 | 1.21535 | 9.8464 | **0.942882** (SD 0) |
+
+**Read the pre-fix column correctly: it is a divergence trajectory, not 30 independent samples.** The replicates share one process, so the LAI compounding accumulates across sweeps. That is the finding, not an artefact: **the contamination is unbounded.** Thirty consecutive sweeps in one process drive the drift to ~2.07e+23 and `max_LAI` to ~8.8e+23. There is no equilibrium and no self-correction. A long pipeline run does not degrade gracefully; it diverges.
+
+**A-ii — Independent single sweeps, a fresh module load per replicate (n = 30, grid seeds 42–71).** This isolates the cost of *one* sweep and asks whether it varies with seed.
+
+| Metric | PRE-FIX | POST-FIX |
+|---|---|---|
+| max abs relative drift | mean **0.397604**, SD **0**, min = max = 0.397604, **1 distinct value / 30** | **0**, SD 0, 1 distinct value |
+| fresh-minus-long-lived `max_CPA` | **199.051**, SD 0, 1 distinct value | **0**, SD 0 |
+| fresh-minus-long-lived `max_LAI` | **−0.210486**, SD 0, 1 distinct value | **0**, SD 0 |
+| max normalized cooling potential | **1.21535**, SD 0 | **0.942882**, SD 0 |
+| per-species LAI ratio range | 0.602396 – 1.120787 | 1.000000 – 1.000000 |
+
+**🔴 Zero variance across 30 seeds is the finding.** Single-sweep contamination is **completely deterministic** — one distinct value in 30 for every metric. This is the exact failure mode named in my mandate: *a seed sweep would never have revealed this defect.* It is invisible to seed variation and visible only to a state-identity check. Per-species LAI after one sweep: Narra ×0.965324, Talisay ×1.120787, Banaba ×0.627604, Kabiki ×0.602396, Duhat ×0.894992, Akleng-parang ×0.895224 — **Kabiki loses 39.8% of its LAI**, which is the `max_abs_relative_drift` figure above and slightly exceeds Entry 8 §D4's reported worst case (Banaba −37%).
+
+*(Incidental corroboration, not a claim of this session: `vulnerable_coords` returned **800 fine cells on all 30 seeds**, one distinct value — consistent with the documented deterministic 8 coarse V-cells × 100 fine cells, and with `CLAUDE.md` §7's zero-seed-variance note.)*
+
+**A precision I must state rather than let the table imply something stronger.** `probe_max_CPA_delta` and `probe_max_LAI_delta` are **0 even pre-fix**. The long-lived instance's *own* cached scalars are never overwritten by the sweep, because the `ts` that runs `_calculate_cpa_and_normalize()` at `:888` is the ephemeral `cooling_model.tree_species` created inside the call. The scalar-level leak manifests **not** as the probe's values changing, but as (a) a *newly constructed* `TreeSpecies` disagreeing with the long-lived one by 199.051 m² in `max_CPA`, and (b) the long-lived instance's `get_normalized_cooling_potential()` going **out of range** — 1.21535 after one sweep, up to 9.8464 after thirty, against a quantity that is a weighted sum of two ratios each intended to be ≤ 1. So D-12's implementation note is **vindicated in its conclusion** (the scalars are live denominators and the harm is real at the normalization level) while its stated mechanism needed this correction: in the current call graph the damage reaches the scalars *through* the dict, not by direct overwrite. The snapshot/restore of both scalars is retained regardless — it is required by D-12, it costs nothing, and it makes the guarantee independent of whether a future refactor gives the cooling model a longer-lived `TreeSpecies`.
+
+#### 5. Verification B — the STEP 7 → STEP 8 contamination check, now EXECUTED
+
+This is the claim Entry 10 §4 recorded as *inferred, not executed*, and which was therefore deliberately left unflagged. It has now been run in both directions, n = 30 replicates each, reproducing `main_revised_validation()`'s STEP 7 → STEP 8 sequence in one process.
+
+| Metric | PRE-FIX (n=30) | POST-FIX (n=30) |
+|---|---|---|
+| Species contaminated at STEP 8 | mean **6.0 / 6**, SD **0**, min = max = 6 | mean **0 / 6**, SD **0** |
+| STEP 8 `TreeSpecies.max_CPA` | mean 2.78079e+06, SD 5.93951e+06, min **651.441**, max 2.5491e+07 | **452.389**, SD **0** |
+| STEP 8 `TreeSpecies.max_LAI` | mean 3.13674e+22, SD 1.66308e+23, min **5.85951**, max 9.11481e+23 | **6.07**, SD **0** |
+
+**The species state STEP 8 actually begins with, pre-fix (replicate 1, single STEP 7 sweep):**
+
+| Species | crown_diameter_m | height_m | LAI |
+|---|---|---|---|
+| Narra | 23.0 → **27.6** | 30.0 → **36.0** | 6.07 → **5.86** |
+| Talisay | 12.0 → **14.4** | 35.0 → **42.0** | 4.40 → **4.931** |
+| Banaba | 11.0 → **13.2** | 13.5 → **16.2** | 3.87 → **2.429** |
+| Kabiki | 11.0 → **13.2** | 13.5 → **16.2** | 4.12 → **2.482** |
+| Duhat | 9.5 → **11.4** | 22.0 → **26.4** | 3.52 → **3.15** |
+| Akleng-parang | 24.0 → **28.8** | 24.0 → **28.8** | 3.15 → **2.82** |
+
+**Every species at its high crown diameter (×1.2) and high height (×1.2)** — last-write-wins — with LAI drifted. **This matches Entry 8 §D4's table value-for-value**, reproduced here from an independent harness, and it now carries the STEP 8 boundary that Entry 8 did not test.
+
+**Post-fix, all 30 replicates: 0 / 6 contaminated, `max_CPA` = 452.389, `max_LAI` = 6.07 — the pristine values, SD 0.**
+
+**A second, independent read of the same contamination.** A `SensitivityAnalyzer` constructed *after* STEP 7 caches its declared parameter bases from `SPECIES_DATA` at construction. Pre-fix it declares `Narra.crown_diameter_m base=27.6`, `Narra.height_m base=36`, `Talisay.crown_diameter_m base=14.4`, `Talisay.height_m base=42`, and so on for all twelve morphology parameters — i.e. **a second sensitivity analysis in the same process would sweep ±20% around the contaminated values, not the Table 3 values.** This extends Entry 8 §D2 (which observed one such base) to the full declared parameter set. Post-fix all twelve declare their pristine bases.
+
+**Verdict: the STEP 7 → STEP 8 contamination is CONFIRMED pre-fix and CLEARED post-fix, by execution, n = 30 each direction.** It is no longer an inference. This bears on the Conclusion's morphological-robustness claim that **#88** already flags as absent from §3 — pre-fix, STEP 8's inputs were not the species table the manuscript documents.
+
+#### 6. §4.4 — hunting the same class of defect elsewhere
+
+Reported, **not fixed**. New instances are a research-lead routing question and a flag recommendation, never a silent extra change under a narrow authorization.
+
+| # | Object | Location | Assessment |
+|---|---|---|---|
+| 1 | `TreeSpecies.SPECIES_DATA` | `:1616` | **The only class-level mutable literal in the file** (verified: `grep -nE "^    [A-Z_]+ *= *[\{\[]"` returns exactly one hit). Fixed under D-12. |
+| 2 | `self.max_CPA` / `self.max_LAI` | `:1677–1678` | **The only `self.max_*` cached aggregates in the file.** Fixed under D-12. (`self.total_fine_cells` at `:1266` is grid geometry, unrelated to species data.) |
+| 3 | `SPECIES_DATA[s]['CPA']` | written at `:1673` | **A derived value cached inside its own source dict.** Not a leak by itself, but it is why a *partial* restore would be unsafe. Covered by the whole-dict copy. Worth removing in the port — a derived quantity should not live in the source table. |
+| 4 | `TreeSpecies.species_list` | `:1662` | Per-instance cache of `SPECIES_DATA.keys()`. No code adds or removes species, so it cannot currently go stale; the restore preserves the key set in any case. **Same dependency pattern — note it in the port.** |
+| 5 | `SensitivityAnalyzer.parameter_definitions` | built in `__init__`, `:784`/`:788–844` | **A real instance of the pattern, now demonstrated by execution** (§5 above): sweep bounds are frozen from `SPECIES_DATA` at construction, so an analyzer built after contamination declares contaminated bases. Post-fix the dict is always restored, so the leak path is closed — but the caching remains, and any future code that legitimately changes species data between construction and use will silently sweep the wrong bounds. **Recommend a flag; do not fix under D-12.** |
+| 6 | `CorrectedCoolingModel.tree_species` | `:1699` | Each cooling model owns a `TreeSpecies` whose denominators freeze at construction. Same structural fragility; no live leak post-fix. |
+
+**Negative results, stated so the absence is on the record rather than assumed:** no mutable default arguments (`grep -nE "def .*=(\[\]|\{\})"` → none); no mutation of `config` / `base_config` dicts anywhere (`grep -nE "(base_config|self\.config|config)\[[^]]+\] *="` → none); the grid paths already take defensive `.copy()`s at `:1422–1423`, `:1864`, `:2936–2941`.
+
+**The structural observation, offered to the research lead and not acted on:** every item above descends from one root cause — mutable species state living at *class* level. If `src/secpi/species.py` makes it instance-level or frozen, with perturbations applied to a per-evaluation copy, the defect class becomes unrepresentable rather than guarded. **That is a design change beyond D-12 and I did not take it.** It is recorded in `MIGRATION.md` as an option requiring research-lead sign-off.
+
+#### 7. §4.5 — `MIGRATION.md` carry-forward criterion
+
+**Confirmed absent before writing** (`grep -niE "D-12|state.leak|SPECIES_DATA|snapshot|max_CPA|#96|finally"` returned only the header's own use of the word "snapshot" and the file-map line naming `species.py`). Entry 10 recorded this criterion as written; **it had not been.** Now added to **Part 7, Stage 7**, immediately after the existing "Reproducibility gate" paragraph — the header itself names Part 7 as one of the two sections still worth keeping accurate.
+
+It is written as a **binding acceptance criterion**, not advice: five numbered requirements (snapshot before any write point; snapshot both scalars; unconditional `finally`; no restore-by-recomputation; in-place two-level restore), the measured consequences of the defect, the frozen-vs-instance-level design option flagged for research-lead sign-off, and `tests/test_species_data_isolation.py` named as the gating test — which already accepts `SECPI_IMPL`, so it can be pointed at the port unmodified.
+
+**Observation for the research lead, as instructed — I did not relocate the criterion, since D-12 names `MIGRATION.md`.** That file's own header states: *"No Claude Code session or subagent reads this file"* and *"treat this document as historical planning context, not current status."* **A binding acceptance criterion in a file declared unread is a weak home for it.** The header does carve out Part 7 as an exception to be re-read "right before Stage 7 actually begins," which is precisely when the port is written, so the placement is defensible *if* that re-read happens. But it depends on a future reader honouring a caveat inside a document they have been told not to read. **Recommendation, labelled as one:** mirror one line into `docs/STATE.md`'s code-health block or `CLAUDE.md` §3 — somewhere in the always-loaded set — pointing at `MIGRATION.md` Part 7. That is an editorial routing call for the orchestrator, not mine to make.
+
+#### 8. Verification C — the internal control: `Cooling_Model` and `Weighting` are BIT-IDENTICAL
+
+D-12's stated internal control: these four parameters are swept **before** any species mutation, so they must come out bit-identical between the pre-fix and post-fix implementations. **Divergence would mean the fix touched more than it should have.**
+
+Design: the `Cooling_Model` + `Weighting` portion of the sweep, **real ACO at production config** (`n_ants=20, n_iterations=40, n_trees=5, evaporation_rate=0.5, alpha=1.0, beta=2.0, q0=0.7`), `n_samples=3`, seeded per replicate, **n = 5 seeds (42–46)**, run against both implementations. This is a strict prefix of the full sweep's evaluation order, so these rows are exactly what the full sweep produces for them — confirmed independently by §9 below, where the full 243-evaluation run at seed 42 returns the same baseline, `2.2424166666666667`.
+
+Comparison is on `repr()` of every stored float, which is stricter than `==` on the printed value.
+
+| Seed | baseline SECPI | `decay_lambda` SI | `cca_threshold` SI | `competition_k` SI | `shade_weight` SI | Verdict |
+|---|---|---|---|---|---|---|
+| 42 | 2.2424166666666667 | 0.003322309 | 0.002482441 | 0.001285815 | 0.013668289 | IDENTICAL |
+| 43 | 2.190783333333333 | 0.011616849 | 0.015709754 | 0.021856718 | 0.000783586 | IDENTICAL |
+| 44 | 2.1964 | 0.041507315 | 0.026065380 | 0.007125296 | 0.025192740 | IDENTICAL |
+| 45 | 2.262066666666667 | 0.011972827 | 0.008141523 | 0.012142289 | 0.009541422 | IDENTICAL |
+| 46 | 2.0951666666666666 | 0.010643545 | 0.008090049 | 0.062485085 | 0.023951953 | IDENTICAL |
+
+```
+compared values: 85
+mismatches:      0
+VERDICT: BIT-IDENTICAL
+```
+
+**The control passes.** 85 values (5 baselines + 5 × 4 parameters × 4 fields) compared, zero mismatches. The fix changes nothing that is evaluated before the species mutations, which is the required scope.
+
+**Two observations from this table that are NOT part of the D-12 verdict but which the research lead should see, because they bear on #75/#77 and D-11.** Both are single-configuration observations from this run and neither is a manuscript value.
+
+- **Every one of these 20 sensitivity indices is small, and most sit at or below Entry 8's measured SI noise floor of ≈ 0.0098.** Only 6 of 20 clear it.
+- **They are wildly unstable across seeds.** `competition_k` ranges 0.001285815 → 0.062485085 (**48.6×**) across five grid seeds; `shade_weight` 0.000783586 → 0.025192740 (**32.1×**); `decay_lambda` 0.003322309 → 0.041507315 (**12.5×**). **Rank order changes completely between seeds** — `competition_k` is last at seed 42 and first at seed 46. This is direct evidence that a single-grid sensitivity ranking is not reproducible across grids, which is a *stronger* and more general statement than the `n_samples=3` noise floor, and it is squarely in #77 / #78 / D-11 territory. **I am not acting on it** — sweep design belongs to #75/#77 and the research lead. It is reported here so the D-11 regeneration is not designed as a single-grid run without someone having seen this.
+
+#### 9. Verification D — full 243-evaluation real-ACO sweep, and validation of the stub
+
+The replicate sweeps in §4 and §5 stub the optimizer, on the argument that the species mutations at `:859–888` occur strictly **before** the optimizer is constructed at `:895` and do not depend on its output. That argument is from reading, so it was checked by execution rather than assumed.
+
+**PRE-FIX, full sweep, real ACO, seed 42, 508.3 s (8.5 min), 243 evaluations:**
+
+```
+baseline_secpi         = 2.2424166666666667
+max_abs_relative_drift = 0.397604   (worst: Kabiki.LAI)
+post-sweep species state:
+   Narra           CD=27.6   H=36     LAI=5.85951
+   Talisay         CD=14.4   H=42     LAI=4.93146
+   Banaba          CD=13.2   H=16.2   LAI=2.42883
+   Kabiki          CD=13.2   H=16.2   LAI=2.48187
+   Duhat           CD=11.4   H=26.4   LAI=3.15037
+   Akleng-parang   CD=28.8   H=28.8   LAI=2.81995
+```
+
+**The stub is validated on two independent grounds.** The real-ACO drift figure, **0.397604**, is *exactly* the stubbed figure from §4's independent sweeps, and the post-sweep species table matches the stubbed STEP 8 table in §5 field for field. So the stubbed state trajectory is the real one, and the n = 30 replicate counts above are not weakened by the stub.
+
+**It also reproduces Entry 8 §D4 at higher precision, from an independent harness:** Entry 8 reported Narra 5.8595 / Talisay 4.9315 / Banaba 2.4288 / Kabiki 2.4819 / Duhat 3.1504 / Akleng-parang 2.82; this run gives 5.85951 / 4.93146 / 2.42883 / 2.48187 / 3.15037 / 2.81995. **Third independent confirmation of the same defect.**
+
+**POST-FIX, full sweep, real ACO, seed 42, 464.2 s, 243 evaluations:**
+
+```
+baseline_secpi         = 2.2424166666666667      <-- bit-identical to the pre-fix run
+max_abs_relative_drift = 0        (worst: None)
+long-lived max_CPA delta = 0      long-lived max_LAI delta = 0
+post-sweep species state:
+   Narra 23 / 30 / 6.07 · Talisay 12 / 35 / 4.4 · Banaba 11 / 13.5 / 3.87
+   Kabiki 11 / 13.5 / 4.12 · Duhat 9.5 / 22 / 3.52 · Akleng-parang 24 / 24 / 3.15
+```
+
+**Every value is the pristine Table 3 value.** And the full-sweep baseline SECPI is **bit-identical** to the pre-fix run at the same seed — a second, full-scale instance of the internal control, since the three baseline evaluations also precede any species mutation.
+
+### What I changed / decided
+
+**I decided nothing.** D-12 was authorized by the research lead on 2026-07-27; I executed it within the scope it names.
+
+**Four files changed:**
+
+| File | Change |
+|---|---|
+| `legacy/AuditedCode_1.py` | **The authorized semantic change.** `_run_single_evaluation` only: snapshot + unconditional `finally` restore of `SPECIES_DATA`, `max_CPA`, `max_LAI`. 63 insertions, 1 deletion. `py_compile` clean. |
+| `tests/test_species_data_isolation.py` | **New file, new `tests/` directory** — the repository's first. Two tests, both failing pre-fix and passing post-fix. |
+| `MIGRATION.md` | Part 7 / Stage 7: the D-12 carry-forward acceptance criterion (§7 above). Verified absent beforehand. |
+| `docs/PROJECT_LOG.md` | This entry, appended. **No prior entry modified or deleted.** |
+
+**Not changed, deliberately:** `docs/FLAGS.md`, `docs/DECISIONS.md`, `docs/STATE.md`, `docs/STATUS.md`, `CLAUDE.md`, every `manuscript/sections/*.md`, `src/secpi/` (still empty — I did not begin the port), and **git state** — no `add`, `commit`, `stash` or `reset`. Only read-only git (`show`, `diff`, `log`, `status`, `check-ignore`). The orchestrator commits after reviewing the diff.
+
+**Explicitly NOT touched, per D-12's exclusions:** sweep bounds (still uniform ±20% on all 36 species parameters), `n_samples` (still 3), the sampling design, and D-11's SD/dispersion column. Each is a separate decision — #75, #77, or a D-11 deliverable — and none is mine.
+
+**Two repo-hygiene facts the orchestrator needs before committing.** Neither is mine to fix.
+
+1. 🔴 **`results/` is gitignored** (`.gitignore:2`, confirmed by `git check-ignore -v`). **This entire run directory will not be committed.** That sits badly against my standing rule to preserve the raw run directory for reproducibility, and against `CLAUDE.md` §5, which lists `results/` as the home for timestamped run outputs. The evidence exists on disk at `results/run_20260728_005508_D12_state_leak_fix/` and is fully re-runnable from the scripts inside it, but **it is not currently under version control.** Whether to force-add this run, carve an exception, or accept on-disk-only preservation is a research-lead / orchestrator call.
+2. **`legacy/__pycache__/AuditedCode_1.cpython-314.pyc` is a tracked file** (confirmed with `git ls-files`) despite `__pycache__/` and `*.pyc` both being in `.gitignore` — it predates the ignore rule. It shows as modified in `git status` purely because I imported the module. **It is not part of my semantic change** and should not be read as one.
+
+### Still open / unresolved
+
+1. **D-11's §3.5 regeneration remains blocked on #75 and #77.** **This session does not unblock it.** D-12 was the third prerequisite and is now discharged, but #75 (three-way: Morris / repaired local OAT / the contaminated sweep as-run) and #77 (replication count) are unanswered research-lead questions. **I touched neither**, by instruction. Running the regeneration now would reproduce the stated-vs-executed method mismatch in fresh numbers.
+2. **New evidence bearing on that design question, produced incidentally by the control run (§8).** Across five grid seeds the four cooling/weighting sensitivity indices vary by 12.5×–48.6× and change rank order completely. A single-grid sensitivity ranking is not reproducible across grids. This is information for #75/#77, not a recommendation, and I did not act on it.
+3. **Six items from the §4.4 hunt are reported, unfixed** (§6). The one with a demonstrated failure mode is `SensitivityAnalyzer.parameter_definitions` caching sweep bounds at construction — **recommend a flag**; the leak path is closed post-fix but the pattern remains.
+4. **The instance-level / frozen `SPECIES_DATA` redesign** would make this defect class unrepresentable rather than guarded. **Beyond D-12; needs research-lead sign-off.** Recorded in `MIGRATION.md` as an option, not adopted.
+5. **`MIGRATION.md` may be the wrong home for a binding criterion** — its own header says no session reads it (§7). Recommendation to mirror one line into the always-loaded set is the orchestrator's call.
+6. **`results/` gitignore tension** (above).
+7. **Not run this session, and out of scope:** D-03's H1/H2 Wilcoxon tests (still sequenced behind `editor` writing both hypotheses into Methods §2.5.2 — pre-specification cannot be applied retroactively), D-02's best-raw-SECPI-vs-3.75 check, and D-13's archive forensics.
+
+### Handoff notes for the next chat
+
+*Assume you have read only this entry.*
+
+1. **Flag #96 is verifiably fixed.** Not "fixed by reading" — a test that failed before and passes after, plus n = 30 replicate sweeps showing zero drift in `SPECIES_DATA`, `max_CPA`, `max_LAI` and all six normalized cooling potentials, plus a full 243-evaluation real-ACO sweep leaving species state pristine. `editorial-flagger` owns closing it; **I did not touch the register.**
+2. **The STEP 7 → STEP 8 contamination is no longer inferred — it is executed, confirmed pre-fix and cleared post-fix**, n = 30 each direction. Pre-fix, STEP 8 began with **6/6 species contaminated**, every one at ×1.2 crown diameter and ×1.2 height. Post-fix, 0/6. This needs a **new flag**; see "Flags touched".
+3. **The internal control passed: 85 values, 0 mismatches.** The fix changes nothing evaluated before the species mutations. Two independent confirmations — the 5-seed control run and the full-sweep baseline at seed 42.
+4. **The defect was invisible to seed variation.** Thirty independent single sweeps across thirty grid seeds produced **one distinct drift value** (0.397604, SD 0). Anyone who had "tested robustness" by sweeping seeds would have found nothing. Check state identity, not just output variance.
+5. **The contamination was unbounded, not bounded.** Thirty sequential sweeps in one process drove drift to ~2.07e+23. Long pipeline runs diverged; they did not degrade gracefully.
+6. **The next gate is #75 and #77, and this session touched neither.** Do not start D-11's regeneration until both have research-lead answers.
+7. **Run directory:** `results/run_20260728_005508_D12_state_leak_fix/` — `SUMMARY.txt`, `ENVIRONMENT.txt`, `data/*.json` (10 files), `logs/*.txt` (14 files), `scripts/` (4 re-runnable scripts). ⚠️ **`results/` is gitignored**; this will not be committed unless someone decides otherwise.
+8. **Re-run the guard any time:** `.venv/Scripts/python.exe tests/test_species_data_isolation.py`. Point it at any implementation with `SECPI_IMPL=<path>` — that is how the pre-fix baseline was tested and how the future `src/secpi/` port must be gated.
+
+### Flags touched
+
+**None. I created, closed, reclassified and renumbered nothing.** `docs/FLAGS.md` was read for the next-free derivation and not edited.
+
+| Flag | Evidence produced this session | Recommended disposition (NOT applied) |
+|---|---|---|
+| **#96** | Failing test pre-fix → passing post-fix; n = 30 isolation replicates (drift 0, SD 0); n = 30 independent sweeps (drift 0); n = 30 STEP 7→8 replicates (0/6 contaminated); full 243-evaluation real sweep leaving state pristine; internal control bit-identical, 85/85 | **Verifiably fixed — `editorial-flagger` may close it.** This is that agent's trigger, stated plainly as my brief requires. |
+| **#88** | STEP 8's pre-fix inputs are now *measured*: all six species at ×1.2 crown diameter and ×1.2 height, LAI drifted up to −39.8% | Bears on the Conclusion's morphological-robustness claim. `editorial-flagger` to reassess; I did not. |
+| **#77 / #78** | Control run: SIs vary 12.5×–48.6× across 5 grid seeds with complete rank inversion — cross-grid instability, distinct from the `n_samples=3` noise floor | Strengthens both. Not applied. |
+| — | `SensitivityAnalyzer.parameter_definitions` caches sweep bounds from `SPECIES_DATA` at construction (§6 item 5) | **Candidate new flag.** Not assigned. |
+| — | **STEP 7 → STEP 8 contamination, EXECUTED** (§5) — the joint claim Entry 10 §4 deliberately left unflagged because it was inferred | **New flag recommended. Derived next-free number: #98.** See below. |
+
+**On the new flag, explicitly:** my brief instructs me to flag the STEP 7→8 result *on evidence, from the next-free number derived per `editorial-flagger`'s procedure* — and separately forbids me from assigning flags. I have therefore **derived** the number and **recommend** it; **I did not write it into `docs/FLAGS.md` and I assigned nothing.** The derivation is at the top of this entry: highest assigned is **#97**, so **next free is #98**, agreeing with `STATE.md`'s authoritative block. If `editorial-flagger` has assigned anything between now and then, it must re-derive rather than take #98 from this entry — the same discipline that Entry 11's R0 correction existed to enforce.
+
+### Decisions raised or closed
+
+**None opened, none closed.** `docs/DECISIONS.md` was read and **not modified**.
+
+**D-12 is now executed**, but recording its completion is the orchestrator's write, not mine — a subagent does not mark a research-lead decision discharged. Three items are recommendations for routing, not decisions:
+
+- Whether to mirror the `MIGRATION.md` criterion into the always-loaded document set (§7).
+- Whether `results/` should remain gitignored given the reproducibility rule.
+- Whether the instance-level/frozen `SPECIES_DATA` redesign is authorized for the port.
+
+### Reproducibility attestation
+
+**Interpreter:** `C:\Users\Administrator\GabskifiedProjects\secpi\.venv\Scripts\python.exe` — Python **3.14.6**; numpy 2.4.2, pandas 3.0.0, scipy 1.17.0, matplotlib 3.10.8; Windows-11-10.0.26200-SP0. `MPLBACKEND=Agg`, `PYTHONUTF8=1`. Working directory `C:\Users\Administrator\GabskifiedProjects\secpi`. Recorded at `results/run_20260728_005508_D12_state_leak_fix/ENVIRONMENT.txt`.
+
+**Pre-fix baseline:** `git show 87d4528:legacy/AuditedCode_1.py` → scratchpad. Verified content-identical to the working tree before any edit (`diff` after CRLF normalization → empty; `git diff 87d4528 HEAD -- legacy/AuditedCode_1.py` → empty). The raw SHA-256 differs **only** because `git show` emits LF where the working file has CRLF — stated so nobody later reads that as drift. **A clean pre-fix baseline was reconstructed successfully; nothing here is approximated.**
+
+| Number(s) asserted | Produced by |
+|---|---|
+| Pre-fix test failure: 10 differences, LAI 6.07→18.12492288, NCP 1.8215/1.1637 | `tests/test_species_data_isolation.py` → `logs/01_test_PRE_FIX_working_tree.txt` (working tree) and `logs/02_..._87d4528_baseline.txt` (anchor); the two differ only on the path line |
+| Post-fix test pass, 2/2 | same test → `logs/03_test_POST_FIX.txt`, re-confirmed `logs/60_test_POST_FIX_final.txt` |
+| §4 A-i sequential replicates, n=30, both implementations | `scripts/verify_d12.py isolation` → `data/isolation_pre.json`, `data/isolation_post.json` |
+| §4 A-ii independent sweeps, n=30, drift 0.397604 SD 0, 1 distinct value; per-species LAI ratios; V=800 all seeds | `scripts/independent_sweeps.py` → `data/independent_pre.json`, `data/independent_post.json` |
+| §5 STEP 7→8, n=30 each direction; 6/6 → 0/6; STEP 8 max_CPA 452.389 / max_LAI 6.07 post-fix; the 12 declared bases | `scripts/verify_d12.py step78` → `data/step78_pre.json`, `data/step78_post.json` |
+| §8 internal control, 5 seeds, 85 values, 0 mismatches, all SIs | `scripts/verify_d12.py control` → `data/control_pre.json`, `data/control_post.json` |
+| §9/§10 full 243-evaluation real sweeps, 508.3 s / 464.2 s, baseline 2.2424166666666667 both | `scripts/verify_d12.py fullsweep` → `data/fullsweep_pre.json`, `data/fullsweep_post.json` |
+| Diff shape (63 insertions, 1 deletion); `copy` already imported at `:17` | `git diff --stat legacy/AuditedCode_1.py`; `Read legacy/AuditedCode_1.py:1–26` |
+| §6 hunt: one class-level mutable, two `self.max_*`, no mutable defaults, no config mutation | `grep` patterns quoted inline in §6 |
+| `MIGRATION.md` criterion absent before writing | `grep -niE "D-12\|state.leak\|SPECIES_DATA\|snapshot\|max_CPA\|#96\|finally" MIGRATION.md` |
+| Next free flag = #98 | header enumeration of `docs/FLAGS.md`, quoted at the top of this entry |
+| `results/` gitignored; `.pyc` tracked | `git check-ignore -v`; `git ls-files legacy/__pycache__/` |
+
+All comparisons of "bit-identical" are on `repr()` of the stored floats, which is stricter than equality of printed values.
+
+**Scope limits I am stating rather than glossing.** The **structural** claims — that the leak existed, that it is now restored, that the control is bit-identical, that STEP 8 was contaminated pre-fix and is clean post-fix — are deterministic and hold across every replicate run. The **magnitude** claims from the control run (§8's individual sensitivity indices) are single-configuration observations on one morphology at `n_samples=3` with **no D-02 ceiling applied and `normalize_secpi()` not exercised**. They are **diagnostic, not the D-11 regeneration**, and **no number in this entry may be quoted as a manuscript value.** The stubbed-ACO replicates are validated against the real ACO in §9 for the state trajectory *only*; they make no claim about SECPI values.
+
+**Nothing was invented, interpolated, or filled in.** The ACO stub returns a constant 1.0 as a control input, labelled as such at its definition and at every use; no scientific quantity is derived from it. The contamination sequence in the test uses the code's own ±20% sweep bounds, not chosen values.
+
+---
+
 ## ENTRY TEMPLATE (copy this for your session, fill in, append after the last entry — do not overwrite prior entries)
 
 ## Entry [N] — [Role name, e.g. "Mathematical Auditor #2" / "Stressor" / "Renderer" / "Editor" / "Deriver"] — [date]

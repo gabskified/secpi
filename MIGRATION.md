@@ -425,6 +425,30 @@ src/secpi/
 
 **Reproducibility gate:** `tests/test_reproducibility.py` asserting the modular pipeline reproduces the archived legacy run from a fixed seed. Nothing in `src/` is authoritative until it passes.
 
+### 🔴 Binding acceptance criterion — species-state isolation (decision **D-12**, Flag **#96**)
+
+**Added 2026-07-28 by `code-stressor` when D-12's fix was applied to `legacy/AuditedCode_1.py`.** D-12 targets *both* the reference implementation and this port. `src/secpi/` was empty at the time, so the port half resolves to the criterion below. **It is binding, not advisory: `src/secpi/analysis/sensitivity.py` must not be written without it, and the port is not accepted until the test below passes against it.**
+
+**The defect being carried forward, so it is not silently reintroduced.** `TreeSpecies.SPECIES_DATA` is a **class attribute**, shared by every instance in the process. `SensitivityAnalyzer._run_single_evaluation` perturbs it to measure parameter sensitivity and, before the fix, never restored it. Measured consequences (Project Log Entries 8 and 12, both by execution):
+
+- the LAI write **compounds geometrically** — six identical evaluations drove Narra 6.07 → 18.12492288, so the routine is not idempotent and `n_samples`' repeats are different models, not repeated samples of one;
+- from the first species evaluation onward, *"all other parameters held at baseline"* — the definition of a one-at-a-time sweep — is **false**;
+- contamination **escapes the sweep** into any later step in the same process.
+
+**What the port must do:**
+
+1. **Snapshot before any write point**, including the cooling-model construction (building a `TreeSpecies` rewrites every species' `CPA`). A deep copy of the whole dict — cheaper to reason about than a partial copy, and it covers `CPA`, which is a *derived* value stored back into its own source dict.
+2. **Snapshot `max_CPA` and `max_LAI` as well.** A dict-level restore is **not sufficient**. `_calculate_cpa_and_normalize()` caches both as **instance** attributes and `get_normalized_cooling_potential()` divides by both — they are live denominators in the cooling term. Leave them alone and the fix looks correct at the dict level and stays wrong at the normalization level.
+3. **Restore all three in an unconditional `finally`**, so an exception mid-evaluation still leaves shared state clean. Success-path-only restoration does not satisfy this criterion.
+4. **Do not restore by recomputation.** Re-running the normalization over restored data must not be assumed to reproduce the original scalars bit-for-bit. Snapshot and restore them directly.
+5. **Restore the dict in place at both levels** — outer mapping and each species' inner mapping — rather than rebinding the class attribute, so that any held reference (e.g. `get_species_params()`, which returns the inner dict itself) sees restored values.
+
+**The better structural fix, if the port is willing to change the design.** The root cause is that mutable species state is *class-level*. If `src/secpi/species.py` makes `SPECIES_DATA` **instance-level** (or frozen, with perturbations applied to a per-evaluation copy), the leak becomes unrepresentable rather than merely guarded, and criteria 1–5 collapse into "pass a modified copy." **That is a design change beyond D-12's authorization and must be put to the research lead before it is taken** — but it is the option that removes the defect class rather than patching this instance of it.
+
+**Test that gates acceptance:** `tests/test_species_data_isolation.py` (added 2026-07-28) already parameterizes the implementation under test via the `SECPI_IMPL` environment variable. Point it at the port; both cases must pass. It asserts bit-identity of `SPECIES_DATA`, `max_CPA`, `max_LAI` and all six normalized cooling potentials across a contaminating evaluation on a **long-lived** `TreeSpecies` instance — long-lived because a fresh instance per evaluation hides the defect by construction.
+
+**Evidence anchors:** pre-fix behaviour is preserved at commit **`87d4528`**; the fix and its verification are Project Log **Entry 12**.
+
 ---
 
 # Part 5 — Risk register

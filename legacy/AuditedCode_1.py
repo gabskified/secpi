@@ -844,7 +844,43 @@ class SensitivityAnalyzer:
         return params
 
     def _run_single_evaluation(self, cooling_params, species_modifications=None):
-        """Run a single ACO evaluation with specified parameters."""
+        """Run a single ACO evaluation with specified parameters.
+
+        State isolation (decision D-12, Flag #96): `TreeSpecies.SPECIES_DATA` is
+        a CLASS attribute shared by every `TreeSpecies` instance in the process,
+        so the species perturbations below are writes to global state. Before
+        this guard existed they were never restored, which meant (a) the LAI
+        write compounded geometrically across repeated identical evaluations, so
+        the routine was not idempotent; (b) every evaluation after the first
+        species perturbation ran against contaminated data, so "all other
+        parameters held at baseline" -- the definition of a one-at-a-time sweep
+        -- was false; and (c) the contamination escaped the sweep entirely into
+        any later pipeline step in the same process.
+
+        The snapshot is taken before ANY write point executes, including the
+        `CorrectedCoolingModel` construction below (which builds a `TreeSpecies`
+        and so rewrites every species' CPA), and is restored in an unconditional
+        `finally` so that an exception mid-evaluation still leaves shared state
+        clean.
+
+        Three things are snapshotted, not one. `_calculate_cpa_and_normalize()`
+        caches `max_CPA` and `max_LAI` as INSTANCE attributes, and
+        `get_normalized_cooling_potential()` divides by both -- they are live
+        denominators in the cooling term. Restoring only the dict would leave any
+        `TreeSpecies` outliving this call with denominators computed from
+        contaminated data. They are restored from the snapshot directly rather
+        than by re-running `_calculate_cpa_and_normalize()`, so the restored
+        values are bit-identical by construction rather than by assumption.
+
+        The dict is restored IN PLACE at both levels -- the outer mapping and
+        each species' inner mapping -- rather than by rebinding the class
+        attribute, so that any code holding a reference to either (for example
+        via `get_species_params()`, which returns the inner dict itself) sees
+        the restored values.
+        """
+        species_data_snapshot = copy.deepcopy(TreeSpecies.SPECIES_DATA)
+        normalization_snapshot = None
+
         try:
             # Create modified cooling model
             cooling_model = CorrectedCoolingModel(
@@ -858,6 +894,10 @@ class SensitivityAnalyzer:
             # Apply species modifications if any
             if species_modifications:
                 ts = cooling_model.tree_species
+                # Capture the cached normalization denominators of the very
+                # instance that will run _calculate_cpa_and_normalize() below,
+                # before any perturbation is applied. See the docstring.
+                normalization_snapshot = (ts, ts.max_CPA, ts.max_LAI)
                 for species, param_name, value in species_modifications:
                     if species not in ts.SPECIES_DATA:
                         continue
@@ -910,6 +950,28 @@ class SensitivityAnalyzer:
         except Exception as e:
             print(f"Evaluation error: {e}")
             return 0
+
+        finally:
+            # Restore the shared species dict in place, at both levels, so that
+            # object identity is preserved for any held reference.
+            live_species_data = TreeSpecies.SPECIES_DATA
+            for species_name in list(live_species_data.keys()):
+                if species_name not in species_data_snapshot:
+                    del live_species_data[species_name]
+            for species_name, saved_fields in species_data_snapshot.items():
+                live_fields = live_species_data.get(species_name)
+                if live_fields is None:
+                    live_species_data[species_name] = copy.deepcopy(saved_fields)
+                else:
+                    live_fields.clear()
+                    live_fields.update(copy.deepcopy(saved_fields))
+
+            # Restore the cached normalization denominators from the snapshot
+            # rather than recomputing them, so they are bit-identical.
+            if normalization_snapshot is not None:
+                snapshot_ts, saved_max_cpa, saved_max_lai = normalization_snapshot
+                snapshot_ts.max_CPA = saved_max_cpa
+                snapshot_ts.max_LAI = saved_max_lai
 
     def run_oat_analysis(self, n_samples=3):
         """
