@@ -303,15 +303,25 @@ Pick distinct notation — e.g. `s` for subset size, `k` for tree count — and 
 ```
 D-06 (recover §3.1 code) ──→ §3.1 survives? ──→ Abstract & Conclusion headline claims survive?
                                  │
-D-02 (ceiling) ─┐                │
-                ├─→ regenerate Results under Option B ─→ Editor writes Results ─→ Abstract rewrite ─→ preprint
-D-03 (metric) ──┤                │
-D-07 (k notation) ───────────────┘
-D-01 ✔ ─────────┘
-D-04 ────────────────────────────────────────────────────────────────────────────→ DOI minting
+D-02 ✔ (ceiling) ─┐              │
+                  ├─→ regenerate Results under Option B ─→ Editor writes Results ─→ Abstract rewrite ─→ preprint
+D-03 ✔ (metric) ──┤              │
+D-07 ✔ (k/s notation) ───────────┘
+D-01 ✔ ───────────┘
+D-04 ──────────────────────────────────────────────────────────────────────────→ DOI minting
+
+§3.5 sub-path (D-11, amended 2026-07-27):
+
+D-12 ✔ (state-leak fix) ──┐
+#75 (three-way: Morris / repaired OAT / as-run) ──┤
+#77 (n_samples design) ───┴──→ D-11 §3.5 regeneration ──→ Editor writes §3.5.2 + Fig 34
+                                                     └──→ #82 remedy · #89 · Fig 34
+D-13 (§3.5 provenance) ──→ can §3.5's published numbers be sourced at all?
 ```
 
-**Neither D-02 nor D-03 blocks *running* the pipeline.** Both block *writing the numbers up*. Settle them first so normalized scores and the significance test are final on the first pass rather than requiring a second regeneration.
+**Neither D-02 nor D-03 blocks *running* the pipeline.** Both block *writing the numbers up*. All four Results-path decisions (D-01, D-02, D-03, D-07) are now settled.
+
+**The §3.5 sub-path is the live bottleneck.** D-12 is authorized but **not yet applied**; #75 needs a research-lead answer that is now three-way; #77 needs a disposition. D-13 runs alongside and does not gate the regeneration — but until it is answered, no §3.5 number in the manuscript has a known provenance.
 
 ---
 
@@ -375,6 +385,51 @@ Entry 3 settled the provenance question: **no Almeida initial-condition conventi
 >
 > **Until the regeneration lands:** §3.5.2 must not be rewritten, and **no number from it may be quoted in the manuscript, the Abstract, or the Conclusion.**
 
+### 🔄 AMENDED 2026-07-27 by the research lead — third prerequisite added; the #82 diagnosis is overturned
+
+**The decision itself stands: option (b), full §3.5 regeneration under Option B.** What changes is what must be true before it runs, and what it can be expected to achieve. Source: **Project Log Entry 8** (`math-auditor`, execution audit, commit `0e912d1`). Nothing above is deleted — read it, then read this.
+
+**1. A third prerequisite, and it is now the binding one.**
+
+D-11 as written names two prerequisites, #75 and #77. There is a third: **the `SensitivityAnalyzer` state leak registered by Entry 8 §D and authorized for repair under D-12.** `_run_single_evaluation` mutates the class-level `TreeSpecies.SPECIES_DATA` at `legacy/AuditedCode_1.py:880,882` and never restores it, so every evaluation after the first `Species_Morphology` parameter runs against contaminated species data. Measured cost: allometric sensitivity **inflated 1.84×**, morphological **deflated 0.63×**.
+
+**Do not run the regeneration before D-12's fix lands.** Doing so burns the run producing a fourth invalid table. This prerequisite is unlike #75 and #77 in kind — those are description questions, this is a code defect — and it is the only one of the three that required a fresh authorization.
+
+**2. The premise this decision was argued from is refuted. The conclusion survives anyway.**
+
+D-11's body above, and Entry 7, both record the working hypothesis that *"four uncorrelated overstatements point at a code defect rather than four transcription slips"* in the aggregation step — and D-11 assigned `math-auditor` to diagnose it on exactly that reasoning. **Entry 8 executed it and the aggregation is innocent.** `groupby().agg(['mean','max','sum','count'])` computes a true arithmetic mean; the pandas 3.0.0 column order matches the hardcoded rename at line 1036; **0 violations of `mean ≤ max` across 2,000 randomized trials**; and a real 243-evaluation sweep produced `mean ≤ max` in all four categories.
+
+That `math-auditor` assignment is therefore **discharged** — do not re-run it.
+
+**3. What the regeneration will and will not do — corrected expectation.**
+
+Executed against published, from a real 243-evaluation sweep at production config:
+
+| Category | n | Executed mean | Published mean |
+|---|---|---|---|
+| Species_Morphology | 12 | 0.006593 | 1.3068 |
+| Species_Allometry | 24 | 0.012433 | 0.1857 |
+| Cooling_Model | 3 | 0.059809 | 0.0727 |
+| Weighting | 1 | 0.001385 | 0.0236 |
+
+Weighting settles it: n = 1, so mean = max = sum = 0.001385, and the published 0.0236 equals none of the three. **The published category means did not come from this code.** Consequently the regeneration will **neither reproduce nor vindicate §3.5** — it will emit a clean, internally consistent table that simply has no relationship to what is printed in the manuscript. That is a weaker reassurance than "the defect is fixed," and §3.5's prose must be regenerated on that understanding, not reconciled against the old numbers.
+
+**4. §3.5 does not survive qualitatively either — expect a rewrite, not an adjustment.**
+
+With the leak repaired, the manuscript's rank-1 parameter (Narra crown diameter) ranks **28 / 40** at SI 0.002245. The executed rank-1 is `decay_lambda` at SI **0.1697** — the parameter §3.5.2 dismisses as *"limited impact (0.0015)"* — larger than the next index by 3.8×. The category hierarchy is inverted. **And the sign is inverted:** forcing the manuscript's own 12 → 34 m bounds through the code gives SECPI 3.213 → 2.855, a *decrease* of effect 0.358, against the published 3.024 → 4.380, an *increase* of effect 1.356.
+
+**5. A reporting requirement the current implementation cannot satisfy.**
+
+D-11's required output table specifies `n` and `SD` columns. Entry 8 confirmed by execution that **no dispersion statistic is computed or stored anywhere** — `low_scores`/`high_scores` are collapsed by `np.mean` at lines 997–998 and discarded — so SD cannot be recovered from the existing CSV. `code-stressor` must add it. This matters because the measured **SI noise floor is ≈ 0.0098 at `n_samples=3`**, and only 2 of 40 indices clear it: without dispersion, the regenerated ranking is an ordering of noise.
+
+**6. #75's prerequisite is now a three-way question, not a two-way one** — Morris, a repaired local OAT, or the contaminated sweep as-run. Entry 8 §A established that the code implements **neither** named method, so "which of the two did we mean" no longer has a true answer. This needs the research lead and is not yet a numbered decision.
+
+**Owners, revised:** `code-stressor` applies D-12's fix, then regenerates and emits the table **including SD**; ~~`math-auditor` reports what the aggregation function computes~~ — **discharged, Entry 8 §C**; `editor` writes §3.5.2 and Figure 34 from the emitted table only.
+
+**Scope caveat carried from Entry 8, binding on every magnitude quoted in this amendment:** those runs are one grid, one morphology, one seed, `n_samples=3`, with no D-02 ceiling applied and `normalize_secpi()` not exercised. They are **diagnostic, not the D-11 regeneration**, and **no number in this amendment may be quoted as a manuscript value.** The structural claims — evaluation counts, sweep bounds, category membership, aggregation semantics, the state leak — are deterministic and safe to assert; the magnitude and ranking claims are single-run observations that `code-stressor` owns replicating.
+
+---
+
 **Opened 2026-07-26 at the research lead's instruction, scoped to regeneration only.** Raised by the orchestrator. Source: **Flag #82 (ROADBLOCK — SEVERE)**, Project Log Entry 6.
 
 **Question:** What is the regeneration scope for §3.5 — the aggregation layer alone, or the whole sensitivity analysis including the parameter sweep?
@@ -415,3 +470,106 @@ The three benign explanations are all excluded: the overstatement factors (2.95 
 **Owners once decided:** `code-stressor` regenerates; `math-auditor` reports what the aggregation function in `SensitivityAnalyzer` actually computes; `editor` writes §3.5.2 and Figure 34 from the emitted table only.
 
 **Until this closes:** §3.5.2 must not be rewritten — it must be regenerated — and **no number from it may be quoted in the manuscript, the Abstract, or the Conclusion.**
+
+---
+
+## D-12 — Authorize the `SensitivityAnalyzer` state-leak fix — **DECIDED**
+
+> ### ✅ AUTHORIZED 2026-07-27 by the research lead
+>
+> **Repair the leak. Snapshot `TreeSpecies.SPECIES_DATA` on entry to `SensitivityAnalyzer._run_single_evaluation` and restore it in a `finally`.**
+>
+> **Target — both, in the same pass** (research lead, 2026-07-27):
+> 1. **`legacy/AuditedCode_1.py`** — the reference implementation. This is where the fix lands now and where D-11's regeneration will run.
+> 2. **`src/secpi/`** — the modular port. ⚠️ **Stated plainly: `src/secpi/` is currently an empty directory — zero files** (verified this session). There is nothing to fix there today, so "both" resolves to a **binding carry-forward requirement**: the port must not be written without the snapshot/restore, and `MIGRATION.md` must carry that as an explicit acceptance criterion. Recorded here so the port cannot silently ship the defect the reference implementation just had removed.
+>
+> **This is the first authorized semantic change to `AuditedCode_1.py` in the project's history.** It is not a refactor and not a cleanup — it changes what the program computes.
+
+**Question:** Entry 8 §D found that `_run_single_evaluation` mutates the class-level `TreeSpecies.SPECIES_DATA` and never restores it. The fix is small and local, but it is a semantic change to the reference implementation, so `math-auditor` declined to make it and routed it here.
+
+### The defect, as verified by execution (Entry 8 §D1–D6)
+
+- `TreeSpecies.SPECIES_DATA` is a **class attribute**, shared by every instance. `_run_single_evaluation` writes into it at `legacy/AuditedCode_1.py:880` and `:882` with no copy, no context manager, no `finally`.
+- The mutation **escapes the evaluation.** After evaluating Narra's crown diameter at its high bound, a brand-new `TreeSpecies`, a brand-new `CorrectedCoolingModel` and a brand-new `SensitivityAnalyzer` all report 27.6 m against a base of 23.0 m.
+- **The LAI path compounds geometrically** — line 879 reads current LAI, line 880 writes `current × ratio`. Six identical `Narra.l0 = 0.30` evaluations drove LAI **6.07 → 18.12**. The function is not idempotent, so the three repeats `n_samples=3` averages "to reduce stochastic noise" are three *different models*, not three samples of one.
+- After a full 40-parameter sweep, **all six species** sit at high crown diameter and high height (last-write-wins), LAI drifted by up to **−37%** (Banaba 3.87 → 2.43).
+- **Measured cost:** allometric sensitivity **inflated 1.84×**, morphological **deflated 0.63×**. The internal control is that `Cooling_Model` and `Weighting` are **bit-identical** between the leaked and repaired runs — they are evaluated before any species mutation — which is what isolates the divergence to the leak and nothing else.
+
+### ⚠️ The blast radius is wider than §3.5, and Entry 8 did not state this
+
+`main_revised_validation()` runs **STEP 7: Sensitivity Analysis** (call site line 3522–3529) and then **STEP 8: Morphological Robustness Validation** (line 3540) **in the same process**. STEP 8 constructs a fresh `MorphologicalRobustnessValidator` from `config`, which builds its own `TreeSpecies` — and Entry 8 §D2 proved by execution that a fresh `TreeSpecies` sees the contaminated class-level state.
+
+**Therefore, in any single-process full pipeline run, STEP 8 begins with every species at its high crown diameter and high height.** That result feeds the Conclusion's morphological-robustness claim, which **#88** already flags as absent from §3 entirely.
+
+**Provenance discipline on that claim:** the step ordering is verified **by reading** `AuditedCode_1.py:3517–3544`; the contamination mechanism is verified **by execution** in Entry 8 §D2. The *joint* conclusion — that STEP 8's outputs are contaminated in practice — is **inferred from those two, not executed**, and per `CLAUDE.md` §2 rule 2 it is not to be recorded as verified until someone runs it. **It needs its own flag number, to be assigned after the in-flight `editorial-flagger` pass lands** so it does not collide with #96/#97. Owner: `code-stressor`, as a before/after check in the same pass that applies this fix.
+
+### ⚠️ Implementation note — a naive `SPECIES_DATA` restore is NOT sufficient
+
+Verified this session by reading `legacy/AuditedCode_1.py:873–888` and `:1605–1632`. Entry 8 cites the mutation as "lines 880 and 882." There are in fact **four write points inside `_run_single_evaluation`**, and one of them has a consequence a dict-level restore does not reach:
+
+| Line | Writes |
+|---|---|
+| 880 | `ts.SPECIES_DATA[species]['LAI'] = hardcoded_lai * ratio` — the compounding write |
+| 882 | `ts.SPECIES_DATA[species][param_name] = value` |
+| 885–886 | `ts.SPECIES_DATA[species]['CPA']` when `crown_diameter_m` changed |
+| 888 | `ts._calculate_cpa_and_normalize()` |
+
+Line 888 is the one that matters. `_calculate_cpa_and_normalize()` (line 1605) rewrites `data['CPA']` for **every** species in the shared dict, and then caches **`self.max_CPA` and `self.max_LAI` as instance attributes** (lines 1615–1616). `get_normalized_cooling_potential()` divides by both (lines 1630–1631), so those two cached scalars are live denominators in the cooling term.
+
+**Restoring `SPECIES_DATA` does not restore `max_CPA` / `max_LAI`.** Any `TreeSpecies` instance that outlives the evaluation keeps denominators computed from contaminated data. The fix must therefore **either** call `_calculate_cpa_and_normalize()` on the affected instance after restoring the dict, **or** ensure no `TreeSpecies` instance survives the `finally`.
+
+Entry 8's Phase H attested that post-sweep `SPECIES_DATA` was pristine and that `Cooling_Model`/`Weighting` were bit-identical. It did **not** state that it checked `max_CPA` / `max_LAI` on a long-lived instance. **`code-stressor` must verify both scalars explicitly**, or the fix will look correct at the dict level and still be wrong at the normalization level — the exact "fixed but still wrong" outcome this project has already hit twice.
+
+### Scope of the authorization — what is and is not permitted
+
+**Permitted:** snapshot and restore `SPECIES_DATA` around each evaluation, exactly as Entry 8's Phase H harness did (proven working; post-sweep state verified pristine) — **plus** the `max_CPA`/`max_LAI` restoration required by the implementation note above.
+
+**Not permitted under D-12** — each of these is a separate decision and none is authorized here:
+- Changing the sweep bounds (currently a uniform ±20% on all 36 species parameters).
+- Changing `n_samples` from 3, or reconciling it with `n_runs = 5`. That is **#77**'s disposition and a design choice, not a typo fix.
+- Adopting Morris, or restructuring the sampling design. That is **#75**'s three-way question and belongs to the research lead.
+- Adding the SD/dispersion column D-11 requires. Necessary, but it is a D-11 deliverable for `code-stressor`, not part of this repair.
+
+### Evidence preservation
+
+The pre-fix behaviour is an evidentiary artefact — it is what produced every existing `results/` run. It is preserved in git history at **`87d4528`**, the HEAD immediately before this authorization. Record that SHA in the commit that applies the fix, so the contaminated behaviour remains recoverable without keeping a second copy of the file.
+
+**Owners:** `code-stressor` applies the fix to `legacy/AuditedCode_1.py`, adds the carry-forward criterion to `MIGRATION.md`, and re-runs to confirm post-sweep state is pristine and that `Cooling_Model`/`Weighting` remain bit-identical. `math-auditor`'s work here is **discharged** — do not re-audit the aggregation.
+
+**Gates:** D-11's regeneration. Does **not** gate #75 or #77, which are independent and still owed.
+
+---
+
+## D-13 — Provenance of §3.5's published numbers — **OPEN**
+
+**Opened 2026-07-27 by the research lead.** Raised by `math-auditor` in Entry 8 §B/§C, item 6 of "Still open", and explicitly left to the orchestrator to route.
+
+**Question:** Where did the numbers printed in Results §3.5 come from?
+
+**Context — this is not a rounding or transcription question.** Entry 8 established by execution that §3.5's published values match `AuditedCode_1.py` on **none** of four independent axes:
+
+| Axis | Manuscript | Code (executed) |
+|---|---|---|
+| Sweep bounds | Narra crown diameter 12.0 → 34.0 m; allometrics "±15% band" | 18.4 → 27.6 m about base 23.0; **uniform ±20% on all 36 species parameters** |
+| Baseline SECPI | 3.0576 | 3.2593 (one grid, one seed) — unmatched |
+| Headline effect | 3.024 → 4.380, effect 1.356, SI 0.4435, **rank 1** | at the manuscript's own bounds: 3.213 → 2.855, effect 0.358 — **sign inverted**; the parameter ranks **28 / 40** |
+| Category aggregation | Morphology 1.3068 · Allometry 0.1857 · Cooling 0.0727 · Weighting 0.0236 | 0.006593 · 0.012433 · 0.059809 · 0.001385 |
+
+The Weighting category closes the argument with no assumptions: **n = 1**, so mean = max = sum = 0.001385, and the published **0.0236** equals none of the three.
+
+**Therefore §3.5's numbers were produced by something this repository does not contain** — an earlier code version, a spreadsheet, or manual entry.
+
+### Structurally identical to D-06, with one decisive difference
+
+D-06 asked the same question of §3.1 and resolved as **reproducible but superseded** — the output was located in `legacy/archive/corrected_outputs/run_20260213_222844/` and matched the manuscript verbatim. **This is not that.** §3.5 is **not reproducible at all** from the current implementation. D-06's happy path is not available here, and the search should be run without assuming it will be.
+
+**Where to look first:** `legacy/archive/` holds pre-audit iterations (`CA.py`, `CODE020526.py`, `GEMINI.py`, `dashboard.py`, `secpi_main.py`, `dashboard.ipynb`, `explore.ipynb`) — the same candidate set D-06 named, still unresolved as to which produced §3.1. A single earlier script may account for both.
+
+### What the research lead must decide
+
+1. **Whether to spend session time on the search at all.** D-11 already commits to regenerating §3.5 from scratch, so provenance is **not** on the critical path to a correct §3.5. Its value is different and narrower: it tells you whether §3.5's numbers were *wrong* or *from a different study configuration*, which bears on how the limitation is disclosed and on whether any other section inherited the same untraced source.
+2. **If unfound: what the manuscript says.** A Results section whose numbers cannot be traced to any code in the repository is a disclosure obligation, not merely an item to delete-and-replace.
+
+**Recommendation (orchestrator, labelled as a recommendation):** **time-box it.** Route one `code-stressor` session at `legacy/archive/`, bounded, searching for both §3.1's and §3.5's generator together since they are likely the same artefact. Do **not** let it block D-12's fix or D-11's regeneration — those proceed regardless. If the search comes back empty, that is itself a finding worth recording, and it converts D-13 into a disclosure decision rather than a forensic one.
+
+**Does not gate:** D-11, D-12, or the preprint's §3.5 regeneration.

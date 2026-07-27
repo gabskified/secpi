@@ -1363,6 +1363,247 @@ Every harness loads `legacy/AuditedCode_1.py` read-only via `importlib.util.spec
 
 ---
 
+## Entry 9 — Editorial Flagger, register v5: Entry 8 applied to the flag register (#96, #97, and seven movements) — [2026-07-27]
+
+**From:** `editorial-flagger`
+**Reviewed:** `CLAUDE.md` (whole file), `docs/DECISIONS.md` (D-11 and D-06 in full, D-01/D-02/D-03/D-07/D-09 for context), `docs/STATE.md` (the authoritative flag-count block), `docs/PROJECT_LOG.md` **Entry 8 in full** plus Entries 5–7 context, `docs/FLAGS.md` (#42, #52–#59, #64, #68, #70, #75–#86, #95, the Executive Summary and the Register-status block).
+**Context:** Project Log Entry 8 (`math-auditor`, commit `0e912d1`) was an execution audit that by design **created, closed and reclassified nothing** and routed all of its evidence to this agent. Its "Flags touched" table was the work order. Task: register the new defect it found, and apply its evidence to the flags it bears on.
+
+> **Nothing was executed this session.** This was a register pass. Every number below is quoted from Entry 8 with its section and execution phase cited, or read from a file this session. **No scientific quantity was computed, interpolated, or estimated by me.** Where Entry 8 does not supply a number I needed, I say so rather than supplying one.
+
+---
+
+### What I found
+
+#### A. Two flags registered: **#96** and **#97**. Both POTENTIAL ROADBLOCK. Both were the next free numbers. Nothing renumbered.
+
+**#96 — the `SensitivityAnalyzer` state leak.** `_run_single_evaluation` writes into the **class-level** `TreeSpecies.SPECIES_DATA` at `legacy/AuditedCode_1.py:880` and `:882` and never restores it — no copy, no context manager, no `finally`. The mutation escapes the evaluation: a brand-new `TreeSpecies`, `CorrectedCoolingModel` and `SensitivityAnalyzer` all observe the perturbed value. The LAI path **compounds geometrically** (line 879 reads current LAI, line 880 writes `current × ratio`) — six identical `Narra.l0 = 0.30` evaluations drove LAI **6.07 → 18.12**, so the function is not idempotent and `n_samples = 3` averages three *different models*, not three samples of one. After a full 40-parameter sweep every species sits at its **high** crown diameter and **high** height (last-write-wins) with LAI drifted up to **−37%** (Banaba 3.87 → 2.43). Because `_define_parameters()` iterates `Cooling_Model → Weighting → Species_Morphology → Species_Allometry`, exactly **27 rows are clean** (3 baseline + 24 Cooling_Model/Weighting) and **36 are contaminated**. Measured cost against the `Cooling_Model`/`Weighting` bit-identity control: allometric sensitivity **inflated 1.84×**, morphological **deflated 0.63×**.
+
+**#97 — §3.5's qualitative findings do not survive execution.** Registered as a **new flag, not folded into #82 or #75**, because #82 is explicitly scoped to §3.5.**2**'s category means and states *"§3.5.1 may be salvageable while §3.5.2 is not"* — this finding removes that salvageability and therefore cannot live inside the flag whose scope it contradicts. #75 is about *method named vs method run*; #79 is about *comparability between* parameters; **neither covers whether the findings survive.** Content: the manuscript's rank-1 parameter (Narra crown diameter) ranks **28/40** at SI 0.002245; the executed rank-1 is `decay_lambda` at **0.1697** — the parameter §3.5.2 dismisses as *"limited impact (0.0015)"* — larger than the next index by 3.8×; the category hierarchy is inverted (`Cooling_Model` dominates, §3.5.2 calls it *"relatively low sensitivity"*); **the sign is inverted** (the manuscript's own 12→34 m bounds forced through the code give 3.213 → 2.855, a *decrease*, effect 0.358, against the manuscript's 3.024 → 4.380, an *increase*, effect 1.356); and the manuscript's stated sweep bounds are absent from the code, which sweeps every species parameter at a uniform **±20%** (`rel_span = 0.4000`), i.e. Narra crown diameter **18.4 → 27.6 m** about a base of 23.0.
+
+#### B. The severity call — I declined Entry 8's recommendation of a second SEVERE, and argued it
+
+Entry 8 wrote of the state leak: *"it warrants a flag and, on its face, a severe one — it invalidates the executed §3.5 parameter table wholesale, not merely its aggregation."* **I weighed it and declined. #82 remains the project's only ROADBLOCK (SEVERE).** The argument is recorded in full inside #96 and #97; the short form:
+
+**For #96.** The register reserves SEVERE for a finding *confirmed unresolvable as written*. Condition 1 (confirmed, not pending) — satisfied. Condition 3 (section must be reworked) — satisfied but adds nothing, since §3.5 is already under a regenerate-don't-rewrite injunction from #82 and D-11. **Condition 2 (unresolvable) fails, and it is the decisive one:** the remedy is known, small, local, and has **already been executed successfully** — Entry 8's Phase H harness snapshotted and restored `SPECIES_DATA` around every evaluation and verified post-sweep state pristine. Two further reasons: #96 does **not** invalidate the *published* §3.5, because #82 v5 and #97 establish those numbers never came from this code — #96's harm is **prospective**, it corrupts the regeneration D-11 has ordered; and the severe count is a triage signal to the research lead, so recording two would say *"two independent unresolvable manuscript defects"* when the true position is **one unresolvable manuscript defect (#82) plus one fixable code defect blocking its remedy.**
+
+**For #97.** Its structural half (bounds absent from code) is deterministic and confirmed. Its sign/rank/hierarchy half is **single-run**, and Entry 8's binding scope limits forbid asserting single-run magnitudes as established — **a SEVERE resting on a caveated single-run number would violate the scope limit I agreed to carry.** More importantly, condition 2 is not established because there is a **live benign explanation with project precedent**: the published §3.5 numbers may come from a pre-audit code iteration, exactly as D-06 established for §3.1 (outcome (b), *"reproducible AND superseded"*). Under that reading §3.5 is **obsolete, not impossible** — and **#43 went POTENTIAL ROADBLOCK → RESOLVED on precisely that basis** when its output was located in `legacy/archive/`. Conflating #97 with #82 would also weaken #82 — the register's one unassailable finding, provable on the manuscript's own printed values regardless of which code produced them — by associating it with a claim that has an open benign explanation.
+
+Both flags carry **explicit escalation triggers**. #96 escalates if the research lead declines to authorize the fix, if #75 settles on "report the contaminated sweep as-run," or if the leak is shown present in whatever code produced the published numbers. #97 escalates if `code-stressor`'s replicated multi-seed run confirms the sign inversion and rank collapse, or if the forensic search returns **no** source for the published §3.5 numbers — which would be a *stronger* defect than #82's.
+
+#### C. Seven flags moved or updated per Entry 8's routing table
+
+| Flag | Old → New | What moved, and why |
+|---|---|---|
+| **#75** | POTENTIAL ROADBLOCK → **POTENTIAL ROADBLOCK** (unchanged) | **Verdict recorded as (c): neither Morris nor a valid local OAT.** (a) confirmed — 243 evaluations = 3 + 40×2×3, one hardcoded base point at lines 927–932, every perturbed vector differing in exactly one coordinate, no trajectories, no Δ, no `r`, one statistic per factor, no μ/μ\*/σ. (b) **confirmed against code**, not prose — `{'Cooling_Model': 3, 'Weighting': 1, 'Species_Morphology': 12, 'Species_Allometry': 24}`, so §2.5.3's scope covers **27 of 40** and excludes the headline parameter; this also confirms #82's forced membership against the implementation. (c) new — the #96 leak makes *"all others held at baseline"* false, which is why the verdict is (c) and not (b). **"Closes when" rewritten to a THREE-WAY research-lead question** (Morris / clean local OAT / the contaminated sweep as-run) with Entry 8's cost sketch attached, and the owner changed from `code-stressor` (characterize) to the research lead (decide) — the design has already been characterized. |
+| **#76** | PENDING VERIFICATION → **PENDING VERIFICATION** (unchanged) | Partially advanced. The baseline *vector* is now known (lines 927–932; Narra CD baseline **23.0 m**, the Table 3 midpoint), which also answers #52's convention question for this routine. **3.0576 remains unmatched** — executed baseline 3.2593 on one grid + seed, no run named in `results/`. #76's own inference that the baseline crown diameter might be near 12 m is refuted for the code; the asymmetry it detected is a property of numbers of unknown source, which escalates the question from *"which convention?"* to *"where did these come from?"* — cross-linked to #97. |
+| **#77** | PENDING VERIFICATION → **POTENTIAL ROADBLOCK** | **The one class change this session.** (a) **reframed, and half of it is a downgrade I state explicitly with its evidence**: `n_samples = 3` (averaged repeats, `SensitivityAnalyzer`) and `n_runs = 5` (best-of restarts, `SuboptimalScenariosGenerator.run_optimization_for_k`, `:2753`) are **different quantities**, so §3.5.1's *"averaged over three independent ACO runs per configuration"* is **accurate to the code** and the "third restart count" framing is withdrawn *(Entry 8 §E3)*. What survives is larger, not smaller: an **undisclosed, unjustified design inconsistency** — the sensitivity analysis runs at lower replication than the headline optimization, and the manuscript states neither count in Methods. (b) **confirmed by execution** — no dispersion statistic is computed or stored anywhere; the results row (`:1002–1009`) has no SD/SE/n, `low_scores`/`high_scores` are collapsed by `np.mean` at `:997–998` and discarded, so **the per-index SD D-11 requires cannot be recovered from the current CSV and must be built.** Also recorded: `n_samples = 3` is hardcoded at the call site `:3527` and is a **second instance of the defect class Entry 2 fixed**, while the Entry 2 fix itself is **confirmed live** — all seven ACO parameters read from `base_aco_config` (`n_ants = 20, n_iterations = 40, n_trees = 5, alpha = 1.0, beta = 2.0, evaporation_rate = 0.5, q0 = 0.7`); the historical hardcoded 10 ants / 15 iterations is gone. **Escalation rationale:** a decided decision (D-11) requires a column the reference implementation cannot emit; #78's remedy is impossible in the current code; and the fix is a code change plus re-run, not a rewording. |
+| **#78** | POTENTIAL ROADBLOCK → **POTENTIAL ROADBLOCK** (unchanged) | **Confirmed by execution and materially strengthened.** Measured SI noise floor **≈ 0.0098** at `n_samples = 3`, from 10 fresh baseline evaluations (mean 3.2155, sd 0.0386, range 0.1220, SD of a 3-sample mean 0.0223). **Only `decay_lambda` (0.1697) and `Akleng-parang.crown_diameter_m` (0.0444) clear it; 38 of 40 sit at or below.** This converts the flag's *"may be an ordering of noise"* to *"is"*, with the boundary at position **2**, not 1. Also recorded as a caution: `Narra.crown_diameter_m` ranked **31/40** in Phase E and **28/40** in Phase H — the two runs differ **both** by the leak repair and by ACO stochasticity, so the change is **not attributable to either alone** and must not be quoted as a noise measurement. Class held because the remedy remains achievable inside D-11, now with a hard dependency on #77's capability gap. |
+| **#79** | POTENTIAL ROADBLOCK → **POTENTIAL ROADBLOCK** (unchanged) | **Factual premise REFUTED, in a `v5 CORRECTION` block with the original text preserved.** All 36 species parameters share `rel_span = 0.4000` (±20%); **there is no 3.19× asymmetry**, and the manuscript's *"full Table 3 trait ranges"* and *"15% uncertainty band"* are both absent from the code. Withdrawn: the asymmetry, the derived correction arithmetic (0.464 / 0.0150 / 30.9× vs 98.6×), and the "inflated roughly threefold" claim. **The conclusion survives** — SI is an effect size, not an elasticity, and cross-parameter comparison requires equal spans, a condition the code satisfies *by accident of a uniform default, not by design*, and which the manuscript nowhere states. **And the objection relocates rather than dying:** the 4 non-species parameters do **not** share the ±20% convention (`decay_lambda` 0.5→3.0 about 1.9 ≈ 132% of base; `cca_threshold` 0.5→2.0; `competition_k` 1.0→10.0; `shade_weight` 0.5→0.9), so **the executed rank-1 parameter is swept over a span several times wider than every species parameter it is ranked against.** The suspected asymmetry is real; it sits between the Cooling_Model and species blocks, not between morphology and allometry. `math-auditor` half of "closes when" discharged. |
+| **#82** | ROADBLOCK (SEVERE) → **ROADBLOCK (SEVERE)** (unchanged) | **`math-auditor` half of "closes when" DISCHARGED, working hypothesis OVERTURNED, marked ⛔ DO NOT RE-RUN so nobody repeats the diagnostic.** The aggregation is **innocent**: `groupby().agg(['mean','max','sum','count'])` computes a true arithmetic mean; the pandas 3.0.0 column order matches the hardcoded rename at `:1036`; **0 violations of `mean ≤ max` in 2,000 randomized trials**; a real 243-evaluation sweep gave `mean ≤ max` in all four categories. The published means are **not reproducible from this code at all** — Morphology 0.0066 vs 1.3068, Allometry 0.0124 vs 0.1857, Cooling 0.0598 vs 0.0727, Weighting 0.001385 vs 0.0236 (n=1, so mean = max = sum = 0.001385 and **none of the three equals 0.0236** — which also excludes the "it's a sum" reading by execution as well as by hand). Recorded plainly: **regeneration will NEITHER reproduce NOR vindicate §3.5** — correct arithmetic over an invalid input table is still an invalid table, for the two separate reasons #96 and #97. The Figure-34-plots-sums observation (`:1066`) is recorded as a real inconsistency to fix but explicitly **not** as the cause, so it is not rediscovered as a lead. Class held and **strengthened**: the correct values are now known to be unrecoverable from the codebase as well as from the manuscript. **#82's note that *"§3.5.1 may be salvageable"* is marked SUPERSEDED by #97.** |
+| **#85** | POTENTIAL ROADBLOCK → **POTENTIAL ROADBLOCK** (unchanged) | **Advanced by a second independent route, not closed.** The 1.84× inflation of allometric SIs is caused by the #96 leak and holds under **either** branch of #85's on-path/off-path binary — so the flag's central diagnosis gains a **third** indistinguishable candidate: *"this index is contaminated by state that leaked out of a previous evaluation."* The interpretive gap is wider, not narrower. **None of #85's three lettered deliverables is discharged**; Entry 8 established only that the allometry branch inside `SensitivityAnalyzer` genuinely routes through `get_computed_lai()` with a real override — i.e. **Entry 2's fabrication fix is present and live and the `np.random.uniform(0.98, 1.02)` failure mode does not recur** — while being *"broken in a different and equally invalidating way."* One addition to "closes when": the call-path trace must run **after** the #96 fix, since a trace against the leaking implementation would attribute drift effects to the call path. |
+
+#### D. Three collateral advances I identified in the same evidence (flagger-initiated, not in Entry 8's routing table)
+
+- **#57 (POTENTIAL ROADBLOCK, unchanged) — strengthened from "two incompatible ways" to THREE.** Entry 8 §E1 recorded the production configuration by execution: **`n_ants = 20, n_iterations = 40`**. The manuscript publishes **50 × 100** (§2.4.1) and **15 × 30** (§3.4). So: 5,000 vs 450 vs **800** function evaluations, three configurations, none matching another. This is the same failure mode as the grid resolution stated three ways (#28/#33), now confirmed against executed code. **Partial discharge:** `base_aco_config` is reported verbatim; **one** of the five ACO instantiation sites is verified, four are not.
+- **#58 (PENDING VERIFICATION, unchanged) — `math-auditor` half DISCHARGED.** The production `AntColonySystemACO` parameter set is enumerated, and `q0 = 0.7` is confirmed correct. **Still missing from the enumeration and from the manuscript:** the **local** and **global** pheromone update rules and **τ₀ initialization** — which is not cosmetic, since the local update is what distinguishes an Ant Colony *System* from generic ACO. Editor half untouched.
+- **#95 (PENDING VERIFICATION, unchanged) — partially advanced, with a caveat that matters.** Versions now on record: Python 3.14.6, numpy 2.4.2, scipy 1.17.0, pandas 3.0.0, matplotlib 3.10.8. **`tqdm`'s version was not recorded — that number is missing and I did not supply one.** ⚠️ These are the **audit environment's** versions, not the versions that produced any published result; per #82 v5 / #97 the §3.5 numbers did not come from this code, and per D-06 the §3.1 numbers came from a 2026-02-13 pre-audit run. A software-availability statement built on them would assert a provenance the project cannot support. Usable for the forthcoming regeneration, not retroactively.
+
+---
+
+### What I changed / decided
+
+**I decided nothing.** No `D-xx` opened, closed or edited. No manuscript prose written. Nothing committed.
+
+**Files changed: two.**
+1. `docs/FLAGS.md` — Executive Summary table extended with a v5 column and a v5 preamble; `v5 UPDATE` / `v5 CORRECTION` blocks appended beneath #57, #58, #75, #76, #77, #78, #79, #82, #85, #95, each preserving the original finding text unaltered per the convention established for #53/#59/#64/#68/#70; #77's class marker amended by strikethrough, not replacement; a new `## v5 — New flags #96–#97` section; the Register-status block re-derived.
+2. `docs/PROJECT_LOG.md` — this entry, appended after Entry 8 and before the ENTRY TEMPLATE block. **No prior entry was modified or deleted.**
+
+**Not changed, deliberately:** `docs/STATE.md`, `docs/STATUS.md`, `docs/DECISIONS.md`, `CLAUDE.md`, `legacy/AuditedCode_1.py`, everything under `manuscript/`, `results/`.
+
+**Register totals, re-derived by per-flag enumeration of #1–#97 — the v4 total was NOT incremented:**
+
+| Category | v4 | **v5** | Δ |
+|---|---|---|---|
+| RESOLVED — Cleared Up | 29 | **29** | — |
+| RESOLVED — Deferred | 2 | **2** | — |
+| PENDING VERIFICATION | 30 | **29** | −1 (#77 out) |
+| POTENTIAL ROADBLOCK | 33 | **36** | +3 (#77 in, #96 and #97 new) |
+| **ROADBLOCK (SEVERE)** | 1 | **1** | — (#82 alone) |
+| **TOTAL** | 95 | **97** | +2 |
+
+29 + 2 + 29 + 36 + 1 = **97** ✓. The four rosters plus #82 are written out in full in the Register-status block and enumerate #1–#97 with no gaps and nothing double-counted.
+
+**Next free flag number: #98.**
+
+⚠️ **Superseded instruction, recorded because two files still carry it.** `FLAGS.md`'s v4 Register-status block and `docs/STATUS.md` both directed a future references-and-appendices pass to *"assign from #96."* **That is now void — #96 and #97 are taken. That pass assigns from #98.** I corrected the instruction inside `FLAGS.md`; `docs/STATE.md` (*"Next free flag number: #96"*, twice) and `docs/STATUS.md` are **now stale on this point** and are owned elsewhere — the orchestrator or whoever next syncs them should take **#98** from here.
+
+---
+
+### Still open / unresolved
+
+1. **🔴 #96 needs research-lead authorization before D-11 can run.** The fix is a semantic change to `legacy/AuditedCode_1.py` — snapshot `TreeSpecies.SPECIES_DATA` on entry to `_run_single_evaluation`, restore in a `finally`, per Entry 8's Phase H harness. **D-11 currently names #75 and #77 as its only prerequisites; this is a third and is different in kind** — the other two need a decision, this needs a code change. **Recommend the orchestrator route it into `docs/DECISIONS.md`. I do not open `D-xx` entries.**
+2. **🔴 #75's question is now three-way and belongs to the research lead.** Morris / clean local OAT / the contaminated sweep as-run. The flag's "closes when" is rewritten accordingly, but the decision itself needs a `D-xx` or an amendment to D-11's prerequisite list. **Same routing recommendation.**
+3. **🔴 The provenance of §3.5's published numbers is an open forensic question that belongs to nobody.** Not from this code — established twice over (bounds mismatch, category-mean non-reproduction). **Structurally identical to D-06's question about §3.1**, and `legacy/archive/` has answered one such question already. **This is #97's escalation trigger:** if a pre-audit source is found, §3.5 is obsolete-not-impossible and #97 may eventually downgrade, following #43's precedent; if none is found, §3.5 carries numbers of no known provenance whatsoever and #97 escalates to SEVERE. **Recommend it be opened as a `D-xx`. I do not open `D-xx` entries.**
+4. **#77's design question needs the research lead:** should the sensitivity analysis run at the same replication as the headline optimization? Entry 8 is explicit that this is *"a design choice, not a typo correction"* — do not "fix" `n_samples = 3` to 5 without deciding it. Bundle with #96's fix pass, since both touch the same call site.
+5. **#78's noise floor still needs formal replication.** ≈ 0.0098 is one grid, one seed, n = 10. `code-stressor` owns the replicated deliverable. **Do not publish 0.0098** — use it to justify the design requirement (every SI reported with an interval), not as the interval.
+6. **#97's sign inversion and rank collapse need multi-seed replication before they may be asserted in prose.** The 0.358 separation between two non-overlapping triplets is an order of magnitude above the 0.0386 baseline SD and is unlikely to be noise — **but it is one grid and one seed.**
+7. **What I could not do and did not attempt:** #85's call-path trace, #83's `shade_weight` marginal-contribution run, #70's verdict-string enumeration, #88's morphology-preset check, and the four unverified ACO instantiation sites under #57. All require execution and belong to `math-auditor` or `code-stressor`. Entry 8 lists the first four among the items it still owes.
+
+---
+
+### Handoff notes for the next chat
+
+*Assume you have read only this log.*
+
+1. **The flag register runs through #97. Next free number is #98.** `docs/STATE.md` and `docs/STATUS.md` both still say #96 and are stale — take #98 from `FLAGS.md`'s v5 Register-status block, which enumerates every flag individually.
+2. **There is still exactly ONE ROADBLOCK (SEVERE): #82.** A second was recommended by Entry 8 for the state leak and was **declined with an argument**, recorded inside #96. Do not re-open that question casually — but note that **#96 and #97 each carry explicit escalation triggers**, and if any fires, the register's risk posture changes materially.
+3. **⛔ Do not re-run #82's aggregation diagnostic.** It is discharged. The aggregation is arithmetically correct and structurally incapable of producing the published pattern. The remaining question is **forensic, not numerical**: where did the published §3.5 numbers come from? Nobody owns it.
+4. **Do not run D-11's regeneration yet.** Three things must land first: **#96**'s state-leak fix (needs research-lead authorization), **#75**'s three-way design decision, and **#77**'s dispersion capability (the current code stores no SD at all and cannot back-compute one). Entry 8's warning stands: running early burns ~8 minutes producing a fourth invalid table.
+5. **Regeneration will change the FINDINGS, not just the magnitudes.** This is the single most important thing in this entry for anyone planning the Results rewrite. §3.5's rank-1 parameter, its category hierarchy, and the *direction* of its headline effect are all contradicted by execution. **Anyone expecting renormalized versions of the same conclusions will be wrong.** See #97.
+6. **`n_samples = 3` is not `n_runs = 5`.** Different quantities — averaged repeats vs best-of restarts. §3.5.1's *"three independent ACO runs"* is **correct about the code**. #77 was reframed on this; do not re-raise it as a manuscript error.
+7. **#79's premise is dead; its conclusion is not.** There is no morphology-vs-allometry sweep asymmetry — all 36 species parameters are ±20%. But the four **non-species** parameters are not, and the executed rank-1 (`decay_lambda`) has the widest relative span of all. Quote the corrected version only; the original arithmetic (30.9× / 98.6×) is withdrawn.
+8. **Every magnitude in the v5 blocks is a single-run diagnostic** — one grid, one morphology, one seed, `n_samples = 3`, no D-02 ceiling, nothing written to `results/`. Entry 8's rule is carried into the register and re-stated at every point of use: **no number from that audit may be quoted as a manuscript value.** The *structural* claims — evaluation counts, sweep bounds, category membership, aggregation semantics, the state leak, the ACO kwargs — are deterministic and carry no such caveat. **Keep the two apart; the classifications in #96 and #97 depend on the distinction.**
+
+---
+
+### Flags touched
+
+**Created: 2. Reclassified: 1. Updated in place: 9. Closed: 0. Renumbered: 0.**
+
+| Flag | Old → New | Evidence |
+|---|---|---|
+| **#96** | — → **POTENTIAL ROADBLOCK** *(new)* | `SensitivityAnalyzer` mutates class-level `TreeSpecies.SPECIES_DATA` (`:880`, `:882`) and never restores it; LAI compounds geometrically; 36 of 40 sweep rows contaminated; 1.84× / 0.63× measured cost. **Confirmed #96 was the next free number** per `docs/STATE.md`, `FLAGS.md` v4 Register-status, and Entry 8's own recommendation. *(Entry 8 §D1–§D6, Phases G and H.)* Severe recommended by Entry 8 and **declined** — argument in the flag body. |
+| **#97** | — → **POTENTIAL ROADBLOCK** *(new)* | §3.5 findings do not survive execution: rank-1 → 28/40; executed rank-1 `decay_lambda` 0.1697; category hierarchy inverted; **sign inverted** (3.213 → 2.855 vs 3.024 → 4.380); manuscript sweep bounds absent from code (uniform ±20%). **Confirmed #97 was the next free number after #96.** *(Entry 8 §B, §D6, Phases A, F2, H.)* |
+| **#77** | PENDING VERIFICATION → **POTENTIAL ROADBLOCK** | (b) confirmed by execution — no dispersion computed or storable, D-11's SD column cannot be produced by the current implementation, #78's remedy is impossible without a code change. (a) reframed: `n_samples` ≠ `n_runs`, manuscript accurate to code. *(Entry 8 §E1–§E3.)* |
+| **#75** | POTENTIAL ROADBLOCK → unchanged | Verdict **(c)**; (b) confirmed against code (27 of 40 in scope); "closes when" rewritten three-way; owner moved to research lead. *(Entry 8 §A1, §A3, §D4.)* |
+| **#76** | PENDING VERIFICATION → unchanged | Baseline vector known (Narra CD 23.0 m); 3.0576 unmatched; escalates to #97's provenance question. *(Entry 8 §A1, §B, §D6.)* |
+| **#78** | POTENTIAL ROADBLOCK → unchanged | Noise floor **≈ 0.0098** measured; 38 of 40 at or below; rank instability 31/40 vs 28/40 recorded with its confound stated. *(Entry 8 §D6, Phase F1.)* |
+| **#79** | POTENTIAL ROADBLOCK → unchanged | `v5 CORRECTION`: premise refuted (uniform ±20%), conclusion survives, objection relocated to the four non-species parameters. Original text preserved. *(Entry 8 §B, §A1.)* |
+| **#82** | ROADBLOCK (SEVERE) → unchanged | `math-auditor` half discharged and marked do-not-re-run; aggregation innocent; published means unreproducible from this code; *"§3.5.1 may be salvageable"* superseded by #97. *(Entry 8 §C1–§C4.)* |
+| **#85** | POTENTIAL ROADBLOCK → unchanged | Advanced by a second independent route (1.84× leak inflation, holds under either branch); Entry 2 fabrication fix confirmed live; call-path trace must run after #96. *(Entry 8 §C4, §D5.)* |
+| **#57** | POTENTIAL ROADBLOCK → unchanged | Flagger-initiated. Strengthened to **three** incompatible ACO configurations (50×100 / 15×30 / executed 20×40). One of five instantiation sites verified. *(Entry 8 §E1.)* |
+| **#58** | PENDING VERIFICATION → unchanged | Flagger-initiated. `math-auditor` half discharged; pheromone update rules and τ₀ still absent everywhere. *(Entry 8 §E1, §E2.)* |
+| **#95** | PENDING VERIFICATION → unchanged | Flagger-initiated. Versions recorded but for the audit environment only; `tqdm` version **missing and not supplied**. *(Entry 8, reproducibility attestation.)* |
+
+### Decisions raised or closed
+
+**None closed. None opened.** `docs/DECISIONS.md` was read, not modified. **I may not close or open a `D-xx`.**
+
+**Four items recommended to the orchestrator for routing into `docs/DECISIONS.md`:**
+
+1. **Authorize the #96 state-leak fix to `legacy/AuditedCode_1.py`** — a semantic change to the reference implementation. **Blocks D-11 and is a third prerequisite D-11 does not currently name.** Highest urgency of the four.
+2. **Settle #75's three-way design question** — Morris / clean local OAT / contaminated sweep as-run. Either a new `D-xx` or an amendment to D-11's prerequisite list.
+3. **Open the §3.5 provenance question as a `D-xx`**, structurally identical to D-06's question about §3.1. It is currently unassigned, and it is #97's escalation trigger in both directions.
+4. **Decide the sensitivity analysis's replication count** (#77) — whether it should match the optimizer's `n_runs = 5`, and disclose the answer in Methods either way. A design choice, not a typo correction.
+
+**One housekeeping item for whoever next syncs state:** `docs/STATE.md` and `docs/STATUS.md` both record *"next free: #96"* and are now stale. **The correct value is #98.**
+
+### Reproducibility attestation
+
+**No code was executed this session and no seed was set.** This was a register pass.
+
+**Every number appearing in this entry and in the v5 blocks of `docs/FLAGS.md` is quoted from Project Log Entry 8**, cited to its section (§A–§E) and its execution phase (A–H), or is a line number read directly from `docs/FLAGS.md`, `docs/DECISIONS.md`, `docs/STATE.md` or `CLAUDE.md` this session. **Nothing was computed, interpolated, estimated or filled in by me.** Where Entry 8 does not supply a value I needed — specifically `tqdm`'s version, the four unverified ACO instantiation sites, and any mechanism for the #97 sign inversion — **I recorded the number or fact as missing rather than supplying one.**
+
+**Entry 8's binding scope limits are carried into every v5 block and re-stated at each point of use:** its runs are **one grid, one morphology, one seed, `n_samples = 3`, with no D-02 ceiling applied and no output written to `results/`**, and **no number in it may be quoted as a manuscript value.** Structural claims (evaluation counts, sweep bounds, category membership, aggregation semantics, the state leak, the ACO kwargs) are asserted without qualification because they are deterministic; magnitude claims are labelled as single-run diagnostics wherever they appear.
+
+**The only arithmetic I performed is register bookkeeping**, not science: the per-flag enumeration of #1–#97 into five classes, verified to sum to 97 with no gaps and no double-counting. Both the rosters and the sum are written out in full in `FLAGS.md`'s v5 Register-status block so the next reader can check them without re-reading the file.
+
+---
+
+---
+
+## Entry 10 — Orchestrator, Entry 8 routing session: D-12 authorized, D-13 opened, D-11 amended — [2026-07-27]
+
+**From:** orchestrator (main thread)
+**Reviewed:** `CLAUDE.md`, `docs/DECISIONS.md`, `docs/STATE.md`, `docs/PROJECT_LOG.md` Entry 8 in full and Entry 9 on return, `docs/FLAGS.md` (tail + #96/#97 verification), `legacy/AuditedCode_1.py:866–889`, `:1605–1632`, `:3301–3560`, commit `87d4528`.
+**Context:** The research lead, having committed Entry 8, issued three instructions: *"I authorize D-12, editorial flagger route to #96, and amend D-11."*
+
+### What I found
+
+**1. D-12 did not exist.** I grepped the whole `docs/` tree and `CLAUDE.md`: the decision register ended at D-11. "D-12" was a number the research lead assigned to something not yet written. Entry 8 raised exactly two routable items — the state-leak fix (which it says explicitly "needs the research lead's authorization") and the §3.5 provenance question (which it left to the orchestrator to raise). I did **not** guess between them. I put the disambiguation to the research lead directly, who answered **both**: D-12 = the state-leak authorization, D-13 = the provenance question, and the fix targets **both** `legacy/AuditedCode_1.py` and the `src/secpi/` port.
+
+**2. `src/secpi/` is an empty directory — zero files** (`find src -type f` → 0). "Both, same pass" therefore cannot mean two code changes. I recorded the port half as a **binding carry-forward criterion** on `MIGRATION.md` rather than record a change that did not happen.
+
+**3. 🔴 A naive `SPECIES_DATA` snapshot/restore is insufficient — Entry 8's fix recipe is incomplete.** This is the substantive finding of this session, and it was found by reading, not execution. Entry 8 cites the mutation as "lines 880 and 882." There are **four** write points in `_run_single_evaluation`:
+
+| Line | Writes |
+|---|---|
+| 880 | `SPECIES_DATA[species]['LAI'] = hardcoded_lai * ratio` — the compounding write |
+| 882 | `SPECIES_DATA[species][param_name] = value` |
+| 885–886 | `SPECIES_DATA[species]['CPA']` when `crown_diameter_m` changed |
+| **888** | `ts._calculate_cpa_and_normalize()` |
+
+Line 888 is the problem. `_calculate_cpa_and_normalize()` (line 1605) rewrites `data['CPA']` for **every** species in the shared dict *and* caches **`self.max_CPA` / `self.max_LAI` as instance attributes** (1615–1616). `get_normalized_cooling_potential()` divides by both (1630–1631), so they are live denominators in the cooling term. **Restoring the dict does not restore those two scalars.** Any `TreeSpecies` surviving the `finally` keeps denominators computed from contaminated data.
+
+Entry 8's Phase H attested post-sweep `SPECIES_DATA` was pristine and that `Cooling_Model`/`Weighting` were bit-identical — it did **not** state it checked `max_CPA`/`max_LAI` on a long-lived instance. Left unaddressed, the fix looks correct at the dict level and remains wrong at the normalization level. Written into D-12 as an explicit verification requirement on `code-stressor`.
+
+**4. ⚠️ The leak's blast radius exceeds §3.5 — stated as inferred, NOT verified.** `main_revised_validation()` runs **STEP 7 Sensitivity Analysis** (line 3522) then **STEP 8 Morphological Robustness Validation** (line 3540) in the same process. STEP 8 constructs a fresh `MorphologicalRobustnessValidator` from `config`, which builds its own `TreeSpecies` — and Entry 8 §D2 proved by execution that a fresh `TreeSpecies` sees the contaminated class state. So STEP 8 plausibly begins with every species at high crown diameter and high height, and its output feeds the Conclusion claim **#88** already flags.
+
+**Provenance discipline, stated so nobody upgrades this later:** step ordering verified **by reading**; contamination mechanism verified **by execution** (Entry 8). The **joint** claim is **inferred and has NOT been executed**, so per `CLAUDE.md` §2 rule 2 it is not recorded as verified and it did **not** receive a flag number this session. Owner: `code-stressor`, as a before/after check in the D-12 pass; flag it on evidence afterward, assigning from **#98**.
+
+**5. Entry 9's counts verified independently.** I re-enumerated `FLAGS.md` headers rather than accept the return summary, per §8.1. #1–#51 contribute 29/2/15/5/0; #52–#97 contribute 0/0/14/31/1; total **29 cleared · 2 deferred · 29 pending · 36 potential roadblock · 1 SEVERE = 97**, matching Entry 9 exactly. The Δ from 95 decomposes cleanly: #77 escalated (−1 pending, +1 potential), #96 and #97 new (+2 potential, +2 total). Append-only discipline confirmed by diff: **0 real deletions** in `PROJECT_LOG.md`; all 14 `FLAGS.md` deletions are superseded count blocks and #77's old class line.
+
+### What I changed / decided
+
+**I decided nothing.** Both decisions recorded here were made by the research lead this session; I wrote them up and scoped them.
+
+- **`docs/DECISIONS.md`** — **D-12** written as DECIDED (state-leak fix authorized; scope deliberately narrow, with sweep bounds, `n_samples`, sampling design and D-11's SD column all **explicitly excluded** as separate decisions); **D-13** opened as OPEN (§3.5 provenance); **D-11 amended, not reopened** — option (b) stands, with a third prerequisite added, the **#82 aggregation hypothesis recorded as overturned and `math-auditor`'s assignment DISCHARGED**, and the corrected expectation that regeneration will neither reproduce nor vindicate §3.5. Dependency-chain diagram updated with a §3.5 sub-path.
+- **`docs/STATE.md`** — open decisions 4 → 5; D-12/D-13 recorded; authoritative flag counts synced to 97 / next free **#98**; the "assign from #96" instruction marked superseded; a correction block added to "Code health" for #96; `code-stressor`'s queue re-headed with D-12 as item 0.
+- **Delegated** to `editorial-flagger` (Entry 9). I asked it to make its **own** classification call on #96 rather than inherit `math-auditor`'s "on its face severe," on the grounds that a second SEVERE is a material change to the project's risk posture. It argued it down to POTENTIAL ROADBLOCK with reasoning I accept and did not override.
+
+**This supersedes** D-11's original owner line assigning `math-auditor` to diagnose the aggregation, and supersedes Entry 7's premise that the four impossible category means pointed at a code defect.
+
+### Still open / unresolved
+
+1. **D-12 is authorized but NOT APPLIED.** No code was changed this session. `code-stressor` owns it, including the `max_CPA`/`max_LAI` requirement in §3 above and the STEP 7 → STEP 8 check in §4.
+2. **#75 is now a three-way research-lead question** — Morris / repaired local OAT / the contaminated sweep as-run — because Entry 8 §A established the code implements **neither** named method, so the old two-way framing has no true answer. **Not yet a numbered decision.** Entry 8 costed true Morris at ~410 ACO runs ≈ 13 min/arm, so cost is not the constraint.
+3. **#77 escalated to POTENTIAL ROADBLOCK** (Entry 9) and needs a research-lead disposition on the sensitivity replication count. `n_samples=3` ≠ `n_runs=5`; the manuscript is *accurate to the code*, so this is a design choice, not a typo. Candidate for a numbered decision.
+4. **D-13 unassigned.** My recommendation, labelled as one: time-box a single `code-stressor` session over `legacy/archive/`, searching for §3.1's and §3.5's generator together since they are plausibly the same artefact. It gates nothing.
+5. **`docs/STATUS.md` is stale** — still says next free #96 and predates D-12/D-13. Regenerate via `interpreter`; do not hand-patch (§8.1 treats it as derived).
+
+### Handoff notes for the next chat
+
+*Assume you have read only this log.*
+
+1. **Next free flag number is #98.** #96 (state leak) and #97 (§3.5 qualitative findings do not survive execution) are assigned. Ignore any "assign from #96" text still in `FLAGS.md` or `STATUS.md`.
+2. **Do not re-run the #82 aggregation diagnostic.** Entry 8 executed it; the aggregation is arithmetically correct and the assignment is discharged. The published §3.5 category means did not come from this code at all.
+3. **Do not run D-11's regeneration until D-12's fix lands**, and when it lands, verify `max_CPA`/`max_LAI` and not just `SPECIES_DATA`. Reference commit `87d4528` as the pre-fix evidence anchor.
+4. **Expect §3.5 to be rewritten, not adjusted.** Rank-1 parameter, category hierarchy, and the *direction* of the headline effect are all contradicted by execution.
+5. **The register carries one SEVERE, #82, alone** — #96 was deliberately argued down. The position is one unresolvable manuscript defect plus one fixable code defect blocking its remedy.
+
+### Flags touched
+
+**None by me.** All register movement this session was `editorial-flagger`'s and is recorded in Entry 9 (#96 and #97 created; #77 escalated PENDING → POTENTIAL ROADBLOCK; #75, #76, #78, #79, #82, #85, #57, #58, #95 updated in place). I verified the totals independently and did not edit `FLAGS.md`.
+
+One finding is **deliberately unflagged**: the STEP 7 → STEP 8 contamination (§4 above), because it is inferred rather than executed. Assign from #98 after `code-stressor` runs it.
+
+### Decisions raised or closed
+
+- **D-12 — DECIDED/authorized** by the research lead, 2026-07-27. Written by me.
+- **D-13 — OPENED** by the research lead, 2026-07-27. Written by me. Status OPEN.
+- **D-11 — AMENDED** (not reopened, not superseded) by the research lead, 2026-07-27.
+
+Two items recommended for numbering but **not opened**, because the research lead has not ruled: #75's three-way design question, and #77's replication count.
+
+### Reproducibility attestation
+
+**No scientific quantity was produced this session.** Every number in `DECISIONS.md` and `STATE.md` written by me is transcribed from Entry 8 (commit `0e912d1`), carrying Entry 8's own binding scope limit forward at each use: *one grid, one morphology, one seed, `n_samples=3`, no D-02 ceiling applied, `normalize_secpi()` not exercised — diagnostic, not the D-11 regeneration, and no number in it may be quoted as a manuscript value.*
+
+Claims I made from direct inspection this session, with their basis:
+
+| Claim | Basis |
+|---|---|
+| `src/secpi/` is empty (0 files) | `find src -type f \| wc -l` → 0 |
+| Four mutation write points at 880 / 882 / 885–886 / 888 | `Read legacy/AuditedCode_1.py:866–889` |
+| `_calculate_cpa_and_normalize()` caches `max_CPA`/`max_LAI` as instance attrs; both are live denominators | `Read legacy/AuditedCode_1.py:1605–1632` |
+| STEP 7 (3522) precedes STEP 8 (3540) in one process; STEP 8 builds its own `TreeSpecies` from `config` | `grep` step map + `Read :3535–3556` |
+| Flag totals 29/2/29/36/1 = 97 | independent per-flag enumeration of `FLAGS.md` headers |
+| Log is append-only; 0 real deletions | `git diff docs/PROJECT_LOG.md` |
+| Pre-fix evidence anchor `87d4528` | `git log` |
+
+---
+
 ---
 
 ## ENTRY TEMPLATE (copy this for your session, fill in, append after the last entry — do not overwrite prior entries)

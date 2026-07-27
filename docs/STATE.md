@@ -18,18 +18,26 @@ Update this file at the end of every session. It answers one question: *what is 
 
 > ⚠️ **SUPERSEDED twice — do not quote this line.** It originally read: *"Current live total: 51 flags (41 original + #42–#51 added during migration)… Next free number: #52."* Entry 5 corrected that to 74 / #75. **Entry 6 supersedes both: the live total is 95 and the next free number is #96.** See the authoritative count block immediately below.
 
-### 🔢 Authoritative flag counts — synced 2026-07-26 (Entry 6)
+### 🔢 Authoritative flag counts — synced 2026-07-27 (Entry 9, register v5)
 
-| Category | Count |
-|---|---|
-| RESOLVED — Cleared Up | **29** |
-| RESOLVED — Deferred | **2** |
-| PENDING VERIFICATION | **30** |
-| POTENTIAL ROADBLOCK | **33** |
-| **ROADBLOCK (SEVERE)** | **1** |
-| **TOTAL LIVE FLAGS** | **95** |
+| Category | v4 (2026-07-26) | **v5 (2026-07-27)** | Δ |
+|---|---|---|---|
+| RESOLVED — Cleared Up | 29 | **29** | — |
+| RESOLVED — Deferred | 2 | **2** | — |
+| PENDING VERIFICATION | 30 | **29** | −1 |
+| POTENTIAL ROADBLOCK | 33 | **36** | +3 |
+| **ROADBLOCK (SEVERE)** | 1 | **1** | — |
+| **TOTAL LIVE FLAGS** | 95 | **97** | +2 |
 
-**Next free flag number: #96.**
+**Next free flag number: #98.**
+
+**Derivation — enumerated per-flag, twice, independently.** `editorial-flagger` derived it in Entry 9; the orchestrator re-derived it from `FLAGS.md` headers on 2026-07-27 and got the same five numbers. Basis: **#1–#51** contribute 29 / 2 / 15 / 5 / 0 (untouched by the v5 pass); **#52–#97** contribute 0 / 0 / 14 / 31 / 1. The five categories sum to 97 ✓.
+
+The Δ decomposes exactly: **#77** escalated PENDING → POTENTIAL ROADBLOCK (−1 pending, +1 potential), plus **#96** and **#97** newly written as POTENTIAL ROADBLOCK (+2 potential, +2 total).
+
+> ⚠️ **`FLAGS.md`'s and `docs/STATUS.md`'s "assign from #96" instruction is SUPERSEDED.** #96 and #97 are now assigned. The scheduled references-and-appendices pass over `08_references_appendices.md` must **assign from #98**.
+
+> **Still exactly one ROADBLOCK (SEVERE): #82, alone.** `editorial-flagger` was asked to make its own call on #96 and **argued it down from `math-auditor`'s recommended SEVERE to POTENTIAL ROADBLOCK** — the register reserves SEVERE for a defect confirmed *unresolvable*, and #96 has a known, small, local remedy that Entry 8's Phase H harness already executed successfully. Its harm is **prospective** (it corrupts the regeneration D-11 ordered) rather than a defect in what is published. The true position is **one unresolvable manuscript defect (#82) plus one fixable code defect blocking its remedy (#96)** — recording two SEVEREs would have misstated that. Three explicit escalation triggers are written into #96's body.
 
 Derived by per-flag enumeration of `docs/FLAGS.md`, not by carrying forward any summary line. Basis: the 51-flag baseline (29 / 2 / 17 / 3 / 0), plus v3's escalations of **#39** and **#44** (PENDING → POTENTIAL ROADBLOCK), plus the 23 flags written in v3 (**#52–#74**: 13 POTENTIAL ROADBLOCK, 10 PENDING VERIFICATION), plus the 21 flags written in v4 (**#75–#95**: 15 POTENTIAL ROADBLOCK, 5 PENDING VERIFICATION, 1 ROADBLOCK (SEVERE)). Re-enumerated from the file on 2026-07-26; the five categories sum to 95 ✓.
 
@@ -84,7 +92,7 @@ Derived by per-flag enumeration of `docs/FLAGS.md`, not by carrying forward any 
 
 **Corroboration from the same extraction:** §3.4.4 states SECPI spans **"3.023 to 4.393... across the 63 configurations"** — matching the recovered `run_20260213_222844` CSV exactly (best 4.393, and a `k2_Tal_Ban_SECPI_3.023.png` file). Independent confirmation that D-06's located output is the source of the manuscript's Results.
 
-~~Next free flag number: **#52**.~~ ~~— superseded 2026-07-26: the next free number is #75.~~ — **superseded again 2026-07-26 (Entry 6): the next free number is #96.** See the authoritative count block at the top of this file.
+~~Next free flag number: **#52**.~~ ~~— superseded 2026-07-26: the next free number is #75.~~ ~~— superseded again 2026-07-26 (Entry 6): the next free number is #96.~~ — **superseded again 2026-07-27 (Entry 9): the next free number is #98.** See the authoritative count block at the top of this file.
 
 ---
 
@@ -134,13 +142,23 @@ The **1** ROADBLOCK (SEVERE): **#82** — §3.5.2's four category-level mean sen
 
 ## Open work by owner
 
-### Research lead — 4 open decisions *(updated 2026-07-26, Entry 7 + addendum)*
+### Research lead — 5 open decisions *(updated 2026-07-27, Entry 8 routing)*
 
-~~7 open: D-02, D-03, D-04, D-05, D-07, D-08, D-10.~~ — **superseded.** D-02, D-03, D-07 and D-11 were all **DECIDED 2026-07-26**; D-11 was opened and closed the same day.
+~~7 open: D-02, D-03, D-04, D-05, D-07, D-08, D-10.~~ — **superseded.** D-02, D-03, D-07 and D-11 were all **DECIDED 2026-07-26**; D-11 was opened and closed the same day. ~~Then 4 open.~~ — **superseded 2026-07-27:** **D-12 authorized** and **D-13 opened**, so the count is **5 open**.
 
-**Open: D-04** (final title — **the only DOI-blocking item**), **D-05** (Chebyshev terminology), **D-08** (assumed heights), **D-10** (`p0 = 1.0` sign-off).
+**Open: D-04** (final title — **the only DOI-blocking item**), **D-05** (Chebyshev terminology), **D-08** (assumed heights), **D-10** (`p0 = 1.0` sign-off), **D-13** (§3.5 provenance — new; gates nothing, but until answered no §3.5 number has a known origin).
 
-> ✅ **Every decision on the Results-regeneration critical path is now settled** — D-01, D-02, D-03, D-07, D-11. The path is **no longer decision-blocked.** It is blocked on **#75 and #77 settling**, then execution.
+**Decided 2026-07-27 — D-12:** authorize the `SensitivityAnalyzer` state-leak fix. Snapshot/restore `TreeSpecies.SPECIES_DATA` around each evaluation. Target is **both** `legacy/AuditedCode_1.py` (now) and `src/secpi/` — but **`src/secpi/` is an empty directory today, zero files, verified**, so the second half resolves to a binding carry-forward criterion in `MIGRATION.md` rather than a code change. **First authorized semantic change to the reference implementation.** Pre-fix behaviour preserved at commit `87d4528`.
+
+**D-11 amended 2026-07-27, not reopened.** The decision (option b, full §3.5 regeneration) stands. Three things changed:
+1. **A third prerequisite** — D-12's fix must land before the regeneration runs, or it burns the run on a fourth invalid table.
+2. **The #82 aggregation hypothesis is overturned.** Entry 8 §C executed it: the aggregation computes a true arithmetic mean, 0 violations of `mean ≤ max` in 2,000 trials. `math-auditor`'s D-11 assignment is **DISCHARGED — do not re-run it.**
+3. **Corrected expectation** — the regeneration will **neither reproduce nor vindicate** §3.5, because the published numbers did not come from this code at all. Expect the Editor to rewrite §3.5, not adjust it.
+
+> ✅ **Every decision on the Results-regeneration critical path is settled** — D-01, D-02, D-03, D-07, D-11, D-12. The path is **not decision-blocked.**
+> 🔴 **The §3.5 sub-path is blocked on three things, in this order:** (1) **D-12's fix applied** — authorized, *not yet written to the file*; (2) **#75**, now a **three-way** research-lead question (Morris / repaired local OAT / the contaminated sweep as-run) because Entry 8 §A established the code implements **neither** named method, so the old two-way framing has no true answer; (3) **#77**'s disposition. Then execution.
+
+> ⚠️ **Unregistered consequence, wider than §3.5 — needs a flag number after the in-flight flagger pass.** `main_revised_validation()` runs **STEP 7 (Sensitivity Analysis, line 3522)** then **STEP 8 (Morphological Robustness Validation, line 3540)** in the same process, and STEP 8 builds its own `TreeSpecies` — which Entry 8 §D2 proved by execution sees the contaminated class-level state. So STEP 8 plausibly begins with every species at high crown diameter and high height, and its output feeds the Conclusion claim **#88** already flags. **Step ordering verified by reading; contamination mechanism verified by execution; the joint claim is inferred and NOT yet executed** — per `CLAUDE.md` §2 rule 2 it must not be recorded as verified until someone runs it. Owner: `code-stressor`, as a before/after check in the D-12 pass.
 **Decided:** D-01, D-02, D-03, D-07, D-09. **D-06** resolved (outcome b), but carries **three residual sub-decisions** — confirm §3.1 regenerates under Option B, confirm the Flag #46 diversity-claim reframing, and decide whether `species_actually_used` becomes a reported variable.
 
 **Decisions taken 2026-07-26 (see `DECISIONS.md` and Entry 7):**
@@ -174,7 +192,14 @@ The **1** ROADBLOCK (SEVERE): **#82** — §3.5.2's four category-level mean sen
 1. Run the paired Wilcoxon signed-rank test on **both** pre-specified metrics — **H1** proportion of delivered cooling landing in V-zones, **H2** proportion of trees placed adjacent to V-zones. n = 30, paired on grid + `k` (tree count). Report **raw** two-sided p, statistic, n, and rank-biserial effect size **for each**, regardless of outcome.
    **Holm–Bonferroni, m = 2, FWER = 0.05 — apply exactly:** order raw p ascending; test `p_(1)` against **0.025**; **if `p_(1) > 0.025`, stop — neither is rejected and `p_(2)` is never tested**; otherwise reject and test `p_(2)` against **0.05**. The step-down gate is the part most often dropped in implementation.
 2. **New (D-02):** report the optimizer's best raw SECPI from the Option-B regeneration so the research lead can confirm or raise the 3.75 ceiling before any Results prose is written.
-3. **New (D-11):** regenerate **all of §3.5** — parameter sweep *and* aggregation — under Option B, emitting a per-parameter table (`parameter · category · low_bound · high_bound · SECPI_low · SECPI_high · SI · n · SD`) to a named `results/` run, with category aggregates computed from that table. ⚠️ **Blocked until #75** (Morris vs local OAT) **and #77** (`n_runs` 3 vs 5) settle — running first reproduces the mismatch.
+3. **New (D-11):** regenerate **all of §3.5** — parameter sweep *and* aggregation — under Option B, emitting a per-parameter table (`parameter · category · low_bound · high_bound · SECPI_low · SECPI_high · SI · n · SD`) to a named `results/` run, with category aggregates computed from that table. ⚠️ **Blocked until #75** (now **three-way**, not Morris-vs-OAT) **and #77** settle — running first reproduces the mismatch. ⚠️ **Also blocked until item 0 below lands.** Note: **`SD` does not exist in the current implementation** — `low_scores`/`high_scores` are collapsed by `np.mean` at lines 997–998 and discarded, so the dispersion column must be **added**, not extracted. It matters: the measured SI noise floor is **≈ 0.0098** at `n_samples=3` and only **2 of 40** indices clear it.
+
+0. **⭐ FIRST — D-12 (authorized 2026-07-27), do this before anything else in §3.5.** Apply the state-leak fix to `legacy/AuditedCode_1.py`: snapshot `TreeSpecies.SPECIES_DATA` on entry to `SensitivityAnalyzer._run_single_evaluation` and restore it in a `finally`. Entry 8's Phase H harness proves the approach works — post-sweep state verified pristine. Then:
+   - **Confirm the internal control:** `Cooling_Model` and `Weighting` must come out **bit-identical** to the pre-fix run (they are evaluated before any species mutation). If they diverge, the fix touched more than it should have.
+   - **Add the carry-forward criterion to `MIGRATION.md`** — `src/secpi/` is empty today and must not be written without this guard.
+   - **Run the STEP 7 → STEP 8 contamination check** described in the ⚠️ note under "Research lead" above. This is the inferred-but-unexecuted claim; execute it and report, so it can be flagged on evidence rather than inference.
+   - **Do not** change sweep bounds, `n_samples`, or the sampling design in this pass — D-12 explicitly excludes all three.
+   - Reference commit **`87d4528`** in the fix commit as the pre-fix evidence anchor.
 2. Regenerate Results under Option B (code is ready as-is).
 3. **Note for V-density stress testing:** the BFS produces exactly **8 V-cells every run, zero seed variance**. Vary `v_target_range` midpoint explicitly — seed variation will *not* explore the 5–10% band.
 
@@ -199,11 +224,13 @@ Then: author the new Results section once regeneration completes.
 - **#81** — §3 carries 28 figure captions and exactly **one** in-text figure reference, which is itself a broken placeholder.
 - **#85** — the near-zero allometric sensitivity indices are the expected signature of *off-path* parameters under D-09; the manuscript reads them as "sufficient buffering." Flagged as the highest-value unexecuted check in the batch (`math-auditor`).
 
-**Next free flag number: #96.**
+**Next free flag number: #98.** *(updated 2026-07-27, Entry 9 — #96 and #97 are assigned.)*
 
 ---
 
 ## Code health — verified, not assumed
+
+> 🔴 **CORRECTION 2026-07-27 (Entry 8, by execution).** The "Confirmed working" list below is accurate as far as it goes, but it omits a defect that invalidates the sensitivity path: **`SensitivityAnalyzer._run_single_evaluation` permanently mutates the class-level `TreeSpecies.SPECIES_DATA`** (`legacy/AuditedCode_1.py:880, 882, 885–886, 888`) and never restores it. The LAI write compounds geometrically (6.07 → 18.12 over six identical evaluations), the function is **not idempotent**, and after a full sweep every species sits at high crown diameter and high height. Measured: allometric sensitivity **inflated 1.84×**, morphological **deflated 0.63×**. Registered as **#96**; repair authorized under **D-12**; **not yet applied.** Note the Entry 2 ACO-fidelity fix listed below *is* confirmed present by execution — this is a different, previously undetected defect in the same class.
 
 `AuditedCode_1.py` (3,670 lines) at `/legacy/AuditedCode_1.py`. `py_compile` passes clean. All Entry 1 fixes confirmed present in Entry 2 by grep + execution; **no regressions detected.**
 
